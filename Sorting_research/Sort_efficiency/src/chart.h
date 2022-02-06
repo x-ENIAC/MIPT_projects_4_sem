@@ -15,8 +15,8 @@ struct my_pair {
 	}
 };
 
-const int X_SCALE = 7;
-const int Y_SCALE = 5000;
+const int X_SCALE = 13;
+const int Y_SCALE = 6000;
 
 class Chart : public View_object {
   public:
@@ -27,13 +27,15 @@ class Chart : public View_object {
 	int count_of_sorting;
 	bool* is_visible;
 	Colour* colours;
+	int count_of_operations;
 
 	Chart(const Point center, const double width, const double height, Pencil* pencil, const char* arg_text,
-			const int arg_count_of_sorting, bool* arg_is_visible, Colour* arg_colours) :
+			const int arg_count_of_sorting, bool* arg_is_visible, Colour* arg_colours, const int arg_count_of_operations) :
 	  View_object(center, width, height, LIGHT_GREY, Widget_types::CHART) {
 		canvas = new Canvas(center, width, height, WHITE, pencil);
 
 		count_of_sorting = arg_count_of_sorting;
+		count_of_operations = arg_count_of_operations;
 		coords = new my_pair*[count_of_sorting + 1];
 
 		text = new Text(Point(center.x, height / 2 + 30 + center.y), arg_text, 200, 50, BLACK);
@@ -63,7 +65,7 @@ class Chart : public View_object {
 
 			Point left_down_corner = rect->get_left_down_corner(), last_point = {};
 			int width = rect->get_width(), height = rect->get_height();
-			int iters = MAX_LEN / X_SCALE;
+			int iters = count_of_sorting;
 
 			for(int sort = 0; sort < count_of_sorting; ++sort) {
 				if(!is_visible[sort])
@@ -101,9 +103,21 @@ class Chart : public View_object {
 	}
 
 	void update_point(const SORTING sorting, const int x, const int new_y) {
-		// printf("\tadd (%d, %d), sorting %d\n", x / 5, new_y, (int)sorting);
+		printf("\tadd (%d, %d), sorting %d; ", x / 5, new_y, (int)sorting);
 		coords[(int)sorting][x / X_SCALE].y = new_y;
 		coords[(int)sorting][x / X_SCALE].x = x / X_SCALE;
+
+		Point now_point = {};
+		Point left_down_corner = rect->get_left_down_corner();
+
+		now_point.x = left_down_corner.x + rect->get_width() / X_SCALE * coords[(int)sorting][x / X_SCALE].x;
+
+		if(coords[(int)sorting][x / X_SCALE].y != 0)
+			now_point.y = left_down_corner.y - rect->get_height() * (coords[(int)sorting][x / X_SCALE].y) / Y_SCALE;
+		else
+			now_point.y = left_down_corner.y;
+
+		printf("Visible coords %lg, %lg. Left down corner %lg, %lg\n", now_point.x, now_point.y, left_down_corner.x, left_down_corner.y);
 	}
 };
 

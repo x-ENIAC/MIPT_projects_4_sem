@@ -8,6 +8,9 @@
 #ifndef CHARTS_H
 #define CHARTS_H
 
+class Charts;
+#include "app.h"
+
 class Charts : public View_object {
 	public:
 	Chart** charts;
@@ -34,8 +37,8 @@ class Charts : public View_object {
 
 		charts = new Chart*[2];
 
-		charts[0] = new Chart(Point(200, 200), 350, 350, pencil, "Comparison", arg_count_of_sorting, is_visible, colours);
-		charts[1] = new Chart(Point(590, 200), 350, 350, pencil, "Assignment", arg_count_of_sorting, is_visible, colours);
+		charts[0] = new Chart(Point(200, 200), 350, 350, pencil, "Comparison", arg_count_of_sorting, is_visible, colours, App::get_app()->get_controller()->get_count_of_operations());
+		charts[1] = new Chart(Point(590, 200), 350, 350, pencil, "Assignment", arg_count_of_sorting, is_visible, colours, App::get_app()->get_controller()->get_count_of_operations());
 	}
 
 	~Charts() {

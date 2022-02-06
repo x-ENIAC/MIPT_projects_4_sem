@@ -74,17 +74,28 @@ void insert_sort(Number* numbers, const int len, graph_pair* pair) {
 }
 
 void std_sort(Number* numbers, const int len, graph_pair* pair) {
-	// std::vector<Number> vec(len, {0, 0});
-	// printf("!!!!! len = %d\n", len);
+	std::vector<Number> vec;
+	printf("!!!!! len = %d\n", len);
 
-	// for(int i = 0; i < len; ++i)
-	// 	// vec[i] = numbers[i];
+	Number tmp = {}, tmp1 = {};
+	for(int i = 0; i < len; ++i) {
+		printf("\ti = %d, size %d, %p\n", i, vec.size(), &numbers[i]);
+		tmp = numbers[i];
+		tmp1.value = tmp.value;
+		vec.push_back(tmp1);
+		// vec.push_back(numbers[i]);
+	}
 	// 	vec.push_back(numbers[i]);
 
-	// std::sort(vec.begin(), vec.end());
+	printf("before sort\n");
+	std::sort(vec.begin(), vec.end());
+	printf("after sort\n");
 
-	// // vec.clear();
-	// printf("after clear..\n");
+	for(int i = 0; i < len; ++i)
+		vec.pop_back();
+
+	// vec.clear();
+	printf("after clear..\n");
 
 	*pair = {SORTING::STD_SORT, assignments, comparisons, len};
 	return;

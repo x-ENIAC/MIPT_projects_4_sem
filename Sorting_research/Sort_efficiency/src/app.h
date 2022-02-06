@@ -26,6 +26,8 @@ enum SDL_STATUSES {
 };
 
 class View_manager;
+// class Controller_data_charts;
+#include "Controller/controller.h"
 
 class App {
   private:
@@ -40,6 +42,7 @@ class App {
 	int width_screen, height_screen;
 	long long begin_era;
 
+	Controller_data_charts* controller;
 	View_manager* view_manager;
 
 	Colour screen_color;
@@ -66,8 +69,6 @@ class App {
 
 	void update();
 
-	// Canvas* get_active_canvas();
-
 	void fill_app_interface();
 
 	SDL_Renderer* get_render();
@@ -76,17 +77,15 @@ class App {
 
 	void remove_app();
 
-	// Painter_tools_and_plugins* get_painter_tools_and_plugins();
-
 	long long get_begin_era();
 
 	long long get_width_screen();
 
 	long long get_height_screen();
 
-	View_manager* get_view_manager();
+	Controller_data_charts* get_controller();
 
-	// PAppInterface* get_app_interface();
+	View_manager* get_view_manager();
 };
 
 void fill_random_values(int* numbers, const int len);

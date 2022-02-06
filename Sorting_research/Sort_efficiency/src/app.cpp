@@ -50,13 +50,6 @@ void App::deinitialize() {
 	delete app->view_manager;
 }
 
-void fill_random_values(Number* numbers, const int len) {
-	for(int i = 0; i < len; ++i) {
-		numbers[i].value = rand() % 100001;
-		numbers[i].pos = i;
-	}
-}
-
 void App::update() {
 	begin_era = time(NULL);
 
@@ -66,47 +59,8 @@ void App::update() {
 	printf("Start initialize the view manager\n");
 	// app->plugin_manager = new Plugin_manager();
 
+	controller = new Controller_data_charts(5, 10, 8);
 	app->view_manager = new View_manager(Point(width_screen / 2.0, height_screen / 2.0), width_screen, height_screen, screen_color);
-
-	//-------------------------------------------------------------
-	for(int len = 5; len <= MAX_LEN; len += 5) {
-
-
-		for(int sort = 0; sort < 5; ++sort) {
-			int comparisons = 0;
-			int assignments = 0;
-
-			Number* numbers = new Number[len];
-			fill_random_values(numbers, len);
-
-			graph_pair pair = {};
-			// printf("begin %s\n", text_sorts[sort]);
-			standartized_sorts[sort](numbers, len, &pair);
-			// printf("%d %d %d %d\n", pair.sorting, pair.assign, pair.compare, pair.len_array);
-			app->view_manager->update_charts(pair);
-			// printf("\n\n");
-
-			delete[] numbers;
-		}
-
-
-
-		// graph_pair bubble_pairs = bubble_sort(numbers, len); //get_sort_pairs(numbers, len);
-		// graph_pair choose_pairs = choose_sort(numbers, len);
-		// graph_pair insert_pairs = insert_sort(numbers, len);
-		// graph_pair std_pairs = std_sort(numbers, len);
-		// graph_pair std_stable_pairs = std_stable_sort(numbers, len);
-		// // for(int i = 0; i < len; ++i)
-		// // 	printf("%d %d\n", pairs[i].assign, pairs[i].compare);
-		// // printf("%d %d %d %d\n", bubble_pairs.sorting, bubble_pairs.assign, bubble_pairs.compare, bubble_pairs.len_array);
-
-		// app->view_manager->update_charts(bubble_pairs);
-		// app->view_manager->update_charts(choose_pairs);
-		// app->view_manager->update_charts(insert_pairs);
-		// app->view_manager->update_charts(std_pairs);
-		// app->view_manager->update_charts(std_stable_pairs);
-	}
-	//-------------------------------------------------------------
 
 	for(int i = 0; i < COUNT_OF_SORTS; ++i) {
 		Text* text = new Text(Point(750, 500 + i * 30), text_sorts[i], 50, 10, app->view_manager->charts->colours[i]);
@@ -137,10 +91,6 @@ void App::update() {
 	}
 }
 
-// Canvas* App::get_active_canvas() {
-// 	return (Canvas*)(App::get_app()->get_view_manager()->manager_of_canvas_managers->active_canvas->view_objects[0]);
-// }
-
 SDL_Renderer* App::get_render() {
 	return app->render;
 }
@@ -165,6 +115,10 @@ long long App::get_width_screen() {
 
 long long App::get_height_screen() {
 	return height_screen;
+}
+
+Controller_data_charts* App::get_controller() {
+	return controller;
 }
 
 View_manager* App::get_view_manager() {
