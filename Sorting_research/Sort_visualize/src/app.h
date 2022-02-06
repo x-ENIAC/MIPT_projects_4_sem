@@ -72,6 +72,8 @@ class App {
 
 	SDL_Renderer* get_render();
 
+	SDL_Renderer** get_render_ptr();
+
 	static App* get_app();
 
 	void remove_app();
