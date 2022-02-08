@@ -9,6 +9,8 @@ View_object(par_point, par_width, par_height, par_color) {
 	heights = new int[number_container->get_count() + 1];
 	colours = new Colour[number_container->get_count() + 1];
 	fill_heights();
+
+	number_of_sort = 0;
 }
 
 void Graph_bar::fill_heights() {
@@ -25,7 +27,7 @@ void Graph_bar::fill_heights() {
 void Graph_bar::update() {
 	int count = number_container->get_count();
 
-	int is_something_change = bubble_sort(number_container->get_numbers(), number_container->get_count());
+	int is_something_change = standartized_sorts[number_of_sort](number_container->get_numbers(), number_container->get_count());
 
 	std::vector<int> changed_pos;
 

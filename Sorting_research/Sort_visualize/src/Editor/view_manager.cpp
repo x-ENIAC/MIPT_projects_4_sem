@@ -27,7 +27,7 @@ View_manager::View_manager(const Point par_point, const double par_width, const 
 	add_view_object(graph_bar);
 
 	printf("[View_manager] start create Button_manager\n");
-	buttons = new Button_manager(Point(350, 600), 300, 60, DARK_GREY_3);
+	buttons = new Button_manager(Point(390, 600), 270, 180, BLUE);
 
 	add_view_object(buttons);
 	// printf("[View_manager] fill Button_manager\n");
@@ -100,9 +100,33 @@ void View_manager::fill_button_manager() {
 	Point left_up_corner = buttons->rect->get_left_up_corner();
 	left_up_corner += Point(70, 30);
 
-	Begin_sort_delegate* delegate = new Begin_sort_delegate(number_container, &is_running_sorting);
-	Button* button = new Button(delegate, left_up_corner, RED, 120, 50, "Start");
-	buttons->add_view_object(button);
+	Begin_sort_delegate* delegate_begin = new Begin_sort_delegate(number_container, &is_running_sorting);
+	Button* button_start = new Button(delegate_begin, left_up_corner, YELLOW, 120, 50, "Start");
+	buttons->add_view_object(button_start);
+
+	left_up_corner += Point(130, 0);
+
+	Stop_sort_delegate* delegate_stop = new Stop_sort_delegate(number_container, &is_running_sorting);
+	Button* button_stop = new Button(delegate_stop, left_up_corner, YELLOW, 120, 50, "Stop");
+	buttons->add_view_object(button_stop);
+
+	left_up_corner += Point(-130, 60);
+
+	Choose_sort_delegate* bubble_sort_delegate = new Choose_sort_delegate(&(get_graph_bar()->number_of_sort), SORTING::BUBBLE_SORT);
+	Button* bubble_sort_button = new Button(bubble_sort_delegate, left_up_corner, YELLOW, 120, 50, "Bubble");
+	buttons->add_view_object(bubble_sort_button);
+
+	left_up_corner += Point(130, 0);
+
+	Choose_sort_delegate* insert_sort_delegate = new Choose_sort_delegate(&(get_graph_bar()->number_of_sort), SORTING::CHOOSE_SORT);
+	Button* insert_sort_button = new Button(insert_sort_delegate, left_up_corner, YELLOW, 120, 50, "Choose");
+	buttons->add_view_object(insert_sort_button);
+
+	left_up_corner += Point(-130, 60);
+
+	Refresh_array_delegate* refresh_array_delegate = new Refresh_array_delegate(number_container);
+	Button* refresh_array_button = new Button(refresh_array_delegate, left_up_corner, YELLOW, 120, 50, "Refresh");
+	buttons->add_view_object(refresh_array_button);
 }
 
 bool View_manager::check_tap(SDL_Event* event) {

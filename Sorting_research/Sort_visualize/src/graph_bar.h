@@ -14,6 +14,7 @@ class Graph_bar : public View_object {
 	Number_container* number_container;
 	int* heights;
 	Colour* colours;
+	int number_of_sort;
 
 	Graph_bar(const Point par_point, const double par_width, const double par_height, const Colour par_color, 
 				Number_container* arg_number_container);

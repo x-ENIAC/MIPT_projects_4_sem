@@ -39,6 +39,55 @@ class Begin_sort_delegate : public Button_delegate {
 };
 
 
+class Stop_sort_delegate : public Button_delegate {
+  public:
+	Number_container* number_container;
+	bool* is_running_sorting;
+
+	Stop_sort_delegate(Number_container* arg_number_container, bool* arg_is_running_sorting);
+
+	void click_reaction(const double mouse_x, const double mouse_y) override {
+		*is_running_sorting = false;
+	}
+
+	void motion_reaction(const double mouse_x, const double mouse_y) override {}
+
+	void reactive_reaction(Point old_mouse, Point now_mouse) override {}
+};
+
+
+class Choose_sort_delegate : public Button_delegate {
+  public:
+	int* number_of_sort;
+	SORTING sorting;
+
+	Choose_sort_delegate(int* arg_number_of_sort, SORTING arg_sorting);
+
+	void click_reaction(const double mouse_x, const double mouse_y) override {
+		*number_of_sort = sorting;
+	}
+
+	void motion_reaction(const double mouse_x, const double mouse_y) override {}
+
+	void reactive_reaction(Point old_mouse, Point now_mouse) override {}
+};
+
+
+class Refresh_array_delegate : public Button_delegate {
+  public:
+	Number_container* number_container;
+
+	Refresh_array_delegate(Number_container* arg_number_container);
+
+	void click_reaction(const double mouse_x, const double mouse_y) override {
+		number_container->fill_container();
+		App::get_app()->get_view_manager()->get_graph_bar()->fill_heights();
+	}
+
+	void motion_reaction(const double mouse_x, const double mouse_y) override {}
+
+	void reactive_reaction(Point old_mouse, Point now_mouse) override {}
+};
 
 
 #endif

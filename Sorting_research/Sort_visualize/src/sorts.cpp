@@ -88,7 +88,6 @@ bool std_sort(Number* numbers, const int len) {
 
 	Number tmp = {}, tmp1 = {};
 	for(int i = 0; i < len; ++i) {
-		printf("\ti = %d, size %d, %p\n", i, vec.size(), &numbers[i]);
 		// tmp = numbers[i];
 
 		// int v = tmp.value;
