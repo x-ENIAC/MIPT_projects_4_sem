@@ -4,7 +4,7 @@
 View_manager::View_manager(const Point par_point, const double par_width, const double par_height, const Colour par_color) :
   View_object(par_point, par_width, par_height, LIGHT_GREY, Widget_types::VIEW_MANAGER) {
 
-  	printf("start View_manager\n");
+	printf("start View_manager\n");
 	count_of_view_objects = 1;
 
 	printf("create objects\n");
@@ -21,7 +21,7 @@ View_manager::View_manager(const Point par_point, const double par_width, const 
 
 	printf("charts\n");
 	charts = new Charts(Point(400, 200), 700, 700, pencil, COUNT_OF_SORTS);
-	printf("add chart\n");
+	printf("add chart %p\n", charts);
 	add_view_object(charts);
 
 	printf("create button_manager\n");
@@ -30,16 +30,18 @@ View_manager::View_manager(const Point par_point, const double par_width, const 
 	add_view_object(buttons);
 	printf("fill button_manager\n");
 	fill_button_manager();
+	// buttons->buttons[3]->delegate->click_reaction(0, 0);
 
 	printf("end construct view manager\n");
+	printf("add chart %p\n", charts);
 }
 
 View_manager::~View_manager() {
 	printf("Destruct View_manager, %ld\n", count_of_view_objects);
 
-	// for(size_t i = 0; i < count_of_view_objects; ++i)
-	// 	delete view_objects[i];
-	// delete[] view_objects;
+	for(size_t i = 0; i < count_of_view_objects; ++i)
+		delete view_objects[i];
+	delete[] view_objects;
 
 	count_of_view_objects = 0;
 	who_is_active = 0;
@@ -51,9 +53,11 @@ void View_manager::add_view_object(View_object* new_view) {
 	++count_of_view_objects;
 
 	++widget_types[(int)new_view->get_yourself_type()];
+	// printf("add chart %p\n", charts);
 }
 
 void View_manager::check_events(SDL_Event* event) {
+	// printf("add chart %p\n", charts);
 	double x_mouse = event->button.x, y_mouse = event->button.y;
 
 	//printf("%d\n", event->type);
@@ -98,7 +102,7 @@ void View_manager::fill_button_manager() {
 
 	for(int i = 0; i < COUNT_OF_SORTS; ++i) {
 		Show_points_delegate* delegate = new Show_points_delegate(charts->is_visible, i);
-		Button* button = new Button(delegate, left_up_corner, charts->colours[i], 50, 50);
+		Button* button = new Button(delegate, left_up_corner, charts->colours[i], 50, 50); // charts->colours[i]
 		buttons->add_view_object(button);
 
 		left_up_corner += Point(60, 0);
@@ -109,7 +113,12 @@ bool View_manager::check_tap(SDL_Event* event) {
 	return false;
 }
 
-void View_manager::update_charts(graph_pair* pairs, const int len) {
-	for(int i = 0; i < len; ++i)
-		charts->update_point(pairs[i]);
+
+
+void View_manager::update_charts(graph_pair pairs) {
+	// printf("UPDATEEEEEEEEEEEEEEEEEEEEEEEEEe\n");
+	// printf("%p\n", charts);
+	charts->update_point(pairs);
+	// printf("%d %d %d %d\n", pairs.assign, pairs.compare, pairs.sorting, pairs.len_array);
+	// printf("%p\n", charts);
 }

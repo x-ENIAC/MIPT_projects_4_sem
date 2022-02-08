@@ -39,15 +39,16 @@ void App::initialize(const int width_screen, const int height_screen) {
 }
 
 void App::deinitialize() {
-	SDL_FreeSurface    (app->screen);
-	SDL_DestroyWindow  (app->window);
-	SDL_DestroyRenderer(app->render);
-	SDL_DestroyTexture (app->texture);
+	// SDL_FreeSurface    (app->screen);
+	// SDL_DestroyWindow  (app->window);
+	// SDL_DestroyRenderer(app->render);
+	// SDL_DestroyTexture (app->texture);
 
 	TTF_Quit();
 	SDL_Quit();
 
 	delete app->view_manager;
+	delete controller;
 }
 
 void App::update() {
@@ -57,7 +58,6 @@ void App::update() {
 	SDL_RenderClear(app->render);
 
 	printf("Start initialize the view manager\n");
-	// app->plugin_manager = new Plugin_manager();
 
 	controller = new Controller_data_charts(5, 10, 8);
 	app->view_manager = new View_manager(Point(width_screen / 2.0, height_screen / 2.0), width_screen, height_screen, screen_color);
@@ -66,6 +66,8 @@ void App::update() {
 		Text* text = new Text(Point(750, 500 + i * 30), text_sorts[i], 50, 10, app->view_manager->charts->colours[i]);
 		app->view_manager->add_view_object(text);
 	}
+
+	// app->view_manager->buttons->buttons[3]->delegate->click_reaction(0, 0);
 
 	printf("\n\nBEGIN EVENTS CYCLE\n");
 	SDL_Event event = {};
@@ -85,10 +87,15 @@ void App::update() {
 
 		app->view_manager->draw(&app->render, &app->texture, &app->screen);
 
-		app->view_manager->tick(TIME_DELTA);
+		// app->view_manager->tick(TIME_DELTA);
 
+		// graph_pair pair = {};
+		// 	std_sort(controller->data[0], controller->start_len, &pair);
 		SDL_RenderPresent(app->render);
 	}
+	// // start + step * i
+	// for(int i = 0; i < )
+	
 }
 
 SDL_Renderer* App::get_render() {

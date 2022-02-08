@@ -70,7 +70,7 @@ class Button : public View_object {
 		printf("~Button\n");
 		delete delegate;
 
-		for(size_t i = 0; i < count_of_views; ++i)
+		for(size_t i = 0; i < MAX_COUNT_OF_VIEW_OBJECTS_FOR_BUTTON; ++i)
 			delete[] view_objects[i];
 
 		delete[] view_objects;

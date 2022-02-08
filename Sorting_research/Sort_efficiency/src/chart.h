@@ -16,7 +16,7 @@ struct my_pair {
 };
 
 const int X_SCALE = 13;
-const int Y_SCALE = 6000;
+const int Y_SCALE = 3000;
 
 class Chart : public View_object {
   public:
@@ -103,7 +103,8 @@ class Chart : public View_object {
 	}
 
 	void update_point(const SORTING sorting, const int x, const int new_y) {
-		printf("\tadd (%d, %d), sorting %d; ", x / 5, new_y, (int)sorting);
+		printf("[update_point] begin\n");
+		printf("\tadd (%d, %d), sorting %d; ", x, new_y, (int)sorting);
 		coords[(int)sorting][x / X_SCALE].y = new_y;
 		coords[(int)sorting][x / X_SCALE].x = x / X_SCALE;
 

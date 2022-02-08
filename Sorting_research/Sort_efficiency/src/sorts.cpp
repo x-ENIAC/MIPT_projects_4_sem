@@ -28,7 +28,7 @@ inline void swap(Number first, Number second) {
 	second = tmp;
 }
 
-void bubble_sort(Number* numbers, const int len, graph_pair* pair) {
+void bubble_sort(Number* numbers, const int len, graph_pair* pair) { // , graph_pair* pair
 	// printf("begin bubble sort\n");
 	for(int i = 0; i < len; ++i)
 		for(int j = 1; j < len - i; ++j)
@@ -37,11 +37,11 @@ void bubble_sort(Number* numbers, const int len, graph_pair* pair) {
 
 	// printf("end bubble sort\n");
 	// printf("len %d, assignments %d, comparisons %d\n", len, assignments, comparisons);
-	*pair = graph_pair(SORTING::BUBBLE_SORT, assignments, comparisons, len);
-	return;
+	if(pair)
+		*pair = graph_pair(SORTING::BUBBLE_SORT, assignments, comparisons, len);
 }
 
-void choose_sort(Number* numbers, const int len, graph_pair* pair) {
+void choose_sort(Number* numbers, const int len, graph_pair* pair) { // , graph_pair* pair
 	Number min_value = numbers[0];
 	int pos = 0;
 
@@ -58,56 +58,70 @@ void choose_sort(Number* numbers, const int len, graph_pair* pair) {
 		swap(&numbers[pos], &numbers[i]);
 	}
 
-	*pair = {SORTING::CHOOSE_SORT, assignments, comparisons, len};
-	return;
+	if(pair)
+		*pair = {SORTING::CHOOSE_SORT, assignments, comparisons, len};
 }
 
-void insert_sort(Number* numbers, const int len, graph_pair* pair) {
+void insert_sort(Number* numbers, const int len, graph_pair* pair) { // , graph_pair* pair
 	for(int i = 1; i < len; ++i)
 		for(int j = i; j > 0; --j) {
 			if(numbers[j] < numbers[j - 1])
 				swap(&numbers[j], &numbers[j - 1]);
 		}
 
-	*pair = {SORTING::INSERT_SORT, assignments, comparisons, len};
-	return;
+	if(pair)
+		*pair = {SORTING::INSERT_SORT, assignments, comparisons, len};
 }
 
-void std_sort(Number* numbers, const int len, graph_pair* pair) {
-	std::vector<Number> vec;
-	printf("!!!!! len = %d\n", len);
+void std_sort(Number* numbers, const int len, graph_pair* pair) { // , graph_pair* pair
+	printf("[std_sort] begin\n");
+	// for(int i = 0; i < len; ++i)
+	// 	printf("%d ", numbers[i].value);
+	// printf("\n");
+	std::vector<Number> vec(0);
+	// printf("!!!!! len = %d\n", len);
 
-	Number tmp = {}, tmp1 = {};
+	// Number tmp = {}, tmp1 = {};
 	for(int i = 0; i < len; ++i) {
-		printf("\ti = %d, size %d, %p\n", i, vec.size(), &numbers[i]);
+		// printf("\ti = %d, size %d, %p\n", i, vec.size(), &numbers[i]);
 		// tmp = numbers[i];
 
-		// int v = tmp.value;
-		// tmp1.value = v;;
+		// int v = tmp.value, u = 0;
+		// tmp1.value = v;
+		// tmp1.pos = u;
+		// vec.push_back(tmp1);
 		vec.push_back(numbers[i]);
 		// vec.push_back(numbers[i]);
 	}
 	// 	vec.push_back(numbers[i]);
 
-	for(int i = 0; i < vec.size(); ++i)
-		printf("%d ", vec[i].value);
-	printf("\n");
+	// for(int i = 0; i < vec.size(); ++i)
+	// 	printf("%d ", vec[i].value);
+	// printf("\n");
 
-	printf("before sort\n");
-	std::sort(vec.begin(), vec.begin() + 17);
-	printf("after sort\n");
+	// printf("before sort\n");
+	// std::sort(vec.begin(), vec.end());
+	// printf("after sort\n");
+
+	// for(int i = 0; i < vec.size(); ++i)
+	// 	printf("%d ", vec[i].value);
+	// printf("\n");
 
 	// for(int i = 0; i < len; ++i)
 	// 	vec.pop_back();
 
-	vec.clear();
-	printf("after clear..\n");
+	// vec.clear();
+	// printf("after clear..\n");
 
-	*pair = {SORTING::STD_SORT, assignments, comparisons, len};
-	return;
+	// printf("lol who you are %p\n", pair);
+	if(pair)
+		*pair = {SORTING::STD_SORT, assignments, comparisons, len};
+	// printf("hahaha\n");
+	// return;
 }
 
-void std_stable_sort(Number* numbers, const int len, graph_pair* pair) {
+void std_stable_sort(Number* numbers, const int len, graph_pair* pair) { // , graph_pair* pair
+	printf("[std_stable_sort] begin\n");
 	std::vector<Number> vec(len);
 
 	for(int i = 0; i < len; ++i)
@@ -115,8 +129,9 @@ void std_stable_sort(Number* numbers, const int len, graph_pair* pair) {
 
 	std::stable_sort(vec.begin(), vec.end());
 
+	printf("[std_stable_sort] end\n");
 	// vec.clear();
 
-	*pair = {SORTING::STD_STABLE_SORT, assignments, comparisons, len};
-	return;
+	if(pair)
+		*pair = {SORTING::STD_STABLE_SORT, assignments, comparisons, len};
 }

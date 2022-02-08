@@ -59,7 +59,9 @@ class Charts : public View_object {
 		// printf("end draw chart\n\n");
 	}
 
-	void update_point(graph_pair &pair) {
+	void update_point(graph_pair pair) {
+		// printf("[update_point] begin 0\n");
+		printf("add %d, %d\n", pair.assign, pair.compare);
 		charts[0]->update_point(pair.sorting, pair.len_array, pair.compare);
 		// printf("begin update assignment_chart\n");
 		charts[1]->update_point(pair.sorting, pair.len_array, pair.assign);

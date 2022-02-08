@@ -36,6 +36,7 @@ class View_manager : public View_object {
 	Mouse_click_state mouse_click_state;
 
 	Charts* charts;
+	bool ok;
 
 	Button_manager* buttons;
 
@@ -94,7 +95,7 @@ class View_manager : public View_object {
 
 	bool check_tap(SDL_Event* event);
 
-	void update_charts(graph_pair* pairs, const int len);
+	void update_charts(graph_pair pairs);
 
 	void fill_button_manager();
 };

@@ -50,21 +50,21 @@ struct graph_pair {
 	}
 };
 
-typedef void (*standartized_sort)(Number*, int, graph_pair*);
+typedef void (*standartized_sort)(Number*, int, graph_pair*); // , graph_pair*
 extern standartized_sort standartized_sorts[];
 
 const int MAX_LEN = 500;
 
 inline void swap(const Number first, const Number second);
 
-void bubble_sort(Number* numbers, const int len, graph_pair* pair);
+void bubble_sort(Number* numbers, const int len, graph_pair* pair); // , graph_pair* pair
 
-void choose_sort(Number* numbers, const int len, graph_pair* pair);
+void choose_sort(Number* numbers, const int len, graph_pair* pair); // , graph_pair* pair
 
-void insert_sort(Number* numbers, const int len, graph_pair* pair);
+void insert_sort(Number* numbers, const int len, graph_pair* pair); // , graph_pair* pair
 
-void std_sort(Number* numbers, const int len, graph_pair* pair);
+void std_sort(Number* numbers, const int len, graph_pair* pair); // , graph_pair* pair
 
-void std_stable_sort(Number* numbers, const int len, graph_pair* pair);
+void std_stable_sort(Number* numbers, const int len, graph_pair* pair); // , graph_pair* pair
 
 #endif
