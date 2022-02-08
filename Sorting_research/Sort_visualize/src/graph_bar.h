@@ -7,6 +7,7 @@
 #include "Utils/rectangle.h"
 #include "number_container.h"
 #include "sorts.h"
+#include "sort_manager.h"
 // #include "app.h"
 
 class Graph_bar : public View_object {
@@ -14,7 +15,7 @@ class Graph_bar : public View_object {
 	Number_container* number_container;
 	int* heights;
 	Colour* colours;
-	int number_of_sort;
+	int* number_of_sort;
 
 	Graph_bar(const Point par_point, const double par_width, const double par_height, const Colour par_color, 
 				Number_container* arg_number_container);

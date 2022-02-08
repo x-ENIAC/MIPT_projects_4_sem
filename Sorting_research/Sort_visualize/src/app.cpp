@@ -59,6 +59,7 @@ void App::update() {
 	printf("Start initialize the view manager\n");
 
 	// controller = new Controller_data_charts(5, 10, 8);
+	app->sort_manager = new Sort_manager();
 	app->view_manager = new View_manager(Point(width_screen / 2.0, height_screen / 2.0), width_screen, height_screen, screen_color);
 
 	printf("\n\nBEGIN EVENTS CYCLE\n");
@@ -115,10 +116,10 @@ long long App::get_height_screen() {
 	return height_screen;
 }
 
-Controller_data_charts* App::get_controller() {
-	return controller;
-}
-
 View_manager* App::get_view_manager() {
 	return view_manager;
+}
+
+Sort_manager* App::get_sort_manager() {
+	return sort_manager;
 }

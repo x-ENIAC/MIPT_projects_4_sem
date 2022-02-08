@@ -65,6 +65,7 @@ class Choose_sort_delegate : public Button_delegate {
 
 	void click_reaction(const double mouse_x, const double mouse_y) override {
 		*number_of_sort = sorting;
+		printf("choose %d sort\n", sorting);
 	}
 
 	void motion_reaction(const double mouse_x, const double mouse_y) override {}
@@ -82,6 +83,8 @@ class Refresh_array_delegate : public Button_delegate {
 	void click_reaction(const double mouse_x, const double mouse_y) override {
 		number_container->fill_container();
 		App::get_app()->get_view_manager()->get_graph_bar()->fill_heights();
+		App::get_app()->get_sort_manager()->set_i(0);
+		App::get_app()->get_sort_manager()->set_j(1);
 	}
 
 	void motion_reaction(const double mouse_x, const double mouse_y) override {}

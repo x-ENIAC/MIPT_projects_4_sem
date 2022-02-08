@@ -50,21 +50,21 @@ struct graph_pair {
 	}
 };
 
-typedef bool (*standartized_sort)(Number*, int);
-extern standartized_sort standartized_sorts[];
+// typedef bool (*standartized_sort)(Number*, int);
+// extern standartized_sort standartized_sorts[];
 
 const int MAX_LEN = 500;
 
 inline void swap(const Number first, const Number second);
 
-bool bubble_sort(Number* numbers, const int len);
+// bool bubble_sort(Number* numbers, const int len);
 
-bool choose_sort(Number* numbers, const int len);
+// bool choose_sort(Number* numbers, const int len);
 
-bool insert_sort(Number* numbers, const int len);
+// bool insert_sort(Number* numbers, const int len);
 
-bool std_sort(Number* numbers, const int len);
+// bool std_sort(Number* numbers, const int len);
 
-bool std_stable_sort(Number* numbers, const int len);
+// bool std_stable_sort(Number* numbers, const int len);
 
 #endif

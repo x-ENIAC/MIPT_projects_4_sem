@@ -5,7 +5,7 @@
 #include "Editor/view_manager.h"
 #include "Utils/my_vector.h"
 #include "Editor/widget_types.h"
-#include "sorts.h"
+#include "sort_manager.h"
 
 #ifndef APP_H
 #define APP_H
@@ -41,7 +41,8 @@ class App {
 	int width_screen, height_screen;
 	long long begin_era;
 
-	Controller_data_charts* controller;
+	// Controller_data_charts* controller;
+	Sort_manager* sort_manager;
 	View_manager* view_manager;
 
 	Colour screen_color;
@@ -87,6 +88,8 @@ class App {
 	Controller_data_charts* get_controller();
 
 	View_manager* get_view_manager();
+
+	Sort_manager* get_sort_manager();
 };
 
 void fill_random_values(int* numbers, const int len);

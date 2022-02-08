@@ -20,14 +20,14 @@ View_manager::View_manager(const Point par_point, const double par_width, const 
 	pencil = new Pencil();
 
 	printf("[View_manager] start create Number_container\n");
-	number_container = new Number_container(100);
+	number_container = new Number_container(25);
 
 	printf("[View_manager] start create Graph_bar\n");
-	graph_bar = new Graph_bar(Point(450, 300), 700, 400, WHITE, number_container);
+	graph_bar = new Graph_bar(Point(460, 300), 700, 400, WHITE, number_container);
 	add_view_object(graph_bar);
 
 	printf("[View_manager] start create Button_manager\n");
-	buttons = new Button_manager(Point(390, 600), 270, 180, BLUE);
+	buttons = new Button_manager(Point(460, 600), 270, 180, BLUE);
 
 	add_view_object(buttons);
 	// printf("[View_manager] fill Button_manager\n");
@@ -112,14 +112,14 @@ void View_manager::fill_button_manager() {
 
 	left_up_corner += Point(-130, 60);
 
-	Choose_sort_delegate* bubble_sort_delegate = new Choose_sort_delegate(&(get_graph_bar()->number_of_sort), SORTING::BUBBLE_SORT);
+	Choose_sort_delegate* bubble_sort_delegate = new Choose_sort_delegate(get_graph_bar()->number_of_sort, SORTING::BUBBLE_SORT);
 	Button* bubble_sort_button = new Button(bubble_sort_delegate, left_up_corner, YELLOW, 120, 50, "Bubble");
 	buttons->add_view_object(bubble_sort_button);
 
 	left_up_corner += Point(130, 0);
 
-	Choose_sort_delegate* insert_sort_delegate = new Choose_sort_delegate(&(get_graph_bar()->number_of_sort), SORTING::CHOOSE_SORT);
-	Button* insert_sort_button = new Button(insert_sort_delegate, left_up_corner, YELLOW, 120, 50, "Choose");
+	Choose_sort_delegate* insert_sort_delegate = new Choose_sort_delegate(get_graph_bar()->number_of_sort, SORTING::INSERT_SORT);
+	Button* insert_sort_button = new Button(insert_sort_delegate, left_up_corner, YELLOW, 120, 50, "Insert");
 	buttons->add_view_object(insert_sort_button);
 
 	left_up_corner += Point(-130, 60);

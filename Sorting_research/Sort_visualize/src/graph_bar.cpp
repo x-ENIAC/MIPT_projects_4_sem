@@ -1,5 +1,6 @@
 #include "graph_bar.h"
 #include "app.h"
+#include "sort_manager.h"
 
 Graph_bar::Graph_bar(const Point par_point, const double par_width, const double par_height, const Colour par_color, 
 			Number_container* arg_number_container) :
@@ -10,7 +11,7 @@ View_object(par_point, par_width, par_height, par_color) {
 	colours = new Colour[number_container->get_count() + 1];
 	fill_heights();
 
-	number_of_sort = 0;
+	number_of_sort = App::get_app()->get_sort_manager()->get_addr_number_of_sort();
 }
 
 void Graph_bar::fill_heights() {
@@ -27,7 +28,8 @@ void Graph_bar::fill_heights() {
 void Graph_bar::update() {
 	int count = number_container->get_count();
 
-	int is_something_change = standartized_sorts[number_of_sort](number_container->get_numbers(), number_container->get_count());
+	int is_something_change = App::get_app()->get_sort_manager()->do_iteration(number_container->get_numbers(), count);
+	// standartized_sorts[number_of_sort](number_container->get_numbers(), count);
 
 	std::vector<int> changed_pos;
 

@@ -60,7 +60,7 @@ void Controller_data_charts::start_research(const int index, graph_pair*& pairs)
 
 	now_len = start_len;
 	for(int i = 0; i < count_of_operations; ++i) {
-		standartized_sorts[index](copy_data[i], now_len);
+		// standartized_sorts[index](copy_data[i], now_len);
 		// printf("%d %d %d %d\n", pairs[i].sorting, pairs[i].assign, pairs[i].compare, pairs[i].len_array);
 		// App::get_app()->get_view_manager()->update_charts(pair);
 		now_len += step;
