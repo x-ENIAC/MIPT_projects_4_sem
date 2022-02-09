@@ -57,6 +57,8 @@ const int MAX_LEN = 500;
 
 inline void swap(const Number first, const Number second);
 
+int cmp(const void* first_, const void* second_);
+
 void bubble_sort(Number* numbers, const int len, graph_pair* pair); // , graph_pair* pair
 
 void choose_sort(Number* numbers, const int len, graph_pair* pair); // , graph_pair* pair

@@ -57,6 +57,18 @@ class Number {
 		return (value < right);
 	}
 
+	bool operator>(const Number& right) const {
+		++comparisons;
+		printf("???, comparisons %d\n", comparisons);
+		return (value > right.value);
+	}
+
+	bool operator>(const int& right) const {
+		++comparisons;
+		printf("???, comparisons %d\n", comparisons);
+		return (value > right);
+	}
+
 
 };
 

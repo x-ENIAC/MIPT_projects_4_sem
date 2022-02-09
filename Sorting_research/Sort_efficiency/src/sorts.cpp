@@ -28,6 +28,20 @@ inline void swap(Number first, Number second) {
 	second = tmp;
 }
 
+int cmp(const void* first_, const void* second_) {
+	Number first = *(Number*)first_;
+	Number second = *(Number*)second_;
+
+	if(first < second) {
+		return -1;
+	}
+	else if(first > second) {
+		--comparisons;
+		return 1;
+	}
+	return 0;
+}
+
 void bubble_sort(Number* numbers, const int len, graph_pair* pair) { // , graph_pair* pair
 	// printf("begin bubble sort\n");
 	for(int i = 0; i < len; ++i)
@@ -83,41 +97,15 @@ void std_sort(Number* numbers, const int len, graph_pair* pair) { // , graph_pai
 
 	// Number tmp = {}, tmp1 = {};
 	for(int i = 0; i < len; ++i) {
-		// printf("\ti = %d, size %d, %p\n", i, vec.size(), &numbers[i]);
-		// tmp = numbers[i];
-
-		// int v = tmp.value, u = 0;
-		// tmp1.value = v;
-		// tmp1.pos = u;
-		// vec.push_back(tmp1);
 		vec.push_back(numbers[i]);
-		// vec.push_back(numbers[i]);
 	}
 	// 	vec.push_back(numbers[i]);
 
-	// for(int i = 0; i < vec.size(); ++i)
-	// 	printf("%d ", vec[i].value);
-	// printf("\n");
-
-	// printf("before sort\n");
 	// std::sort(vec.begin(), vec.end());
-	// printf("after sort\n");
-
-	// for(int i = 0; i < vec.size(); ++i)
-	// 	printf("%d ", vec[i].value);
-	// printf("\n");
-
-	// for(int i = 0; i < len; ++i)
-	// 	vec.pop_back();
-
-	// vec.clear();
-	// printf("after clear..\n");
-
-	// printf("lol who you are %p\n", pair);
+	qsort(numbers, len, sizeof(numbers[0]), cmp);
+	
 	if(pair)
 		*pair = {SORTING::STD_SORT, assignments, comparisons, len};
-	// printf("hahaha\n");
-	// return;
 }
 
 void std_stable_sort(Number* numbers, const int len, graph_pair* pair) { // , graph_pair* pair
