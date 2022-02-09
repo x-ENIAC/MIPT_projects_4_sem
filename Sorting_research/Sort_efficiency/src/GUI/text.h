@@ -17,7 +17,7 @@ class Text : public View_object {
 
 	Text() : View_object(Widget_types::TEXT) {
 
-		font_size = 20;
+		font_size = 18;
 		font_name = (char*)calloc(100, sizeof(char));
 		strcpy(font_name, "courier.ttf");
 		font = TTF_OpenFont(font_name, font_size);
@@ -36,7 +36,7 @@ class Text : public View_object {
 	Text(const Point par_point, const char* par_text, const double par_width, const double par_height, const Colour par_color) : 
 	  View_object(par_point, par_width, par_height, par_color, Widget_types::TEXT) {
 
-		font_size = 30;
+		font_size = 25;
 		font_name = (char*)calloc(100, sizeof(char));
 		strcpy(font_name, "courier.ttf");
 		font = TTF_OpenFont(font_name, font_size);

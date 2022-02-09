@@ -1,6 +1,4 @@
 #include "app.h"
-// #include "sorts.h"
-// #include "number.h"
 #include <vector>
 
 App* App::app = 0;
@@ -10,13 +8,13 @@ void App::initialize(const int width_screen, const int height_screen) {
 	SDL_STATUSES status = SDL_OKEY;
 
 	if(SDL_Init(SDL_INIT_EVERYTHING | SDL_INIT_TIMER | SDL_INIT_VIDEO) != 0) {
-		printf("bad init\n");
+		printf("[App::initialize] bad init\n");
 		status = BAD_SDL_INIT;
 		return;
 	}
 
 	if((IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG) != IMG_INIT_PNG) {
-		printf("bad init\n");
+		printf("[App::initialize] bad init\n");
 		status = BAD_SDL_INIT;
 		return;
 	}
@@ -24,7 +22,7 @@ void App::initialize(const int width_screen, const int height_screen) {
 	SDL_CreateWindowAndRenderer(width_screen, height_screen, 0, &window, &render);
 
 	if(!(window)) {
-		printf("Window not create\n");
+		printf("[App::initialize] Window not create\n");
 		status = WINDOW_NOT_CREATE;
 		return;
 	}
@@ -39,10 +37,10 @@ void App::initialize(const int width_screen, const int height_screen) {
 }
 
 void App::deinitialize() {
-	// SDL_FreeSurface    (app->screen);
-	// SDL_DestroyWindow  (app->window);
-	// SDL_DestroyRenderer(app->render);
-	// SDL_DestroyTexture (app->texture);
+	SDL_FreeSurface		(app->screen);
+	SDL_DestroyWindow	(app->window);
+	SDL_DestroyRenderer	(app->render);
+	SDL_DestroyTexture	(app->texture);
 
 	TTF_Quit();
 	SDL_Quit();
@@ -57,17 +55,10 @@ void App::update() {
 	SDL_SetRenderDrawColor(render, screen_color.red, screen_color.green, screen_color.blue, screen_color.alpha);
 	SDL_RenderClear(app->render);
 
-	printf("Start initialize the view manager\n");
+	printf("[App] Start initialize the view manager\n");
 
-	controller = new Controller_data_charts(5, 10, 8);
+	controller = new Controller_data_charts(5, 10, 20);
 	app->view_manager = new View_manager(Point(width_screen / 2.0, height_screen / 2.0), width_screen, height_screen, screen_color);
-
-	for(int i = 0; i < COUNT_OF_SORTS; ++i) {
-		Text* text = new Text(Point(750, 500 + i * 30), text_sorts[i], 50, 10, app->view_manager->charts->colours[i]);
-		app->view_manager->add_view_object(text);
-	}
-
-	// app->view_manager->buttons->buttons[3]->delegate->click_reaction(0, 0);
 
 	printf("\n\nBEGIN EVENTS CYCLE\n");
 	SDL_Event event = {};
@@ -87,15 +78,10 @@ void App::update() {
 
 		app->view_manager->draw(&app->render, &app->texture, &app->screen);
 
-		// app->view_manager->tick(TIME_DELTA);
+		app->view_manager->tick(TIME_DELTA);
 
-		// graph_pair pair = {};
-		// 	std_sort(controller->data[0], controller->start_len, &pair);
 		SDL_RenderPresent(app->render);
 	}
-	// // start + step * i
-	// for(int i = 0; i < )
-	
 }
 
 SDL_Renderer* App::get_render() {

@@ -55,8 +55,6 @@ class View_object {
 	int* widget_types;
 	Widget_types yourself_type;
 
-	// Texture* texture;
-
 	bool is_visible;
 	bool is_active;
 	bool is_alive;
@@ -76,10 +74,6 @@ class View_object {
 
 		yourself_type = par_widget_types;
 
-		// texture = new Texture(render);
-		// texture->texture = NULL;
-		// strcpy(texture->path_to_picture, par_path_to_picture);
-
 		is_visible = is_active = is_alive = is_reactive = true;
 	}
 
@@ -97,12 +91,6 @@ class View_object {
 			widget_types[i] = 0;
 
 		yourself_type = par_widget_types;
-
-
-		// texture = new Texture(render);
-		// texture->texture = NULL;
-		// strcpy(texture->path_to_picture, par_path_to_picture);
-		//printf("!!! %s\n", path_to_picture);
 
 		is_visible = is_active = is_alive = true;
 	}
@@ -122,28 +110,12 @@ class View_object {
 	virtual void draw(SDL_Renderer** render, SDL_Texture** par_texture, SDL_Surface** screen) {
 		if(is_visible) {
 			rect->draw(*render);
-
-			// SDL_Rect sdl_rect;
-			// sdl_rect.w = rect->get_width();
-			// sdl_rect.h = rect->get_height();
-			// sdl_rect.x = rect->get_center().x - sdl_rect.w / 2.0;
-			// sdl_rect.y = rect->get_center().y - sdl_rect.h / 2.0;
-
-
-
-			// texture->draw_texture(&sdl_rect);
 		}
 	}
 
-	virtual bool check_click(const float mouse_x, const float mouse_y, const Mouse_click_state* par_mouse_status) {
-		//if(is_active)
-		//	return true;
-		return false;
-	}
+	virtual bool check_click(const float mouse_x, const float mouse_y, const Mouse_click_state* par_mouse_status) {return false;}
 
-	virtual bool check_motion(Point old_mouse, Point now_mouse, const Mouse_click_state* par_mouse_status) {
-		return false;
-	}
+	virtual bool check_motion(Point old_mouse, Point now_mouse, const Mouse_click_state* par_mouse_status) {return false;}
 
 	Widget_types get_yourself_type() const {
 		return yourself_type;
@@ -162,18 +134,12 @@ class View_object {
 	}
 
 	virtual void update_position_from_delta(Point delta) {
-		//center -= delta;
 		rect->set_center(rect->get_center() - delta);     
 	}
 
-	virtual void update_view_object_position(const double mouse_x, const double mouse_y) {/*printf("-------\n");*/}
+	virtual void update_view_object_position(const double mouse_x, const double mouse_y) {}
 
 	virtual void tick(const double delta_time) {}
-
-	/*void update_position(const double mouse_x, const double mouse_y) {
-		center = Point(mouse_x, mouse_y);
-		rect->set_center(center); 
-	}*/
 };
 
 #endif

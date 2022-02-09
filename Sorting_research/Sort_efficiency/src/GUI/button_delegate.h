@@ -13,6 +13,4 @@ class Button_delegate {
 #include "../Editor/view_manager.h"
 enum class Mouse_click_state;
 
-// extern Animation_manager* anim_manager;
-
 #endif

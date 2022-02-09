@@ -29,7 +29,7 @@ class Charts : public View_object {
 			is_visible[i] = false;
 
 		colours = new Colour[count_of_sorting + 1];
-		colours[0] = BLACK;
+		colours[0] = LIGHT_CARROT;
 		colours[1] = RED;
 		colours[2] = GREEN;
 		colours[3] = BLUE;

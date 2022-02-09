@@ -4,8 +4,6 @@
 
 #ifndef CONTROLLER_H
 #define CONTROLLER_H
-// class Controller_data_charts;
-// #include "../app.h"
 
 class Controller_data_charts {
   public:
@@ -22,8 +20,7 @@ class Controller_data_charts {
 
 	void refresh_data();
 
-	// void start_research(const int index); // , graph_pair* pairs
-	void start_research(std::vector<Number> &numbers, const int len, const int index, graph_pair* pair);
+	void start_research(const int index_arr, const int len, const int index, graph_pair* pair);
 
 	int get_count_of_operations();
 

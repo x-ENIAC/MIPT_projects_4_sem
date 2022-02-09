@@ -38,11 +38,9 @@ class Show_points_delegate : public Button_delegate {
 
 		for(int i = 0; i < count_of_operations; ++i) {
 	  		graph_pair pair = {};
-			std::vector<Number> v1(cur_len);
-	  		for(int i = 0; i < cur_len; ++i)
-	  			v1[i] = Number(rand() % 100, i);
 
-	  		App::get_app()->get_controller()->start_research(v1, cur_len, index, &pair);
+
+	  		App::get_app()->get_controller()->start_research(i, cur_len, index, &pair);
 	  		cur_len += step;
 			App::get_app()->get_view_manager()->update_charts(pair);
 
@@ -50,33 +48,7 @@ class Show_points_delegate : public Button_delegate {
 			comparisons = 0;
 	  	}
 	  		
-
-	 //  	//------------------------------------------------------------------	  		
-  // 		cur_len = 15;
-
-  // 		std::vector<Number> v2(cur_len);
-  // 		for(int i = 0; i < cur_len; ++i)
-  // 			v2[i] = Number(rand() % 100, i);
-
-  // 		App::get_app()->get_controller()->start_research(v2, cur_len, 3);
-
-	 //  	//------------------------------------------------------------------
-		// cur_len = 25;
-		// std::vector<Number> v3(cur_len);
-		// for(int i = 0; i < cur_len; ++i)
-		// 	v3[i] = Number(rand() % 100, i);
-
-		// App::get_app()->get_controller()->start_research(v3, cur_len, 3);
-		// cur_len += step;
-	 //  	//------------------------------------------------------------------
-	 //  		// delete[] v;
-	  	// }
-
-  		// return;
   		printf("..............................%d\n", count_of_operations);
-  		// graph_pair* pairs = new graph_pair[count_of_operations];
-
-		// App::get_app()->get_controller()->start_research(index);
 		
 		is_visible[index] = 1 - is_visible[index];
 	}

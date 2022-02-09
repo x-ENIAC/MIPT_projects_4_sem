@@ -16,7 +16,7 @@
 
 SDL_Renderer* render;
 
-const int SCREEN_WIDTH  = 920;
+const int SCREEN_WIDTH  = 800;
 const int SCREEN_HEIGHT = 720;
 const double DELTA = 0.5;
 const double TIME_DELTA = 0.005;

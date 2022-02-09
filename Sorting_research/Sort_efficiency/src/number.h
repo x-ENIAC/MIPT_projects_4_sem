@@ -39,7 +39,7 @@ class Number {
 			value = right.value;
 			pos = right.pos;
 			++assignments;
-			printf("!!!, assignments %d\n", assignments);
+			// printf("!!!, assignments %d\n", assignments);
 		}
 
 		return *this;
@@ -47,25 +47,25 @@ class Number {
 
 	bool operator<(const Number& right) const {
 		++comparisons;
-		printf("???, comparisons %d\n", comparisons);
+		// printf("???, comparisons %d\n", comparisons);
 		return (value < right.value);
 	}
 
 	bool operator<(const int& right) const {
 		++comparisons;
-		printf("???, comparisons %d\n", comparisons);
+		// printf("???, comparisons %d\n", comparisons);
 		return (value < right);
 	}
 
 	bool operator>(const Number& right) const {
 		++comparisons;
-		printf("???, comparisons %d\n", comparisons);
+		// printf("???, comparisons %d\n", comparisons);
 		return (value > right.value);
 	}
 
 	bool operator>(const int& right) const {
 		++comparisons;
-		printf("???, comparisons %d\n", comparisons);
+		// printf("???, comparisons %d\n", comparisons);
 		return (value > right);
 	}
 
