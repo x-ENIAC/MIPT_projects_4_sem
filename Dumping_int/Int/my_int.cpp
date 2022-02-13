@@ -1,11 +1,12 @@
 #include "my_int.h"
 #include "../Dumper/int_dumping.h"
 #include "../Dumper/console.h"
+#include "../Tools/console_colours.h"
 
 size_t indents = 0;
 bool pair_arithm_flag  = false;
 
-#define BEGIN_FUNC Adder_at_trace adder(__PRETTY_FUNCTION__);
+#define BEGIN_FUNC(colour) Adder_at_trace adder(__PRETTY_FUNCTION__, colour);
 
 #define SINGLE_PRETTY_ARITHM							\
 	printf("%s", ARROWS[1]);
@@ -14,40 +15,50 @@ bool pair_arithm_flag  = false;
 	printf("%s", ARROWS[(int)pair_arithm_flag]);		\
 	pair_arithm_flag = !pair_arithm_flag;
 
-#define INFO_ABOUT_VAR_PTR(int_ptr) 	printf("[%p]: id = %ld, value = %d, name=%s\n", 											\
-											int_ptr, int_ptr->get_id(), int_ptr->get_value(), int_ptr->get_name().c_str());
+#define INFO_ABOUT_VAR_PTR(int_ptr, colour) 																		\
+	printf("%s[%p]: id = %ld, %s=%d%s\n",																			\
+		console_colours_text[(int)colour], int_ptr, int_ptr->get_id(),												\
+		int_ptr->get_name().c_str(), int_ptr->get_value(), console_colours_text[(int)Console_colours::RESET]);
 
-#define INFO_ABOUT_VAR_NOT_PTR(int_ptr) printf("[%p]: id = %ld, value = %d, name=%s\n", 											\
-											&int_ptr, int_ptr.get_id(),  int_ptr.get_value(), int_ptr.get_name().c_str());
+#define INFO_ABOUT_VAR_NOT_PTR(int_ptr, colour)																		\
+	printf("%s[%p]: id = %ld, %s=%d%s\n",																			\
+		console_colours_text[(int)colour], &int_ptr, int_ptr.get_id(),												\
+		int_ptr.get_name().c_str(), int_ptr.get_value(), console_colours_text[(int)Console_colours::RESET]);
 
-#define INFO_ABOUT_VARS_PTR_AND_NOT_PTR 				\
-	$ PAIR_PRETTY_ARITHM INFO_ABOUT_VAR_PTR(this)		\
-	$ PAIR_PRETTY_ARITHM INFO_ABOUT_VAR_NOT_PTR(other)
+#define INFO_ABOUT_VARS_PTR_AND_NOT_PTR(colour)							\
+	$ PAIR_PRETTY_ARITHM INFO_ABOUT_VAR_PTR(this, colour)				\
+	$ PAIR_PRETTY_ARITHM INFO_ABOUT_VAR_NOT_PTR(other, colour)
 
 size_t Int::max_id = 0;
 
 Int::Int() {
-	BEGIN_FUNC
+	BEGIN_FUNC(CONSTRUCTOR_COLOUR)
 
 	value = 0;
 	id = max_id++;
 	name = "not_defined";
 
-	$ SINGLE_PRETTY_ARITHM INFO_ABOUT_VAR_PTR(this)
+	$ SINGLE_PRETTY_ARITHM INFO_ABOUT_VAR_PTR(this, ARGUMENTS_COLOUR)
+}
+
+Int::~Int() {
+	BEGIN_FUNC(DESTRUCTOR_COLOUR)
+
+	$ SINGLE_PRETTY_ARITHM INFO_ABOUT_VAR_PTR(this, DESTRUCTOR_COLOUR)
 }
 
 Int::Int(const int arg_value, const std::string arg_name) {
-	BEGIN_FUNC
+	BEGIN_FUNC(CONSTRUCTOR_COLOUR)
 
 	value = arg_value;
 	id = max_id++;
 	name = arg_name;
 
-	$ SINGLE_PRETTY_ARITHM INFO_ABOUT_VAR_PTR(this)
+	$ SINGLE_PRETTY_ARITHM INFO_ABOUT_VAR_PTR(this, ARGUMENTS_COLOUR)
 }
 
 Int& Int::operator=(const int &other) {
-	BEGIN_FUNC
+	BEGIN_FUNC(OPERATOR_COLOUR)
 
 	value = other;
 
@@ -55,20 +66,22 @@ Int& Int::operator=(const int &other) {
 }
 
 Int& Int::operator=(const Int &other) {
-	BEGIN_FUNC
+	BEGIN_FUNC(OPERATOR_COLOUR)
 
 	value = other.get_value();
-	id = other.get_id();
+	// id = other.get_id();
 
-	Dumper::get_dumper()->signal(*this, other, Int_signal::ASSIGNMENT);
+	
+
+	// Dumper::get_dumper()->signal(*this, other, Int_signal::ASSIGNMENT);
 
 	return *this; 
 }
 
 Int& Int::operator+=(const Int &other) {
-	BEGIN_FUNC
+	BEGIN_FUNC(OPERATOR_COLOUR)
 
-	INFO_ABOUT_VARS_PTR_AND_NOT_PTR
+	INFO_ABOUT_VARS_PTR_AND_NOT_PTR(ARGUMENTS_COLOUR)
 
 	value += other.get_value();
 
@@ -76,9 +89,9 @@ Int& Int::operator+=(const Int &other) {
 }
 
 Int& Int::operator-=(const Int &other) {
-	BEGIN_FUNC
+	BEGIN_FUNC(OPERATOR_COLOUR)
 
-	INFO_ABOUT_VARS_PTR_AND_NOT_PTR
+	INFO_ABOUT_VARS_PTR_AND_NOT_PTR(ARGUMENTS_COLOUR)
 
 	value -= other.get_value();
 
@@ -86,9 +99,9 @@ Int& Int::operator-=(const Int &other) {
 }
 
 Int& Int::operator*=(const Int &other) {
-	BEGIN_FUNC
+	BEGIN_FUNC(OPERATOR_COLOUR)
 
-	INFO_ABOUT_VARS_PTR_AND_NOT_PTR
+	INFO_ABOUT_VARS_PTR_AND_NOT_PTR(ARGUMENTS_COLOUR)
 
 	value *= other.get_value();
 
@@ -96,9 +109,9 @@ Int& Int::operator*=(const Int &other) {
 }
 
 Int& Int::operator/=(const Int &other) {
-	BEGIN_FUNC
+	BEGIN_FUNC(OPERATOR_COLOUR)
 
-	INFO_ABOUT_VARS_PTR_AND_NOT_PTR
+	INFO_ABOUT_VARS_PTR_AND_NOT_PTR(ARGUMENTS_COLOUR)
 
 	value /= other.get_value();
 
@@ -106,81 +119,81 @@ Int& Int::operator/=(const Int &other) {
 }
 
 bool Int::operator<(const Int &other) const {
-	BEGIN_FUNC
+	BEGIN_FUNC(OPERATOR_COLOUR)
 
-	INFO_ABOUT_VARS_PTR_AND_NOT_PTR
+	INFO_ABOUT_VARS_PTR_AND_NOT_PTR(ARGUMENTS_COLOUR)
 
 	return value < other.get_value();
 }
 
 bool Int::operator>(const Int &other) const {
-	BEGIN_FUNC
+	BEGIN_FUNC(OPERATOR_COLOUR)
 
-	INFO_ABOUT_VARS_PTR_AND_NOT_PTR
+	INFO_ABOUT_VARS_PTR_AND_NOT_PTR(ARGUMENTS_COLOUR)
 
 	return value > other.get_value();
 }
 
 bool Int::operator<=(const Int &other) const {
-	BEGIN_FUNC
+	BEGIN_FUNC(OPERATOR_COLOUR)
 
-	INFO_ABOUT_VARS_PTR_AND_NOT_PTR
+	INFO_ABOUT_VARS_PTR_AND_NOT_PTR(ARGUMENTS_COLOUR)
 
 	return value <= other.get_value();
 }
 
 bool Int::operator>=(const Int &other) const {
-	BEGIN_FUNC
+	BEGIN_FUNC(OPERATOR_COLOUR)
 
-	INFO_ABOUT_VARS_PTR_AND_NOT_PTR
+	INFO_ABOUT_VARS_PTR_AND_NOT_PTR(ARGUMENTS_COLOUR)
 
 	return value >= other.get_value();
 }
 
 bool Int::operator==(const Int &other) const {
-	BEGIN_FUNC
+	BEGIN_FUNC(OPERATOR_COLOUR)
 
-	INFO_ABOUT_VARS_PTR_AND_NOT_PTR
+	INFO_ABOUT_VARS_PTR_AND_NOT_PTR(ARGUMENTS_COLOUR)
 
 	return value == other.get_value();
 }
 
 bool Int::operator!=(const Int &other) const {
-	BEGIN_FUNC
+	BEGIN_FUNC(OPERATOR_COLOUR)
 
-	INFO_ABOUT_VARS_PTR_AND_NOT_PTR
+	INFO_ABOUT_VARS_PTR_AND_NOT_PTR(ARGUMENTS_COLOUR)
 
 	return value != other.get_value();
 }
 
 const Int Int::operator+(const Int &other) const {
-	BEGIN_FUNC
+	BEGIN_FUNC(OPERATOR_COLOUR)
 
-	INFO_ABOUT_VARS_PTR_AND_NOT_PTR
+	INFO_ABOUT_VARS_PTR_AND_NOT_PTR(ARGUMENTS_COLOUR)
 
 	return { value + other.get_value() }; 
 }
 
 const Int Int::operator-(const Int &other) const {
-	BEGIN_FUNC
+	BEGIN_FUNC(OPERATOR_COLOUR)
 
-	INFO_ABOUT_VARS_PTR_AND_NOT_PTR
+	INFO_ABOUT_VARS_PTR_AND_NOT_PTR(ARGUMENTS_COLOUR)
 
 	return { value - other.get_value() }; 
 }
 
 const Int Int::operator*(const Int &other) const {
-	BEGIN_FUNC
+	BEGIN_FUNC(OPERATOR_COLOUR)
 
-	INFO_ABOUT_VARS_PTR_AND_NOT_PTR
+	INFO_ABOUT_VARS_PTR_AND_NOT_PTR(ARGUMENTS_COLOUR)
 
 	return { value * other.get_value() }; 
 }
 
 const Int Int::operator/(const Int &other) const {
-	BEGIN_FUNC
+	BEGIN_FUNC(OPERATOR_COLOUR)
 
-	INFO_ABOUT_VARS_PTR_AND_NOT_PTR
+	INFO_ABOUT_VARS_PTR_AND_NOT_PTR(ARGUMENTS_COLOUR)
 
 	return { value / other.get_value() }; 
 }

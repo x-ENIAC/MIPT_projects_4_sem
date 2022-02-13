@@ -12,5 +12,8 @@ void testing() {
 
 	printf("\n");
 
-	a = (b + 10) / 2;
+	b = a;
+
+	// VAR(Int, c, 0);
+	// c = a + b;
 }

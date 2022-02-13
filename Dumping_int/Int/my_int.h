@@ -3,6 +3,7 @@
 
 #include <cstdio>
 #include <string>
+#include "../Tools/console_colours.h"
 
 extern size_t indents;
 
@@ -12,6 +13,12 @@ extern size_t indents;
 		printf("\t");
 
 #define $$ printf("\n");
+
+const Console_colours CONSTRUCTOR_COLOUR = Console_colours::GREEN;
+const Console_colours ARGUMENTS_COLOUR = Console_colours::YELLOW;
+const Console_colours DESTRUCTOR_COLOUR = Console_colours::BOLDMAGENTA;
+const Console_colours OPERATOR_COLOUR = Console_colours::CYAN;
+// const Console_colours 
 
 class Int {
 private:
@@ -23,6 +30,8 @@ private:
 
 public:
 	Int();
+
+	~Int();
 
 	Int(const int arg_value, const std::string arg_name = "aboba");
 
