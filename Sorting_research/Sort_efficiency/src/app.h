@@ -5,7 +5,7 @@
 #include "Editor/view_manager.h"
 #include "Utils/my_vector.h"
 #include "Editor/widget_types.h"
-#include "sorts.h"
+#include "Sorting_research/sorts.h"
 
 #ifndef APP_H
 #define APP_H

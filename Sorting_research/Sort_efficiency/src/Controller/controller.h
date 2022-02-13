@@ -1,5 +1,5 @@
-#include "../number.h"
-#include "../sorts.h"
+#include "../Sorting_research/number.h"
+#include "../Sorting_research/sorts.h"
 #include <vector>
 
 #ifndef CONTROLLER_H
@@ -11,7 +11,6 @@ class Controller_data_charts {
 	int step;
 	int count_of_operations;
 
-	// Number** data;
 	std::vector<Number*> data;
 
 	Controller_data_charts(const int arg_start_len, const int arg_step, const int arg_count_of_operations);

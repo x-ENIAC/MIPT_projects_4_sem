@@ -6,8 +6,6 @@
 Controller_data_charts::Controller_data_charts(const int arg_start_len, const int arg_step, const int arg_count_of_operations) :
 	start_len(arg_start_len), step(arg_step), count_of_operations(arg_count_of_operations) {
 
-	printf("[Controller] init, start_len %d, step %d, count_of_operations %d\n", start_len, step, count_of_operations);
-
 	data.resize(count_of_operations);
 
 	int now_len = start_len;
@@ -38,16 +36,12 @@ void Controller_data_charts::refresh_data() {
 }
 
 void Controller_data_charts::start_research(const int index_arr, const int len, const int index, graph_pair* pair) {
-	printf("start start_research index %d!\n", index);
-
-	printf("[start_research] start\n");
 	Number* copy_data = new Number[len];
 
 	for(int i = 0; i < len; ++i)
 		copy_data[i] = data[index_arr][i];
 
 	standartized_sorts[index](copy_data, len, pair);
-	printf("[start_research] end\n");
 	
 	delete[] copy_data;
 }

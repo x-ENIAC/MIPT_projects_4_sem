@@ -1,15 +1,15 @@
-#include "Editor/canvas.h"
-#include "Editor/pencil.h"
+#include "../Editor/canvas.h"
+#include "../Editor/pencil.h"
 #include "sorts.h"
 #include "chart.h"
-#include "Utils/my_vector.h"
-#include "cmath"
+#include "../Utils/my_vector.h"
+#include <cmath>
 
 #ifndef CHARTS_H
 #define CHARTS_H
 
 class Charts;
-#include "app.h"
+#include "../app.h"
 
 class Charts : public View_object {
 	public:
@@ -22,7 +22,6 @@ class Charts : public View_object {
 		View_object(center, width, height, LIGHT_GREY, Widget_types::CHART) {
 			
 		count_of_sorting = arg_count_of_sorting;
-		// printf("%d...\n", count_of_sorting);
 
 		is_visible = new bool[count_of_sorting + 1];
 		for(int i = 0; i <= count_of_sorting; ++i)
@@ -52,18 +51,13 @@ class Charts : public View_object {
 
 	void draw(SDL_Renderer** render, SDL_Texture** texture, SDL_Surface** screen) override {
 		if(is_visible) {
-			// printf("begin draw chartsssssssssssss\n");
 			charts[0]->draw(render, texture, screen);
 			charts[1]->draw(render, texture, screen);
 		}
-		// printf("end draw chart\n\n");
 	}
 
 	void update_point(graph_pair pair) {
-		// printf("[update_point] begin 0\n");
-		printf("add %d, %d\n", pair.assign, pair.compare);
 		charts[0]->update_point(pair.sorting, pair.len_array, pair.compare);
-		// printf("begin update assignment_chart\n");
 		charts[1]->update_point(pair.sorting, pair.len_array, pair.assign);
 	}
 };

@@ -96,15 +96,8 @@ class View_object {
 	}
 
 	~View_object() {
-		// printf("~View_object\n");
-
 		delete rect;
 		delete[] widget_types;
-
-		// delete texture;
-		
-		// delete rect;
-		// delete[] widget_types;
 	}
 
 	virtual void draw(SDL_Renderer** render, SDL_Texture** par_texture, SDL_Surface** screen) {

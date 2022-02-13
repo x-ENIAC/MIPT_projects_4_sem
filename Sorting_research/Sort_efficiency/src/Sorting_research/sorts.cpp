@@ -42,20 +42,17 @@ int cmp(const void* first_, const void* second_) {
 	return 0;
 }
 
-void bubble_sort(Number* numbers, const int len, graph_pair* pair) { // , graph_pair* pair
-	// printf("begin bubble sort\n");
+void bubble_sort(Number* numbers, const int len, graph_pair* pair) {
 	for(int i = 0; i < len; ++i)
 		for(int j = 1; j < len - i; ++j)
 			if(numbers[j] < numbers[j - 1])
 				swap(&numbers[j - 1], &numbers[j]);
 
-	// printf("end bubble sort\n");
-	// printf("len %d, assignments %d, comparisons %d\n", len, assignments, comparisons);
 	if(pair)
 		*pair = graph_pair(SORTING::BUBBLE_SORT, assignments, comparisons, len);
 }
 
-void choose_sort(Number* numbers, const int len, graph_pair* pair) { // , graph_pair* pair
+void choose_sort(Number* numbers, const int len, graph_pair* pair) {
 	Number min_value = numbers[0];
 	int pos = 0;
 
@@ -76,7 +73,7 @@ void choose_sort(Number* numbers, const int len, graph_pair* pair) { // , graph_
 		*pair = {SORTING::CHOOSE_SORT, assignments, comparisons, len};
 }
 
-void insert_sort(Number* numbers, const int len, graph_pair* pair) { // , graph_pair* pair
+void insert_sort(Number* numbers, const int len, graph_pair* pair) {
 	for(int i = 1; i < len; ++i)
 		for(int j = i; j > 0; --j) {
 			if(numbers[j] < numbers[j - 1])
@@ -87,38 +84,20 @@ void insert_sort(Number* numbers, const int len, graph_pair* pair) { // , graph_
 		*pair = {SORTING::INSERT_SORT, assignments, comparisons, len};
 }
 
-void std_sort(Number* numbers, const int len, graph_pair* pair) { // , graph_pair* pair
-	printf("[std_sort] begin\n");
-	// for(int i = 0; i < len; ++i)
-	// 	printf("%d ", numbers[i].value);
-	// printf("\n");
-	std::vector<Number> vec(0);
-	// printf("!!!!! len = %d\n", len);
-
-	// Number tmp = {}, tmp1 = {};
-	for(int i = 0; i < len; ++i) {
-		vec.push_back(numbers[i]);
-	}
-	// 	vec.push_back(numbers[i]);
-
-	// std::sort(vec.begin(), vec.end());
+void std_sort(Number* numbers, const int len, graph_pair* pair) {
 	qsort(numbers, len, sizeof(numbers[0]), cmp);
 	
 	if(pair)
 		*pair = {SORTING::STD_SORT, assignments, comparisons, len};
 }
 
-void std_stable_sort(Number* numbers, const int len, graph_pair* pair) { // , graph_pair* pair
-	printf("[std_stable_sort] begin\n");
+void std_stable_sort(Number* numbers, const int len, graph_pair* pair) {
 	std::vector<Number> vec(len);
 
 	for(int i = 0; i < len; ++i)
 		vec[i] = numbers[i];
 
 	std::stable_sort(vec.begin(), vec.end());
-
-	printf("[std_stable_sort] end\n");
-	// vec.clear();
 
 	if(pair)
 		*pair = {SORTING::STD_STABLE_SORT, assignments, comparisons, len};

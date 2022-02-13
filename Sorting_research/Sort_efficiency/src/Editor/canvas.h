@@ -38,15 +38,6 @@ struct Cell {
 
 class Canvas : public View_object {
   public:
-	//Rectangle* object_rect;
-	//Button_owner owner;
-
-	//View_object** view_objects;
-	//size_t count_of_views;
-	// Pencil* pencil;
-
-	// Tool* active_tool;
-
 	Pencil* pencil;
 
 	Cell** cells_color;
@@ -54,7 +45,7 @@ class Canvas : public View_object {
 	Canvas() : View_object() {}
 
 	Canvas(const Point par_point, const double par_width, const double par_height, const Colour par_button_color,
-			Pencil* par_pencil /*const Button_owner par_owner, */) :
+			Pencil* par_pencil) :
 	  View_object(par_point, par_width, par_height, par_button_color, Widget_types::CANVAS) {
 
 		cells_color = new Cell*[(int)par_width + 1];
@@ -69,9 +60,6 @@ class Canvas : public View_object {
 			}
 
 		pencil = par_pencil;
-
-		printf("CANVAAS !! %d !! %d\n", (int)par_width, (int)par_height);
-		// load_picture();
 	}
 
 	void load_picture();
@@ -102,8 +90,6 @@ class Canvas : public View_object {
 
 	bool check_motion(Point old_mouse, Point now_mouse, const Mouse_click_state* par_mouse_status) override {
 		if(is_active) {
-			// printf("MOTIOOOOOOOOOOOOOOOOOOOOOOON\n");
-			// Tool_manager::get_tool_manager()->on_move(old_mouse, now_mouse, par_mouse_status);
 			if(*par_mouse_status == Mouse_click_state::MOUSE_DOWN_AND_MOTION) {
 				if(rect->is_point_belongs_to_rectangle( Point(now_mouse.x, now_mouse.y) )) {
 					if(rect->is_point_belongs_to_rectangle( Point(now_mouse.x, now_mouse.y) )) {
@@ -141,17 +127,6 @@ class Canvas : public View_object {
 	void delete_all();
 
 	void update_position_from_delta(const Point delta);
-
-
-	/*inline Button_owner get_owner() const {
-		return owner;
-	}*/
-
-	//inline void set_owner(const Button_owner new_owner) {
-	//  owner = new_owner;
-	//}
-
-	//void tick(const double delta_time) override {}
 };
 
 #endif

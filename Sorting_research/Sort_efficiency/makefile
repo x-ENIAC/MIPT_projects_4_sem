@@ -1,4 +1,4 @@
-CUR_PROG = graphical_editor
+CUR_PROG = sorts_efficiently
 ARGS = 
 
 CPP = g++
@@ -32,8 +32,8 @@ canvas.o: ./src/Editor/canvas.cpp ./src/Editor/canvas.h
 view_manager.o: ./src/Editor/view_manager.cpp ./src/Editor/view_manager.h
 	$(CPP) $(CFLAGS) -c ./src/Editor/view_manager.cpp -o view_manager.o	
 
-sorts.o: ./src/sorts.cpp ./src/sorts.h
-	$(CPP) $(CFLAGS) -c ./src/sorts.cpp -o sorts.o
+sorts.o: ./src/Sorting_research/sorts.cpp ./src/Sorting_research/sorts.h
+	$(CPP) $(CFLAGS) -c ./src/Sorting_research/sorts.cpp -o sorts.o
 
 button_delegates.o: ./src/GUI/button_delegates.cpp ./src/GUI/button_delegates.h
 	$(CPP) $(CFLAGS) -c ./src/GUI/button_delegates.cpp -o button_delegates.o

@@ -11,25 +11,10 @@
 #define BUTTON_H
 
 const size_t MAX_COUNT_OF_VIEW_OBJECTS_FOR_BUTTON = 5;
-//extern const char NON_PATH_TO_PUCTURE[];
-
-/*enum Button_status {
-	IS_PUSH 	= 1,
-	IS_NOT_PUSH = 2,
-};*/
-
-/*enum Button_owner {
-	BUTTON_OWNER_BUTTON_CLASS = 0,
-	BUTTON_OWNER_USER         = 1,
-	BUTTON_OWNER_OTHER_CLASS  = 2,
-};*/
 
 class Button : public View_object {
   public:
 	Button_delegate* delegate;
-
-	//Button_status status;
-	//Button_owner owner;
 
 	View_object** view_objects;
 	size_t count_of_views;
@@ -44,12 +29,8 @@ class Button : public View_object {
 	}	
 
 	Button(Button_delegate* par_delegate, const Point par_point, const Colour par_button_color, const double par_width, const double par_height, 
-								/*const Button_owner par_owner, */const char text_on_button[] = TEXT_SPACE, const Colour par_text_color = BLACK,
-																  const char* par_path_to_picture = NON_PATH_TO_PUCTURE) :
+								const char text_on_button[] = TEXT_SPACE, const Colour par_text_color = BLACK, const char* par_path_to_picture = NON_PATH_TO_PUCTURE) :
 	  View_object (par_point, par_width, par_height, par_button_color, Widget_types::BUTTON, par_path_to_picture) {
-
-	  	printf("%s\n", par_path_to_picture);
-	  	// printf("------------------------- %d\n", ((Show_points_delegate*)par_delegate)->index);
 
 		delegate = par_delegate;
 
@@ -80,8 +61,7 @@ class Button : public View_object {
 
 	bool check_click(const float mouse_x, const float mouse_y, const Mouse_click_state* par_mouse_status) override {
 		if(rect->is_point_belongs_to_rectangle( Point(mouse_x, mouse_y) )) {
-			// printf("Begin check button\n");
-			//printf("!!! %d\n", *par_mouse_status);
+
 			if(*par_mouse_status == Mouse_click_state::MOUSE_DOWN) {
 				delegate->click_reaction(mouse_x, mouse_y);
 			}
@@ -94,7 +74,6 @@ class Button : public View_object {
 
 	bool check_motion(Point old_mouse, Point now_mouse, const Mouse_click_state* par_mouse_status) override {
 		if(rect->is_point_belongs_to_rectangle( Point(now_mouse.x, now_mouse.y) )) {
-			//printf("!!! %d\n", *par_mouse_status);
 			if(*par_mouse_status == Mouse_click_state::MOUSE_DOWN_AND_MOTION)
 				delegate->motion_reaction(now_mouse.x, now_mouse.y);
 
@@ -139,7 +118,6 @@ class Button : public View_object {
 		new_center -= delta;
 
 		rect->set_center(new_center);
-		//center = new_center;
 
 		for(size_t i = 0; i < count_of_views; ++i) {
 			Point new_view_center(view_objects[i]->rect->get_center());
@@ -147,7 +125,6 @@ class Button : public View_object {
 			new_view_center -= delta;
 
 			view_objects[i]->rect->set_center(new_view_center);
-			//view_objects[i]->center = new_view_center;
 		}
 	}
 
@@ -155,27 +132,15 @@ class Button : public View_object {
 		printf("begin button delete_all\n");
 
 		for(size_t i = 0; i < count_of_views; ++i) {
-			//view_objects[i]->delete_all();
 			delete[] view_objects[i];
 		}
 
-		printf("middle button delete_all\n");
-
-		// delete[] view_objects;
 		count_of_views = 0;
 
-		//delete delegate;
 		printf("end button delete_all\n");
 	}
 
-	/*inline Button_owner get_owner() const {
-		return owner;
-	}*/
-
-	//inline void set_owner(const Button_owner new_owner) {
-	//	owner = new_owner;
-	//}
-
+	
 	void tick(const double delta_time) override {
 		for(size_t i = 0; i < count_of_views; ++i) {
 			if(!(view_objects[i]->is_alive)) {

@@ -1,8 +1,8 @@
-#include "Editor/canvas.h"
-#include "Editor/pencil.h"
-#include "Sorting_research/sorts.h"
-#include "Utils/my_vector.h"
-#include "cmath"
+#include "../Editor/canvas.h"
+#include "../Editor/pencil.h"
+#include "sorts.h"
+#include "../Utils/my_vector.h"
+#include <cmath>
 
 #ifndef CHART_H
 #define CHART_H

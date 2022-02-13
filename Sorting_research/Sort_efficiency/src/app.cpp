@@ -27,8 +27,6 @@ void App::initialize(const int width_screen, const int height_screen) {
 		return;
 	}
 
-	char* name_font = "courier.ttf";
-
 	TTF_Init();
 
 	screen = SDL_GetWindowSurface(window);
@@ -55,12 +53,9 @@ void App::update() {
 	SDL_SetRenderDrawColor(render, screen_color.red, screen_color.green, screen_color.blue, screen_color.alpha);
 	SDL_RenderClear(app->render);
 
-	printf("[App] Start initialize the view manager\n");
-
-	controller = new Controller_data_charts(5, 10, 20);
+	controller = new Controller_data_charts(5, 10, 8);
 	app->view_manager = new View_manager(Point(width_screen / 2.0, height_screen / 2.0), width_screen, height_screen, screen_color);
 
-	printf("\n\nBEGIN EVENTS CYCLE\n");
 	SDL_Event event = {};
 	bool is_run = true;
 	while(is_run) {
@@ -96,6 +91,7 @@ App* App::get_app() {
 
 void App::remove_app() {
 	delete app;
+	printf("Thanks for using this app!\n");
 }
 
 long long App::get_begin_era() {

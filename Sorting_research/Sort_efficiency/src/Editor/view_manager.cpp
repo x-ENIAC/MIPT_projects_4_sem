@@ -4,10 +4,8 @@
 View_manager::View_manager(const Point par_point, const double par_width, const double par_height, const Colour par_color) :
   View_object(par_point, par_width, par_height, LIGHT_GREY, Widget_types::VIEW_MANAGER) {
 
-	printf("[View_manager::construct] start View_manager\n");
 	count_of_view_objects = 1;
 
-	printf("[View_manager::construct] create objects\n");
 	view_objects = new View_object*[MAX_COUNT_OF_VIEW_OBJECTS];
 	for(size_t i = 0; i < MAX_COUNT_OF_VIEW_OBJECTS; ++i)
 		view_objects[i] = new View_object;
@@ -16,28 +14,18 @@ View_manager::View_manager(const Point par_point, const double par_width, const 
 
 	mouse_click_state = Mouse_click_state::MOUSE_UP;
 
-	printf("[View_manager::construct] new pencil\n");
 	pencil = new Pencil();
 
-	printf("[View_manager::construct] charts\n");
 	charts = new Charts(Point(400, 200), 700, 700, pencil, COUNT_OF_SORTS);
-	printf("[View_manager::construct] add chart %p\n", charts);
 	add_view_object(charts);
 
-	printf("[View_manager::construct] create button_manager\n");
 	buttons = new Button_manager(Point(400, 580), 250, 240, DARK_GREY_3);
 
 	add_view_object(buttons);
-	printf("[View_manager::construct] fill button_manager\n");
 	fill_button_manager();
-
-	printf("[View_manager::construct] end construct view manager\n");
-	printf("[View_manager::construct] add chart %p\n", charts);
 }
 
 View_manager::~View_manager() {
-	printf("Destruct View_manager, %ld\n", count_of_view_objects);
-
 	for(size_t i = 0; i < count_of_view_objects; ++i)
 		delete view_objects[i];
 	delete[] view_objects;
@@ -52,14 +40,11 @@ void View_manager::add_view_object(View_object* new_view) {
 	++count_of_view_objects;
 
 	++widget_types[(int)new_view->get_yourself_type()];
-	// printf("add chart %p\n", charts);
 }
 
 void View_manager::check_events(SDL_Event* event) {
-	// printf("add chart %p\n", charts);
 	double x_mouse = event->button.x, y_mouse = event->button.y;
 
-	//printf("%d\n", event->type);
 	if(event->type == SDL_MOUSEBUTTONUP) {
 		mouse_click_state = Mouse_click_state::MOUSE_UP;
 
@@ -78,11 +63,9 @@ void View_manager::check_events(SDL_Event* event) {
 
 		if(mouse_click_state == Mouse_click_state::MOUSE_DOWN || mouse_click_state == Mouse_click_state::MOUSE_DOWN_AND_MOTION) {
 			mouse_click_state = Mouse_click_state::MOUSE_DOWN_AND_MOTION;
-			//bool is_solved = check_motion(old_pos_mouse, now_pos_mouse, &mouse_click_state);
 
 		} else 
 			mouse_click_state = Mouse_click_state::MOUSE_MOTION;
-			// printf("motion\n");
 
 		now_pos_mouse = {x_mouse, y_mouse};
 		bool is_solved = check_motion(old_pos_mouse, now_pos_mouse, &mouse_click_state);
@@ -115,9 +98,5 @@ bool View_manager::check_tap(SDL_Event* event) {
 
 
 void View_manager::update_charts(graph_pair pairs) {
-	// printf("UPDATEEEEEEEEEEEEEEEEEEEEEEEEEe\n");
-	// printf("%p\n", charts);
 	charts->update_point(pairs);
-	// printf("%d %d %d %d\n", pairs.assign, pairs.compare, pairs.sorting, pairs.len_array);
-	// printf("%p\n", charts);
 }
