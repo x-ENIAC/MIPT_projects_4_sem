@@ -1,21 +1,18 @@
-//#include "view.h"
-//#include "animation_manager.h"
+
 #include "../GUI/button.h"
 #include "../GUI/button_manager.h"
 #include "canvas.h"
-#include "../number_container.h"
+#include "../Math_structures/number_container.h"
 
-// #include "../charts.h"
 
 #ifndef VIEW_MANAGER_H
 #define VIEW_MANAGER_H
 
 class Graph_bar;
-#include "../graph_bar.h"
+#include "../Sorting_visualization/graph_bar.h"
 #include "../app.h"
 
 class View_manager;
-// class Graph_bar;
 
 const int WIDTH_FILE_PANEL_BUTTON = 90;
 const int HEIGHT_FILE_PANEL_BUTTON = 20;
@@ -37,8 +34,6 @@ class View_manager : public View_object {
 	Pencil* pencil;
 
 	Mouse_click_state mouse_click_state;
-
-	// Charts* charts;
 
 	Number_container* number_container;
 	Graph_bar* graph_bar;
@@ -66,15 +61,10 @@ class View_manager : public View_object {
 	void check_events(SDL_Event* event);
 
 	bool check_click(const float mouse_x, const float mouse_y, const Mouse_click_state* par_mouse_status) override {
-		// printf("\n\nview_manager check_click, mouse (%d, %d)\n", (int)mouse_x, (int)mouse_y);
 
 		if(is_active) {
-
-			//printf("click View_manager\n");
 			for(int i = count_of_view_objects - 1; i >= 0; --i) {
 				if(view_objects[i]->check_click(mouse_x, mouse_y, par_mouse_status)) {
-					//set_new_active_object(i);
-					// find_not_alive();
 					return true;
 				}
 			}
@@ -84,11 +74,8 @@ class View_manager : public View_object {
 	}
 
 	bool check_motion(Point old_mouse, Point now_mouse, const Mouse_click_state* par_mouse_status) override {
-		//printf("\n\nview_manager check_click\n");
 
 		if(is_active) {
-
-			//printf("click View_manager\n");
 			for(int i = count_of_view_objects - 1; i >= 0; --i) {
 				if(view_objects[i]->check_motion(old_mouse, now_mouse, par_mouse_status)) {
 					return true;

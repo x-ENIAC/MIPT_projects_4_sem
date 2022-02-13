@@ -4,15 +4,14 @@
 
 #include "button_delegate.h"
 #include "view.h"
-#include "../sorts.h"
-#include "../graph_bar.h"
+#include "../Math_structures/sorts.h"
+#include "../Sorting_visualization/graph_bar.h"
 
 #ifndef OBJECT_DELEGATES_H
 #define OBJECT_DELEGATES_H
 
 #include "../app.h"
-// #include "../Controller/controller.h"
-#include "../number_container.h"
+#include "../Math_structures/number_container.h"
 extern SDL_Renderer* render;
 
 extern const double TIME_DELTA;
@@ -30,7 +29,6 @@ class Begin_sort_delegate : public Button_delegate {
 
 	void click_reaction(const double mouse_x, const double mouse_y) override {
 		*is_running_sorting = true;
-		// App::get_app()->get_view_manager()->get_graph_bar()->update();
 	}
 
 	void motion_reaction(const double mouse_x, const double mouse_y) override {}
@@ -65,7 +63,6 @@ class Choose_sort_delegate : public Button_delegate {
 
 	void click_reaction(const double mouse_x, const double mouse_y) override {
 		*number_of_sort = sorting;
-		printf("choose %d sort\n", sorting);
 	}
 
 	void motion_reaction(const double mouse_x, const double mouse_y) override {}

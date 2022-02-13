@@ -1,11 +1,10 @@
 #include "view_manager.h"
-#include "../graph_bar.h"
+#include "../Sorting_visualization/graph_bar.h"
 #include "../app.h"
 
 View_manager::View_manager(const Point par_point, const double par_width, const double par_height, const Colour par_color) :
   View_object(par_point, par_width, par_height, LIGHT_GREY, Widget_types::VIEW_MANAGER) {
 
-  	printf("[View_manager] start construct\n");
 	count_of_view_objects = 1;
 
 	view_objects = new View_object*[MAX_COUNT_OF_VIEW_OBJECTS];
@@ -16,35 +15,22 @@ View_manager::View_manager(const Point par_point, const double par_width, const 
 
 	mouse_click_state = Mouse_click_state::MOUSE_UP;
 
-	printf("[View_manager] start create Pencil\n");
 	pencil = new Pencil();
 
-	printf("[View_manager] start create Number_container\n");
 	number_container = new Number_container(25);
 
-	printf("[View_manager] start create Graph_bar\n");
 	graph_bar = new Graph_bar(Point(460, 300), 700, 400, WHITE, number_container);
 	add_view_object(graph_bar);
 
-	printf("[View_manager] start create Button_manager\n");
 	buttons = new Button_manager(Point(460, 600), 270, 180, BLUE);
 
 	add_view_object(buttons);
-	// printf("[View_manager] fill Button_manager\n");
 	fill_button_manager();
 
 	is_running_sorting = false;
-
-	printf("[View_manager] end construct\n");
 }
 
 View_manager::~View_manager() {
-	printf("Destruct View_manager, %ld\n", count_of_view_objects);
-
-	// for(size_t i = 0; i < count_of_view_objects; ++i)
-	// 	delete view_objects[i];
-	// delete[] view_objects;
-
 	count_of_view_objects = 0;
 	who_is_active = 0;
 }
@@ -60,7 +46,6 @@ void View_manager::add_view_object(View_object* new_view) {
 void View_manager::check_events(SDL_Event* event) {
 	double x_mouse = event->button.x, y_mouse = event->button.y;
 
-	//printf("%d\n", event->type);
 	if(event->type == SDL_MOUSEBUTTONUP) {
 		mouse_click_state = Mouse_click_state::MOUSE_UP;
 
@@ -79,11 +64,9 @@ void View_manager::check_events(SDL_Event* event) {
 
 		if(mouse_click_state == Mouse_click_state::MOUSE_DOWN || mouse_click_state == Mouse_click_state::MOUSE_DOWN_AND_MOTION) {
 			mouse_click_state = Mouse_click_state::MOUSE_DOWN_AND_MOTION;
-			//bool is_solved = check_motion(old_pos_mouse, now_pos_mouse, &mouse_click_state);
 
 		} else 
 			mouse_click_state = Mouse_click_state::MOUSE_MOTION;
-			// printf("motion\n");
 
 		now_pos_mouse = {x_mouse, y_mouse};
 		bool is_solved = check_motion(old_pos_mouse, now_pos_mouse, &mouse_click_state);

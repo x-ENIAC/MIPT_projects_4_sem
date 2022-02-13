@@ -1,10 +1,8 @@
-#include "../number.h"
-#include "../sorts.h"
+#include "../Math_structures/number.h"
+#include "../Math_structures/sorts.h"
 
 #ifndef CONTROLLER_H
 #define CONTROLLER_H
-// class Controller_data_charts;
-// #include "../app.h"
 
 class Controller_data_charts {
   public:

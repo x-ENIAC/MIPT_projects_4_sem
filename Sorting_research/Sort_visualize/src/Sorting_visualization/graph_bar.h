@@ -3,12 +3,11 @@
 
 #include <unistd.h>
 #include <vector>
-#include "GUI/view.h"
-#include "Utils/rectangle.h"
-#include "number_container.h"
-#include "sorts.h"
-#include "sort_manager.h"
-// #include "app.h"
+#include "../GUI/view.h"
+#include "../Utils/rectangle.h"
+#include "../Math_structures/number_container.h"
+#include "../Math_structures/sorts.h"
+#include "../Math_structures/sort_manager.h"
 
 class Graph_bar : public View_object {
   public:

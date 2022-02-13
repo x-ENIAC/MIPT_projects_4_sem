@@ -1,6 +1,6 @@
 #include "graph_bar.h"
-#include "app.h"
-#include "sort_manager.h"
+#include "../app.h"
+#include "../Math_structures/sort_manager.h"
 
 Graph_bar::Graph_bar(const Point par_point, const double par_width, const double par_height, const Colour par_color, 
 			Number_container* arg_number_container) :
@@ -21,7 +21,6 @@ void Graph_bar::fill_heights() {
 	for(int i = 0; i < count_numbers; ++i) {
 		heights[i] = basis * number_container->numbers[i].value;
 		colours[i] = BLUE;
-		// printf("\tnumber %d, height %d\n", number_container->numbers[i].value, heights[i]);
 	}
 }
 
@@ -29,13 +28,11 @@ void Graph_bar::update() {
 	int count = number_container->get_count();
 
 	int is_something_change = App::get_app()->get_sort_manager()->do_iteration(number_container->get_numbers(), count);
-	// standartized_sorts[number_of_sort](number_container->get_numbers(), count);
 
 	std::vector<int> changed_pos;
 
 	for(int i = 0; i < count; ++i) {
 		if(i != number_container->numbers[i].pos) {
-			// printf("i = %d\n", i);
 			changed_pos.push_back(i);
 		}
 	}

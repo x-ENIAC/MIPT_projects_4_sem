@@ -9,12 +9,6 @@ Sort_manager::Sort_manager() {
 	j = 0;
 
 count_of_sorts = COUNT_OF_SORTS;
-
-// standartized_sorts[0] = bubble_sort;
-// standartized_sorts[1] = choose_sort;
-// standartized_sorts[2] = insert_sort;
-// standartized_sorts[3] = std_sort;
-// standartized_sorts[4] = std_stable_sort;
 }
 
 bool Sort_manager::do_iteration(Number* numbers, const int len) {
@@ -33,7 +27,6 @@ bool Sort_manager::do_iteration(Number* numbers, const int len) {
 
 	printf("Bad.\n");
 	return false;
-	// return standartized_sorts[active_sort](numbers, len);
 }
 
 bool Sort_manager::bubble_sort(Number* numbers, const int len) {
@@ -97,7 +90,6 @@ bool Sort_manager::insert_sort(Number* numbers, const int len) {
 
 bool Sort_manager::std_sort(Number* numbers, const int len) {
 	std::vector<Number> vec;
-	printf("!!!!! len = %d\n", len);
 
 	Number tmp = {}, tmp1 = {};
 	for(int i = 0; i < len; ++i) {

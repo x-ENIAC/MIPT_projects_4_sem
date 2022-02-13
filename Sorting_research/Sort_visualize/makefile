@@ -1,4 +1,4 @@
-CUR_PROG = graphical_editor
+CUR_PROG = sorts_visualizate
 ARGS = 
 
 CPP = g++
@@ -32,8 +32,8 @@ canvas.o: ./src/Editor/canvas.cpp ./src/Editor/canvas.h
 view_manager.o: ./src/Editor/view_manager.cpp ./src/Editor/view_manager.h
 	$(CPP) $(CFLAGS) -c ./src/Editor/view_manager.cpp -o view_manager.o	
 
-sorts.o: ./src/sorts.cpp ./src/sorts.h
-	$(CPP) $(CFLAGS) -c ./src/sorts.cpp -o sorts.o
+sorts.o: ./src/Math_structures/sorts.cpp ./src/Math_structures/sorts.h
+	$(CPP) $(CFLAGS) -c ./src/Math_structures/sorts.cpp -o sorts.o
 
 button_delegates.o: ./src/GUI/button_delegates.cpp ./src/GUI/button_delegates.h
 	$(CPP) $(CFLAGS) -c ./src/GUI/button_delegates.cpp -o button_delegates.o
@@ -41,14 +41,14 @@ button_delegates.o: ./src/GUI/button_delegates.cpp ./src/GUI/button_delegates.h
 controller.o: ./src/Controller/controller.cpp ./src/Controller/controller.h
 	$(CPP) $(CFLAGS) -c ./src/Controller/controller.cpp -o controller.o
 
-graph_bar.o: ./src/graph_bar.cpp ./src/graph_bar.h
-	$(CPP) $(CFLAGS) -c ./src/graph_bar.cpp -o graph_bar.o
+graph_bar.o: ./src/Sorting_visualization/graph_bar.cpp ./src/Sorting_visualization/graph_bar.h
+	$(CPP) $(CFLAGS) -c ./src/Sorting_visualization/graph_bar.cpp -o graph_bar.o
 
-number_container.o: ./src/number_container.cpp ./src/number_container.h
-	$(CPP) $(CFLAGS) -c ./src/number_container.cpp -o number_container.o
+number_container.o: ./src/Math_structures/number_container.cpp ./src/Math_structures/number_container.h
+	$(CPP) $(CFLAGS) -c ./src/Math_structures/number_container.cpp -o number_container.o
 
-sort_manager.o: ./src/sort_manager.cpp ./src/sort_manager.h
-	$(CPP) $(CFLAGS) -c ./src/sort_manager.cpp -o sort_manager.o
+sort_manager.o: ./src/Math_structures/sort_manager.cpp ./src/Math_structures/sort_manager.h
+	$(CPP) $(CFLAGS) -c ./src/Math_structures/sort_manager.cpp -o sort_manager.o
 
 run: all
 	./$(CUR_PROG) $(ARGS)

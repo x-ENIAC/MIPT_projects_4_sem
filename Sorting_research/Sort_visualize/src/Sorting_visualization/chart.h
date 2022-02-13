@@ -1,8 +1,8 @@
-#include "Editor/canvas.h"
-#include "Editor/pencil.h"
+#include "../Editor/canvas.h"
+#include "../Editor/pencil.h"
 #include "sorts.h"
-#include "Utils/my_vector.h"
-#include "cmath"
+#include "../Utils/my_vector.h"
+#include <cmath>
 
 #ifndef CHART_H
 #define CHART_H
@@ -88,14 +88,12 @@ class Chart : public View_object {
 					now_point.draw_big_point(*render, 5);
 
 					if(i > 0) {
-						// printf("(%lg %lg) -> (%lg %lg)\n", last_point.x, last_point.y, now_point.x, now_point.y);
 						Vector vector(last_point, now_point);
 						vector.draw(*render, now_point.color);
 					}
 
 					last_point = now_point;
 				}
-				// printf("\n");
 			}
 
 			text->draw(render, texture, screen);
@@ -103,7 +101,6 @@ class Chart : public View_object {
 	}
 
 	void update_point(const SORTING sorting, const int x, const int new_y) {
-		printf("\tadd (%d, %d), sorting %d; ", x / 5, new_y, (int)sorting);
 		coords[(int)sorting][x / X_SCALE].y = new_y;
 		coords[(int)sorting][x / X_SCALE].x = x / X_SCALE;
 
@@ -116,8 +113,6 @@ class Chart : public View_object {
 			now_point.y = left_down_corner.y - rect->get_height() * (coords[(int)sorting][x / X_SCALE].y) / Y_SCALE;
 		else
 			now_point.y = left_down_corner.y;
-
-		printf("Visible coords %lg, %lg. Left down corner %lg, %lg\n", now_point.x, now_point.y, left_down_corner.x, left_down_corner.y);
 	}
 };
 

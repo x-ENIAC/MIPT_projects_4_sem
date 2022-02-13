@@ -2,7 +2,6 @@
 #include <SDL2/SDL_ttf.h>
 
 #include "view.h"
-//#include "widget_types.h"
 
 #ifndef TEXT_H
 #define TEXT_H
@@ -22,7 +21,6 @@ class Text : public View_object {
 		strcpy(font_name, "courier.ttf");
 		font = TTF_OpenFont(font_name, font_size);
 
-		//text = new char[30];
 		strcpy(text, "hello, world");
 
 		color = {0, 0, 0, 0};
@@ -41,7 +39,6 @@ class Text : public View_object {
 		strcpy(font_name, "courier.ttf");
 		font = TTF_OpenFont(font_name, font_size);
 
-		//text = new char[30];
 		strcpy(text, par_text);
 
 		color = par_color;
@@ -52,32 +49,11 @@ class Text : public View_object {
 		}
 	}
 
-
-	/*Text(const Point par_point, char* par_font_name, const size_t par_font_size, char* par_text, 
-								const double par_width, const double par_height, const Colour par_color) : 
-	  View_object(par_point, par_width, par_height, par_color, Widget_types::TEXT) {
-
-		font_size = par_font_size;
-		font_name = par_font_name;
-		font 	  = TTF_OpenFont(font_name, font_size);
-
-		//text = new char[30];
-		strcpy(text, par_text);
-
-		color     = par_color;
-
-		if(!font) {
-			printf("error: font not found, %s\n", TTF_GetError());
-			exit(EXIT_FAILURE);
-		}
-	}*/
-
 	~Text() {
 
 	}
 
 	void draw(SDL_Renderer** render, SDL_Texture** texture, SDL_Surface** screen) {
-		// printf("!!! begin draw text !!! \n");
 		SDL_Surface* surface = {};
 		SDL_Color text_color = {};
 
@@ -94,9 +70,6 @@ class Text : public View_object {
 		sdl_rect.y = rect->get_center().y - sdl_rect.h / 2.0;
 
 		SDL_RenderCopy(*render, *texture, NULL, &sdl_rect);
-
-		// printf("!!! end draw text !!! \n");
-		//printf("\t\t\tend draw text\n");
 	}
 
 	void draw_text(const Point pos, SDL_Renderer** render, SDL_Texture** texture) {

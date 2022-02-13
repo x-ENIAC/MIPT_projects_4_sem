@@ -5,7 +5,7 @@
 #include "Editor/view_manager.h"
 #include "Utils/my_vector.h"
 #include "Editor/widget_types.h"
-#include "sort_manager.h"
+#include "Math_structures/sort_manager.h"
 
 #ifndef APP_H
 #define APP_H
@@ -15,7 +15,7 @@
 extern const double TIME_DELTA;
 
 enum SDL_STATUSES {
-	SDL_OKEY		   = 0,
+	SDL_OKEY				   = 0,
 	BAD_SDL_INIT       = 1,
 	BAD_TTF_INIT       = 2,
 	WINDOW_NOT_CREATE  = 3,
@@ -41,7 +41,6 @@ class App {
 	int width_screen, height_screen;
 	long long begin_era;
 
-	// Controller_data_charts* controller;
 	Sort_manager* sort_manager;
 	View_manager* view_manager;
 

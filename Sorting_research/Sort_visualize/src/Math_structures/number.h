@@ -10,8 +10,6 @@ class Number {
 	int value;
 	int pos;
 
-	// int* assignments;
-	// int* comparisons;
 	Number() {
 		value = 0;
 		pos = 0;
