@@ -18,10 +18,13 @@ enum class Int_signal {
 	MUL_AND_ASSIGNMENT	= 12,
 	DIV					= 13,
 	DIV_AND_ASSIGNMENT	= 14,
-	ASSIGNMENT			= 15
+	ASSIGNMENT			= 15,
+	CONSTRUCT			= 16,
+	DESTRUCT			= 17,
+	COPY				= 18
 };
 
-const int COUNT_OF_SIGNALS = 16;
+const int COUNT_OF_SIGNALS = 20;
 
 extern const char* signals[];
 

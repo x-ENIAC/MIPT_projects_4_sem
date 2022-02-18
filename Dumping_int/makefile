@@ -13,9 +13,9 @@ LDFLAGS =
 
 .PHONY : all run debug clean
 
-all: my_int.o int_dumping.o int_signals.o calling_trace.o console_colours.o console.o testing.o
+all: my_int.o int_dumping.o int_signals.o calling_trace.o console_colours.o html_listing.o console.o testing.o
 	$(CPP) $(CFLAGS) -c main.cpp -o main.o
-	$(LD) my_int.o int_dumping.o int_signals.o calling_trace.o console_colours.o console.o testing.o main.o -o $(CUR_PROG) $(LDFLAGS)
+	$(LD) my_int.o int_dumping.o int_signals.o calling_trace.o console_colours.o console.o html_listing.o testing.o main.o -o $(CUR_PROG) $(LDFLAGS)
 
 testing.o: Tests/testing.cpp Tests/testing.h
 	$(CPP) $(CFLAGS) -c Tests/testing.cpp -o testing.o
@@ -37,6 +37,9 @@ console.o: Dumper/console.cpp Dumper/console.h
 
 console_colours.o: Tools/console_colours.cpp Tools/console_colours.h
 	$(CPP) $(CFLAGS) -c Tools/console_colours.cpp -o console_colours.o
+
+html_listing.o: Dumper/html_listing.cpp Dumper/html_listing.h
+	$(CPP) $(CFLAGS) -c Dumper/html_listing.cpp -o html_listing.o
 
 run: all
 	./$(CUR_PROG) $(ARGS)

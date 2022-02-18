@@ -1,0 +1,65 @@
+<!DOCTYPE html><pre>
+<style>p.std_indent {
+	line-height: 1.5;
+}
+P {
+	line-height: 0.9em;
+}
+</style>
+
+<p><font size="3" color="green">[Calling_trace] CTOR Int::Int(int, std::string)
+</font>
+	<font size="3" color="green">└──>[0x7ffdef266010]: id = 0, a=10
+</font>
+<font size="3" color="green">
+</font>
+<font size="3" color="green">[Calling_trace] CTOR Int::Int(int, std::string)
+</font>
+	<font size="3" color="green">└──>[0x7ffdef266050]: id = 1, b=20
+</font>
+<font size="3" color="green">
+</font>
+<font size="3" color="red">[Calling_trace] !!! COPY !!! Int::Int(const Int&)
+</font>
+	<font size="3" color="red">└──>[0x7ffdef266090]: id = 2, a=10
+</font>
+<font size="3" color="red">
+</font>
+<font size="3" color="red">[Calling_trace] !!! COPY !!! Int::Int(const Int&)
+</font>
+	<font size="3" color="red">└──>[0x7ffdef2660d0]: id = 3, a=10
+</font>
+<font size="3" color="red">
+</font>
+<font size="3" color="darkcyan">[Calling_trace] OPERATION Int& Int::operator=(const Int&)
+</font>
+	<font size="3" color="darkcyan">└──>[0x7ffdef266050]: from id = 1, b=10
+</font>
+	<font size="3" color="darkcyan">└──>[0x7ffdef2660d0]: to   id = 3, a=10
+</font>
+<font size="3" color="darkcyan">
+</font>
+<font size="3" color="purple">[Calling_trace] DTOR Int::~Int()
+</font>
+	<font size="3" color="purple">└──>[0x7ffdef2660d0]: id = 3, a=10
+</font>
+<font size="3" color="purple">
+</font>
+<font size="3" color="purple">[Calling_trace] DTOR Int::~Int()
+</font>
+	<font size="3" color="purple">└──>[0x7ffdef266090]: id = 2, a=10
+</font>
+<font size="3" color="purple">
+</font>
+<font size="3" color="purple">[Calling_trace] DTOR Int::~Int()
+</font>
+	<font size="3" color="purple">└──>[0x7ffdef266050]: id = 1, b=10
+</font>
+<font size="3" color="purple">
+</font>
+<font size="3" color="purple">[Calling_trace] DTOR Int::~Int()
+</font>
+	<font size="3" color="purple">└──>[0x7ffdef266010]: id = 0, a=10
+</font>
+<font size="3" color="purple">
+</font>

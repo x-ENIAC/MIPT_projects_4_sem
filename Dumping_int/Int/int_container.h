@@ -33,11 +33,11 @@ class Int_container : public Signals_default_handler {
   		count = capacity;
   	}
 
-  	void signal(const Int& sender, const Int& recipient_, const Int_signal int_signal) override {
-  		if(recipient)
-  			recipient->signal(sender, recipient_, int_signal);
-  		else
-  			printf("[Int_container] Recipient doesn't found!\n");
+  	void signal(const Int& sender, const Int_signal int_signal) override {
+  		// if(recipient)
+  		// 	recipient->signal(sender, recipient_, int_signal);
+  		// else
+  		// 	printf("[Int_container] Recipient doesn't found!\n");
   	}
 
   	void print_array() {

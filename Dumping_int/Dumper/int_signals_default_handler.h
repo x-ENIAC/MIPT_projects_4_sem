@@ -7,7 +7,9 @@ class Int;
 
 class Signals_default_handler {
   public:
-  	virtual void signal(const Int& sender, const Int& recipient, const Int_signal int_signal) {};
+  	virtual void signal(const Int& sender, const Int_signal int_signal) {};
+
+    virtual void signal(const Int& sender, const Int_signal int_signal, const Int& other) {};
 };
 
 #endif

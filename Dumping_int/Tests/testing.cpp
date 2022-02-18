@@ -4,6 +4,10 @@
 
 #define VAR(type, name, value) type name(value, #name)
 
+Int nothing(Int var) {
+	return var;
+}
+
 void testing() {
 	std::cout << __PRETTY_FUNCTION__ << "\n";
 
@@ -12,7 +16,8 @@ void testing() {
 
 	printf("\n");
 
-	b = a;
+	// b = a;
+	b = nothing(a);
 
 	// VAR(Int, c, 0);
 	// c = a + b;
