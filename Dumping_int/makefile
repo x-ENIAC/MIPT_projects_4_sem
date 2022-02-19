@@ -6,15 +6,20 @@ LD = g++
 
 WARNINGS = 
 STANDARD = 
-OPTIMIZATION = -O0 -Wno-reorder -fno-elide-constructors
+OPTIMIZATION_ON = -O0 -Wno-reorder -fno-elide-constructors
+OPTIMIZATION_OFF = -O3
 
-CFLAGS = $(WARNINGS) $(STANDARD) $(OPTIMIZATION)
+CFLAGS = $(WARNINGS) $(STANDARD)
 LDFLAGS =
 
 .PHONY : all run debug clean
 
-all: my_int.o int_dumping.o int_signals.o calling_trace.o console_colours.o html_listing.o console.o testing.o
-	$(CPP) $(CFLAGS) -c main.cpp -o main.o
+all_optimize_on: my_int.o int_dumping.o int_signals.o calling_trace.o console_colours.o html_listing.o console.o testing.o
+	$(CPP) $(CFLAGS) $(OPTIMIZATION_ON) -c main.cpp -o main.o
+	$(LD) my_int.o int_dumping.o int_signals.o calling_trace.o console_colours.o console.o html_listing.o testing.o main.o -o $(CUR_PROG) $(LDFLAGS)
+	
+all_optimize_off: my_int.o int_dumping.o int_signals.o calling_trace.o console_colours.o html_listing.o console.o testing.o
+	$(CPP) $(CFLAGS) $(OPTIMIZATION_OFF) -c main.cpp -o main.o
 	$(LD) my_int.o int_dumping.o int_signals.o calling_trace.o console_colours.o console.o html_listing.o testing.o main.o -o $(CUR_PROG) $(LDFLAGS)
 
 testing.o: Tests/testing.cpp Tests/testing.h
@@ -41,7 +46,10 @@ console_colours.o: Tools/console_colours.cpp Tools/console_colours.h
 html_listing.o: Dumper/html_listing.cpp Dumper/html_listing.h
 	$(CPP) $(CFLAGS) -c Dumper/html_listing.cpp -o html_listing.o
 
-run: all
+run_optimize_on: all_optimize_on
+	./$(CUR_PROG) $(ARGS)
+	
+run_optimize_off: all_optimize_off
 	./$(CUR_PROG) $(ARGS)
 
 callgrind_debug: all

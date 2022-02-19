@@ -29,7 +29,7 @@ struct Format {
 };
 
 class Html_listing {
-public:
+  public:
 	FILE* html_file;
 
 	Html_listing() {

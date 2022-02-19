@@ -20,25 +20,12 @@ bool pair_arithm_flag  = false;
 #define INFO_ABOUT_VARS_PTR_AND_NOT_PTR(colour)
 
 const char* char_type_functions[] = {
+	"",
 	"CTOR",
 	"DTOR",
 	"OPERATION",
 	"!!! COPY !!!"
 };
-
-// #define INFO_ABOUT_VAR_PTR(int_ptr, colour) 																		\
-// 	printf("%s[%p]: id = %ld, %s=%d%s\n",																			\
-// 		console_colours_text[(int)colour], int_ptr, int_ptr->get_id(),												\
-// 		int_ptr->get_name().c_str(), int_ptr->get_value(), console_colours_text[(int)Console_colours::RESET]);
-
-// #define INFO_ABOUT_VAR_NOT_PTR(int_ptr, colour)																		\
-// 	printf("%s[%p]: id = %ld, %s=%d%s\n",																			\
-// 		console_colours_text[(int)colour], &int_ptr, int_ptr.get_id(),												\
-// 		int_ptr.get_name().c_str(), int_ptr.get_value(), console_colours_text[(int)Console_colours::RESET]);
-
-// #define INFO_ABOUT_VARS_PTR_AND_NOT_PTR(colour)							\
-// 	$ PAIR_PRETTY_ARITHM INFO_ABOUT_VAR_PTR(this, colour)				\
-// 	$ PAIR_PRETTY_ARITHM INFO_ABOUT_VAR_NOT_PTR(other, colour)
 
 size_t Int::max_id = 0;
 size_t Int::max_tmp_number = 1;
@@ -53,8 +40,6 @@ Int::Int() {
 
 	if(parent)
 		parent->signal(*this, Int_signal::CONSTRUCT);
-
-	// $ SINGLE_PRETTY_ARITHM INFO_ABOUT_VAR_PTR(this, ARGUMENTS_COLOUR)
 }
 
 Int::~Int() {
@@ -62,8 +47,6 @@ Int::~Int() {
 
 	if(parent)
 		parent->signal(*this, Int_signal::DESTRUCT);
-
-	// $ SINGLE_PRETTY_ARITHM INFO_ABOUT_VAR_PTR(this, DESTRUCTOR_COLOUR)
 }
 
 Int::Int(const Int &other) {
@@ -74,11 +57,8 @@ Int::Int(const Int &other) {
 	name = other.get_name();
 	parent = Dumper::get_dumper();
 
-	// printf("COPY!!!!!!!!!!!!!!\n");
 	if(parent)
 		parent->signal(*this, Int_signal::COPY);
-
-	// $ SINGLE_PRETTY_ARITHM INFO_ABOUT_VAR_PTR(this, ARGUMENTS_COLOUR)
 }
 
 Int::Int(const int arg_value, const std::string arg_name) {
@@ -94,8 +74,6 @@ Int::Int(const int arg_value, const std::string arg_name) {
 
 	if(parent)
 		parent->signal(*this, Int_signal::CONSTRUCT);
-
-	// $ SINGLE_PRETTY_ARITHM INFO_ABOUT_VAR_PTR(this, ARGUMENTS_COLOUR)
 }
 
 Int& Int::operator=(const int &other) {
@@ -110,13 +88,9 @@ Int& Int::operator=(const Int &other) {
 	BEGIN_FUNC(Type_functions::OPERATION, OPERATOR_COLOUR)
 
 	value = other.get_value();
-	// id = other.get_id();
 
 	if(parent)
 		parent->signal(*this, Int_signal::ASSIGNMENT, other);
-		// parent->signal(*this, Int_signal::ASSIGNMENT);
-
-	// Dumper::get_dumper()->signal(*this, other, Int_signal::ASSIGNMENT);
 
 	return *this; 
 }
@@ -130,7 +104,6 @@ Int& Int::operator+=(const Int &other) {
 
 	if(parent)
 		parent->signal(*this, Int_signal::ADD_AND_ASSIGNMENT, other);
-		// parent->signal(*this, Int_signal::ADD_AND_ASSIGNMENT);
 
 	return *this; 
 }
@@ -144,7 +117,6 @@ Int& Int::operator-=(const Int &other) {
 
 	if(parent)
 		parent->signal(*this, Int_signal::SUB_AND_ASSIGNMENT, other);
-		// parent->signal(*this, Int_signal::SUB_AND_ASSIGNMENT);
 
 	return *this; 
 }
@@ -158,7 +130,6 @@ Int& Int::operator*=(const Int &other) {
 
 	if(parent)
 		parent->signal(*this, Int_signal::MUL_AND_ASSIGNMENT, other);
-		// parent->signal(*this, Int_signal::MUL_AND_ASSIGNMENT);
 
 	return *this; 
 }
@@ -172,7 +143,6 @@ Int& Int::operator/=(const Int &other) {
 
 	if(parent)
 		parent->signal(*this, Int_signal::DIV_AND_ASSIGNMENT, other);
-		// parent->signal(*this, Int_signal::DIV_AND_ASSIGNMENT);
 
 	return *this; 
 }
@@ -184,7 +154,6 @@ bool Int::operator<(const Int &other) const {
 
 	if(parent)
 		parent->signal(*this, Int_signal::LESS, other);
-		// parent->signal(*this, Int_signal::LESS);
 
 	return value < other.get_value();
 }
@@ -196,7 +165,6 @@ bool Int::operator>(const Int &other) const {
 
 	if(parent)
 		parent->signal(*this, Int_signal::MORE, other);
-		// parent->signal(*this, Int_signal::MORE);
 
 	return value > other.get_value();
 }
@@ -208,7 +176,6 @@ bool Int::operator<=(const Int &other) const {
 
 	if(parent)
 		parent->signal(*this, Int_signal::LESS_OR_EQUAL, other);
-		// parent->signal(*this, Int_signal::LESS_OR_EQUAL);
 
 	return value <= other.get_value();
 }
@@ -220,7 +187,6 @@ bool Int::operator>=(const Int &other) const {
 
 	if(parent)
 		parent->signal(*this, Int_signal::MORE_OR_EQUAL, other);
-		// parent->signal(*this, Int_signal::MORE_OR_EQUAL);
 
 	return value >= other.get_value();
 }
@@ -232,7 +198,6 @@ bool Int::operator==(const Int &other) const {
 
 	if(parent)
 		parent->signal(*this, Int_signal::EQUAL, other);
-		// parent->signal(*this, Int_signal::EQUAL);
 
 	return value == other.get_value();
 }
@@ -244,7 +209,6 @@ bool Int::operator!=(const Int &other) const {
 
 	if(parent)
 		parent->signal(*this, Int_signal::NOT_EQUAL, other);
-		// parent->signal(*this, Int_signal::NOT_EQUAL);
 
 	return value != other.get_value();
 }
@@ -256,7 +220,6 @@ const Int Int::operator+(const Int &other) const {
 
 	if(parent)
 		parent->signal(*this, Int_signal::ADD, other);
-		// parent->signal(*this, Int_signal::ADD);
 
 	return { value + other.get_value() }; 
 }
@@ -268,7 +231,6 @@ const Int Int::operator-(const Int &other) const {
 
 	if(parent)
 		parent->signal(*this, Int_signal::SUB, other);
-		// parent->signal(*this, Int_signal::SUB);
 
 	return { value - other.get_value() }; 
 }
@@ -280,7 +242,6 @@ const Int Int::operator*(const Int &other) const {
 
 	if(parent)
 		parent->signal(*this, Int_signal::MUL, other);
-		// parent->signal(*this, Int_signal::MUL);
 
 	return { value * other.get_value() }; 
 }
@@ -292,7 +253,6 @@ const Int Int::operator/(const Int &other) const {
 
 	if(parent)
 		parent->signal(*this, Int_signal::DIV, other);
-		// parent->signal(*this, Int_signal::DIV);
 
 	return { value / other.get_value() }; 
 }

@@ -13,12 +13,13 @@ void testing() {
 
 	VAR(Int, a, 10);
 	VAR(Int, b, 20);
+	VAR(Int, d, 30);
 
 	printf("\n");
 
 	// b = a;
-	b = nothing(a);
+	// b = nothing(a);
 
-	// VAR(Int, c, 0);
-	// c = a + b;
+	VAR(Int, c, 0);
+	c = (a + b) * d;
 }

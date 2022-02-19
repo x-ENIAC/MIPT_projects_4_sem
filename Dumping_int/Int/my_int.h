@@ -26,6 +26,7 @@ const Console_colours COPY_COLOUR = Console_colours::BOLDRED;
 // const Console_colours 
 
 enum class Type_functions {
+	NOT_FUNCTION,
 	CONSTRUCT,
 	DESTRUCT,
 	OPERATION,

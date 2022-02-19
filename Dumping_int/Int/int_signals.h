@@ -21,7 +21,8 @@ enum class Int_signal {
 	ASSIGNMENT			= 15,
 	CONSTRUCT			= 16,
 	DESTRUCT			= 17,
-	COPY				= 18
+	COPY				= 18,
+	OPERATION			= 19
 };
 
 const int COUNT_OF_SIGNALS = 20;

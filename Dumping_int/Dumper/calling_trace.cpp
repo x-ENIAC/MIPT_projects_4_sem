@@ -8,7 +8,7 @@ Calling_trace::Calling_trace() {
 }
 
 Calling_trace::~Calling_trace() {
-	delete[] functions;
+	delete functions;
 }
 
 void Calling_trace::add_function(Elem_t new_element, 	const Type_functions type_function,

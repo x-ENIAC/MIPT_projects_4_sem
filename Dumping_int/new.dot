@@ -1,0 +1,29 @@
+digraph graphname {
+	node0CTOR [shape="record", color="red", label="{{CTOR | a=10}|{0x7ffd711bfc40 | id=0}}"]
+	node1CTOR [shape="record", color="red", label="{{CTOR | b=20}|{0x7ffd711bfc80 | id=1}}"]
+	node0CTOR -> node1CTOR
+	node2CTOR [shape="record", color="red", label="{{CTOR | d=30}|{0x7ffd711bfcc0 | id=2}}"]
+	node1CTOR -> node2CTOR
+	node3CTOR [shape="record", color="red", label="{{CTOR | c=0}|{0x7ffd711bfd00 | id=3}}"]
+	node2CTOR -> node3CTOR
+	node0OPERATION1 [shape="record", color="red", label="{{OPERATION | a+b}|{0x7ffd711bfc40 | id=0 | value=10}|{0x7ffd711bfc80 | id=1 | value=20}}"]
+	node3CTOR -> node0OPERATION1
+	node4CTOR [shape="record", color="red", label="{{CTOR | tmp_1=30}|{0x7ffd711bfd40 | id=4}}"]
+	node0OPERATION1 -> node4CTOR
+	node4OPERATION2 [shape="record", color="red", label="{{OPERATION | tmp_1*d}|{0x7ffd711bfd40 | id=4 | value=30}|{0x7ffd711bfcc0 | id=2 | value=30}}"]
+	node4CTOR -> node4OPERATION2
+	node5CTOR [shape="record", color="red", label="{{CTOR | tmp_2=900}|{0x7ffd711bfd80 | id=5}}"]
+	node4OPERATION2 -> node5CTOR
+	node5DTOR [shape="record", color="red", label="{{DTOR | tmp_2=900}|{0x7ffd711bfd80 | id=5}}"]
+	node5CTOR -> node5DTOR
+	node4DTOR [shape="record", color="red", label="{{DTOR | tmp_1=30}|{0x7ffd711bfd40 | id=4}}"]
+	node5DTOR -> node4DTOR
+	node3DTOR [shape="record", color="red", label="{{DTOR | c=900}|{0x7ffd711bfd00 | id=3}}"]
+	node4DTOR -> node3DTOR
+	node2DTOR [shape="record", color="red", label="{{DTOR | d=30}|{0x7ffd711bfcc0 | id=2}}"]
+	node3DTOR -> node2DTOR
+	node1DTOR [shape="record", color="red", label="{{DTOR | b=20}|{0x7ffd711bfc80 | id=1}}"]
+	node2DTOR -> node1DTOR
+	node0DTOR [shape="record", color="red", label="{{DTOR | a=10}|{0x7ffd711bfc40 | id=0}}"]
+	node1DTOR -> node0DTOR
+}

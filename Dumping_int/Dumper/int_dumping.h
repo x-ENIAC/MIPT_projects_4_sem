@@ -10,6 +10,7 @@
 #include "../Tools/console_colours.h"
 #include "console.h"
 #include "html_listing.h"
+#include "graph_dumper.h"
 
 extern const char* signals[];
 
@@ -17,20 +18,38 @@ extern const char* signals[];
 	printf("%s", ARROWS[1]);
 
 class Int;
+class Dumper;
+
+class Dumper_destroyer {
+  private:
+	Dumper* dumper;
+
+  public:
+	~Dumper_destroyer();
+
+	void initialize(Dumper* arg_dumper);
+};
 
 class Dumper : public Signals_default_handler {
   private:
 	static Dumper* dumper;
+	static Dumper_destroyer destroyer;
+	friend class Dumper_destroyer;
+
 	Calling_trace* tracer_functions;
 	Html_listing* html_dumper;
+	Graph_dumper* graph_dumper;
 
 	Dumper() {
 		tracer_functions = new Calling_trace;
 		html_dumper = new Html_listing;
+		graph_dumper = new Graph_dumper;
 	}
 
 	~Dumper() {
+		printf("[Dumper] delete graph_dumper\n");
 		delete tracer_functions;
+		delete graph_dumper;
 		delete html_dumper;
 	}
 
@@ -40,8 +59,12 @@ class Dumper : public Signals_default_handler {
 	Calling_trace* get_tracer_functions();
 
 	Html_listing* get_html_dumper();
+
+	Graph_dumper* get_graph_dumper();
 	
 	void signal(const Int& sender, const Int_signal int_signal) override {
+		graph_dumper->dump(sender, int_signal);
+
 		Console_colours colour = get_colour(int_signal);
 
 		//----------------------------- console -----------------------------\\
@@ -69,6 +92,8 @@ class Dumper : public Signals_default_handler {
 	}
 
 	void signal(const Int& sender, const Int_signal int_signal, const Int& other) override {
+		graph_dumper->dump(sender, int_signal, other);
+
 		Console_colours colour = get_colour(int_signal);
 
 		char first[MAX_SIZE], second[MAX_SIZE];

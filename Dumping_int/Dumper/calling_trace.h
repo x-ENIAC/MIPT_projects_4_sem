@@ -9,7 +9,7 @@ const int MAX_TRACE_SIZE = 128;
 
 class Calling_trace {
 
-public:
+  public:
 	Stack* functions;
 
 	Calling_trace();
@@ -27,7 +27,7 @@ public:
 
 class Adder_at_trace {
 
-public:
+  public:
 	bool is_func_added;
 
 	Adder_at_trace(Elem_t name_func, const Type_functions type_function, const Console_colours colour);
