@@ -4,6 +4,7 @@
 #include <string>
 
 enum class Int_signal {
+	NOT_SIGNAL			= 0,
 	MORE				= 1,
 	MORE_OR_EQUAL		= 2,
 	LESS				= 3,

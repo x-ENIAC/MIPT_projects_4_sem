@@ -6,7 +6,21 @@
 #include "../Tools/console_colours.h"
 #include "../Dumper/int_signals_default_handler.h"
 
+class Int;
 class Signals_default_handler;
+struct Node_identity;
+
+enum class Type_functions {
+	NOT_FUNCTION,
+	CONSTRUCT,
+	DESTRUCT,
+	OPERATION,
+	COPY
+};
+
+extern const char* char_type_functions[];
+
+#include "../Dumper/graph_dumper.h"
 
 extern size_t indents;
 
@@ -25,18 +39,8 @@ const Console_colours DEFAULT_COLOUR = Console_colours::BOLDWHITE;
 const Console_colours COPY_COLOUR = Console_colours::BOLDRED;
 // const Console_colours 
 
-enum class Type_functions {
-	NOT_FUNCTION,
-	CONSTRUCT,
-	DESTRUCT,
-	OPERATION,
-	COPY
-};
-
-extern const char* char_type_functions[];
-
 class Int {
-private:
+  private:
 	int value;
 	std::string name;
 
@@ -46,7 +50,9 @@ private:
 
 	Signals_default_handler* parent;
 
-public:
+  public:
+  	mutable Node_identity last_operation;
+
 	Int();
 
 	~Int();
@@ -86,6 +92,10 @@ public:
 	const Int operator*(const Int &other) const;
 
 	const Int operator/(const Int &other) const;
+
+	void refresh_last_node_operation(const Int& sender, const Int_signal int_signal) const;
+
+	void refresh_last_node_operation(const Int& sender, const Int_signal int_signal, const Int& other) const;
 
 	int get_value() const;
 
