@@ -63,9 +63,9 @@ class Dumper : public Signals_default_handler {
 	Graph_dumper* get_graph_dumper();
 	
 	void signal(const Int& sender, const Int_signal int_signal) override {
-		graph_dumper->dump(sender, int_signal);
-
 		Console_colours colour = get_colour(int_signal);
+
+		graph_dumper->dump(sender, int_signal, colour);
 
 		//----------------------------- console -----------------------------\\
 
@@ -92,9 +92,10 @@ class Dumper : public Signals_default_handler {
 	}
 
 	void signal(const Int& sender, const Int_signal int_signal, const Int& other) override {
-		graph_dumper->dump(sender, int_signal, other);
-
 		Console_colours colour = get_colour(int_signal);
+		
+		graph_dumper->dump(sender, int_signal, other, colour);
+		printf("COLOUR %s, id %d\n", colours_text[(int)colour], (int)colour);
 
 		char first[MAX_SIZE], second[MAX_SIZE];
 

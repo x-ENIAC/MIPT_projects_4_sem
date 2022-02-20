@@ -1,43 +1,30 @@
 digraph graphname {
-	node0CTOR [shape="record", color="red", label="{{CTOR | a=10}|{0x7ffed7099500 | id=0}}"]
-	node1CTOR [shape="record", color="red", label="{{CTOR | b=20}|{0x7ffed7099560 | id=1}}"]
+	rankdir = LR;
+	node0CTOR [shape="record", style="filled", fillcolor="palegreen1", label="{{CTOR | a=10}|{0x7ffdfd37b900 | id=0}}"]
+	node1CTOR [shape="record", style="filled", fillcolor="palegreen1", label="{{CTOR | b=20}|{0x7ffdfd37b960 | id=1}}"]
 	node0CTOR -> node1CTOR
-	node2CTOR [shape="record", color="red", label="{{CTOR | d=30}|{0x7ffed70995c0 | id=2}}"]
+	node2CTOR [shape="record", style="filled", fillcolor="palegreen1", label="{{CTOR | d=30}|{0x7ffdfd37b9c0 | id=2}}"]
 	node1CTOR -> node2CTOR
-	node3CTOR [shape="record", color="red", label="{{CTOR | c=0}|{0x7ffed7099620 | id=3}}"]
-	node2CTOR -> node3CTOR
-	node0OPERATION1 [shape="record", color="red", label="{{OPERATION | a+b}|{0x7ffed7099500 | id=0 | value=10}|{0x7ffed7099560 | id=1 | value=20}}"]
-	node3CTOR -> node0OPERATION1
-	node0CTOR -> node0OPERATION1[color="red"]
-	node1CTOR -> node0OPERATION1[color="red"]
-	node4CTOR [shape="record", color="red", label="{{CTOR | tmp_1=30}|{0x7ffed7099680 | id=4}}"]
-	node0OPERATION1 -> node4CTOR
-	node4OPERATION2 [shape="record", color="red", label="{{OPERATION | tmp_1*d}|{0x7ffed7099680 | id=4 | value=30}|{0x7ffed70995c0 | id=2 | value=30}}"]
-	node4CTOR -> node4OPERATION2
-	node4CTOR -> node4OPERATION2[color="red"]
-	node2CTOR -> node4OPERATION2[color="red"]
-	node5CTOR [shape="record", color="red", label="{{CTOR | tmp_2=900}|{0x7ffed70996e0 | id=5}}"]
-	node4OPERATION2 -> node5CTOR
-	node3OPERATION5 [shape="record", color="red", label="{{OPERATION | c=tmp_2}|{0x7ffed7099620 | id=3 | value=900}|{0x7ffed70996e0 | id=5 | value=900}}"]
-	node5CTOR -> node3OPERATION5
-	node3CTOR -> node3OPERATION5[color="red"]
-	node5CTOR -> node3OPERATION5[color="red"]
-	node5DTOR [shape="record", color="red", label="{{DTOR | tmp_2=900}|{0x7ffed70996e0 | id=5}}"]
-	node3OPERATION5 -> node5DTOR
-	node5CTOR -> node5DTOR[style="dashed"]
-	node4DTOR [shape="record", color="red", label="{{DTOR | tmp_1=30}|{0x7ffed7099680 | id=4}}"]
-	node5DTOR -> node4DTOR
-	node4CTOR -> node4DTOR[style="dashed"]
-	node3DTOR [shape="record", color="red", label="{{DTOR | c=900}|{0x7ffed7099620 | id=3}}"]
-	node4DTOR -> node3DTOR
-	node3CTOR -> node3DTOR[style="dashed"]
-	node2DTOR [shape="record", color="red", label="{{DTOR | d=30}|{0x7ffed70995c0 | id=2}}"]
+	node1OPERATION0 [shape="record", style="filled", fillcolor="lightskyblue", label="{{OPERATION | b=a}|{0x7ffdfd37b960 | id=1 | value=10}|{0x7ffdfd37b900 | id=0 | value=10}}"]
+	node2CTOR -> node1OPERATION0
+	node1CTOR -> node1OPERATION0[color="red"]
+	node0CTOR -> node1OPERATION0[color="red"]
+	node3COPY [shape="record", style="filled", fillcolor="webmaroon", label="{{COPY | a_copied=10}|{0x7ffdfd37ba20 | id=3}}"]
+	node1OPERATION0 -> node3COPY
+	node1OPERATION3 [shape="record", style="filled", fillcolor="lightskyblue", label="{{OPERATION | b=a_copied}|{0x7ffdfd37b960 | id=1 | value=10}|{0x7ffdfd37ba20 | id=3 | value=10}}"]
+	node3COPY -> node1OPERATION3
+	node1OPERATION0 -> node1OPERATION3[color="red"]
+	node3COPY -> node1OPERATION3[color="red"]
+	node3DTOR [shape="record", style="filled", fillcolor="violet", label="{{DTOR | a_copied=10}|{0x7ffdfd37ba20 | id=3}}"]
+	node1OPERATION3 -> node3DTOR
+	node3COPY -> node3DTOR[style="dashed"]
+	node2DTOR [shape="record", style="filled", fillcolor="violet", label="{{DTOR | d=30}|{0x7ffdfd37b9c0 | id=2}}"]
 	node3DTOR -> node2DTOR
 	node2CTOR -> node2DTOR[style="dashed"]
-	node1DTOR [shape="record", color="red", label="{{DTOR | b=20}|{0x7ffed7099560 | id=1}}"]
+	node1DTOR [shape="record", style="filled", fillcolor="violet", label="{{DTOR | b=10}|{0x7ffdfd37b960 | id=1}}"]
 	node2DTOR -> node1DTOR
 	node1CTOR -> node1DTOR[style="dashed"]
-	node0DTOR [shape="record", color="red", label="{{DTOR | a=10}|{0x7ffed7099500 | id=0}}"]
+	node0DTOR [shape="record", style="filled", fillcolor="violet", label="{{DTOR | a=10}|{0x7ffdfd37b900 | id=0}}"]
 	node1DTOR -> node0DTOR
 	node0CTOR -> node0DTOR[style="dashed"]
 }

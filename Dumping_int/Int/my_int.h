@@ -47,6 +47,7 @@ class Int {
 	static size_t max_id;
 	static size_t max_tmp_number;
 	size_t id;
+	bool is_copy_anyone;
 
 	Signals_default_handler* parent;
 
@@ -102,6 +103,8 @@ class Int {
 	size_t get_id() const;
 
 	std::string get_name() const;
+
+	bool get_is_copy_anyone() const;
 
 	void set_value(const int new_value);
 };

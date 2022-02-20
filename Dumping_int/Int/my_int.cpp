@@ -26,7 +26,7 @@ const char* char_type_functions[] = {
 	"CTOR",
 	"DTOR",
 	"OPERATION",
-	"!!! COPY !!!"
+	"COPY"
 };
 
 size_t Int::max_id = 0;
@@ -38,6 +38,7 @@ Int::Int() {
 	value = 0;
 	id = max_id++;
 	name = "not_defined";
+	is_copy_anyone = false;
 	parent = Dumper::get_dumper();
 
 	REFRESH_UNARY(this, *this, Int_signal::CONSTRUCT)
@@ -59,9 +60,13 @@ Int::Int(const Int &other) {
 	value = other.get_value();
 	id = max_id++;
 	name = other.get_name();
+	name += "_copied";
+	is_copy_anyone = true;
 	parent = Dumper::get_dumper();
 
+	REFRESH_UNARY(this, *this, Int_signal::CONSTRUCT)
 	REFRESH_UNARY(this, *this, Int_signal::COPY)
+
 	if(parent)
 		parent->signal(*this, Int_signal::COPY);
 }
@@ -72,6 +77,7 @@ Int::Int(const int arg_value, const std::string arg_name) {
 	value = arg_value;
 	id = max_id++;
 	name = arg_name;
+	is_copy_anyone = false;
 	parent = Dumper::get_dumper();
 
 	if(arg_name == "tmp")
@@ -334,6 +340,10 @@ void Int::set_value(const int new_value) {
 
 size_t Int::get_id() const {
 	return id;
+}
+
+bool Int::get_is_copy_anyone() const {
+	return is_copy_anyone;
 }
 
 std::string Int::get_name() const {

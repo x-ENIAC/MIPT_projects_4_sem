@@ -23,4 +23,6 @@ enum class Console_colours {
 
 extern const char* console_colours_text[];
 
+extern const char* colours_text[];
+
 #endif

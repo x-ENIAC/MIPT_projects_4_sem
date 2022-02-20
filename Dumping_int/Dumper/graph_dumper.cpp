@@ -4,10 +4,10 @@ Graph_dumper::Graph_dumper() : last_node(0, Type_functions::NOT_FUNCTION) {
 	strcpy(graph_name, "new.dot");
 
 	dumper = fopen(graph_name, "w");
-	fprintf(dumper, "digraph graphname {\n");
+	fprintf(dumper, "digraph graphname {\n\trankdir = LR;\n");
 }
 
-void Graph_dumper::dump(const Int& object, Int_signal int_signal) {
+void Graph_dumper::dump(const Int& object, Int_signal int_signal, const Console_colours colour = Console_colours::RESET) {
 	Type_functions type = Type_functions::NOT_FUNCTION;
 
 	if(int_signal == Int_signal::CONSTRUCT)
@@ -20,9 +20,10 @@ void Graph_dumper::dump(const Int& object, Int_signal int_signal) {
 		type = Type_functions::DESTRUCT;
 	else { printf("[Graph_dumper] [dump(..., ...)\n"); return; }
 
-	fprintf(dumper, "\tnode%ld%s [shape=\"record\", color=\"red\", label=\"{{%s | %s=%d}|{%p | id=%ld}}\"]\n",
-											object.get_id(), char_type_functions[(int)type], char_type_functions[(int)type],
-											object.get_name().c_str(), object.get_value(), &object, object.get_id());
+	fprintf(dumper, "\tnode%ld%s [shape=\"record\", style=\"filled\", fillcolor=\"%s\", label=\"{{%s | %s=%d}|{%p | id=%ld}}\"]\n",
+											object.get_id(), char_type_functions[(int)type], colours_text[(int)colour],
+											char_type_functions[(int)type], object.get_name().c_str(),
+											object.get_value(), &object, object.get_id());
 
 	Node_identity now_node(object.get_id(), type);
 	now_node.is_binary = false;		
@@ -35,15 +36,17 @@ void Graph_dumper::dump(const Int& object, Int_signal int_signal) {
 	last_node.is_binary = false;
 }
 
-void Graph_dumper::dump(const Int& left_object, const Int_signal int_signal, const Int& right_object) {
+void Graph_dumper::dump(const Int& left_object, const Int_signal int_signal, const Int& right_object,
+												const Console_colours colour = Console_colours::RESET) {
+
 	Type_functions type = Type_functions::NOT_FUNCTION;
 
 	if(int_signal >= Int_signal::MORE && int_signal <= Int_signal::ASSIGNMENT)
 		type = Type_functions::OPERATION;
 	else { printf("[Graph_dumper] [dump(..., ..., ...) signal %d]\n", (int)int_signal); return; }
 
-	fprintf(dumper, "\tnode%ld%s%ld [shape=\"record\", color=\"red\", label=\"{{%s | %s%s%s}|{%p | id=%ld | value=%d}|{%p | id=%ld | value=%d}}\"]\n",
-					left_object.get_id(), char_type_functions[(int)type], right_object.get_id(),
+	fprintf(dumper, "\tnode%ld%s%ld [shape=\"record\", style=\"filled\", fillcolor=\"%s\", label=\"{{%s | %s%s%s}|{%p | id=%ld | value=%d}|{%p | id=%ld | value=%d}}\"]\n",
+					left_object.get_id(), char_type_functions[(int)type], right_object.get_id(), colours_text[(int)colour],
 					char_type_functions[(int)type], left_object.get_name().c_str(), signals[(int)int_signal],
 					right_object.get_name().c_str(),
 					&left_object, left_object.get_id(), left_object.get_value(),
@@ -61,11 +64,14 @@ void Graph_dumper::dump(const Int& left_object, const Int_signal int_signal, con
 	last_node.is_binary = true;
 }
 
-void Graph_dumper::print_node(const Node_identity* node) {
+void Graph_dumper::print_node(const Node_identity* node, Console_colours colour = Console_colours::RESET) {
 	if(node->is_binary)
 		fprintf(dumper, "node%ld%s%ld", node->left_id, char_type_functions[(int)node->type], node->right_id);
 	else
 		fprintf(dumper, "node%ld%s", node->left_id, char_type_functions[(int)node->type]);
+
+	if(colour != Console_colours::RESET)
+		fprintf(dumper, "[]");
 }
 
 void Graph_dumper::add_order_arrows(Node_identity* last_node, Node_identity* now_node) {
@@ -87,6 +93,9 @@ void Graph_dumper::add_ctor_dtor_arrows(const Int& object, Node_identity* node, 
 		return;
 
 	Node_identity ctor_node(object.get_id(), Type_functions::CONSTRUCT);
+
+	if(object.get_is_copy_anyone())
+		ctor_node.type = Type_functions::COPY;
 
 	fprintf(dumper, "\t");
 	print_node(&ctor_node);

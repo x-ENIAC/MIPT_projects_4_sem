@@ -44,10 +44,10 @@ public:
 
 	Graph_dumper();
 
-	void dump(const Int& object, Int_signal int_signal);
-	void dump(const Int& left_object, const Int_signal int_signal, const Int& right_object);
+	void dump(const Int& object, Int_signal int_signal, const Console_colours colour);
+	void dump(const Int& left_object, const Int_signal int_signal, const Int& right_object, const Console_colours colour);
 	
-	void print_node(const Node_identity* node);
+	void print_node(const Node_identity* node, Console_colours colour);
 
 	void add_order_arrows(Node_identity* last_node, Node_identity* now_node);
 

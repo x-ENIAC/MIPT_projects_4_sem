@@ -19,3 +19,24 @@ const char* console_colours_text[] = {
 		"\033[1m\033[36m",
 		"\033[1m\033[37m"
 };
+
+const char* colours_text[] = {
+		"nothing",
+		"black",
+		"red",
+		"palegreen1",
+		"yellow",
+		"blue",
+		"magenta",
+		"cyan",
+		"white",
+
+		"grey10",
+		"webmaroon",
+		"palegreen1",
+		"gold",
+		"deepskyblue2",
+		"violet",
+		"lightskyblue",
+		"wheat1"
+};
