@@ -47,7 +47,6 @@ class Dumper : public Signals_default_handler {
 	}
 
 	~Dumper() {
-		printf("[Dumper] delete graph_dumper\n");
 		delete tracer_functions;
 		delete graph_dumper;
 		delete html_dumper;

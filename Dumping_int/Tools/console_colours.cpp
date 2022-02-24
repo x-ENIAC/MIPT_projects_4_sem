@@ -32,7 +32,7 @@ const char* colours_text[] = {
 		"white",
 
 		"grey10",
-		"webmaroon",
+		"red",
 		"palegreen1",
 		"gold",
 		"deepskyblue2",
