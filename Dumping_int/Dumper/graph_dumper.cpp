@@ -43,12 +43,23 @@ void Graph_dumper::dump(const Int& left_object, const Int_signal int_signal, con
 
 	if(int_signal >= Int_signal::MORE && int_signal <= Int_signal::ASSIGNMENT)
 		type = Type_functions::OPERATION;
+	else
+	if(int_signal == Int_signal::COPY)
+		type = Type_functions::COPY;
 	else { printf("[Graph_dumper] [dump(..., ..., ...) signal %d]\n", (int)int_signal); return; }
 
-	fprintf(dumper, "\tnode%ld%s%ld [shape=\"record\", style=\"filled\", fillcolor=\"%s\", label=\"{{%s | %s%s%s}|{%p | id=%ld | value=%d}|{%p | id=%ld | value=%d}}\"]\n",
+	if(type != Type_functions::COPY)
+		fprintf(dumper, "\tnode%ld%s%ld [shape=\"record\", style=\"filled\", fillcolor=\"%s\", label=\"{{%s | %s%s%s}|{%p | id=%ld | value=%d}|{%p | id=%ld | value=%d}}\"]\n",
 					left_object.get_id(), char_type_functions[(int)type], right_object.get_id(), colours_text[(int)colour],
 					char_type_functions[(int)type], left_object.get_name().c_str(), signals[(int)int_signal],
 					right_object.get_name().c_str(),
+					&left_object, left_object.get_id(), left_object.get_value(),
+					&right_object, right_object.get_id(), right_object.get_value());
+
+	else
+		fprintf(dumper, "\tnode%ld%s  [shape=\"record\", style=\"filled\", fillcolor=\"%s\" label=\"{{%s | %s}|{%p | id=%ld | value=%d}|{%p | id=%ld | value=%d}}\"]\n",
+					left_object.get_id(), char_type_functions[(int)type], colours_text[(int)colour],
+					char_type_functions[(int)type], left_object.get_name().c_str(),
 					&left_object, left_object.get_id(), left_object.get_value(),
 					&right_object, right_object.get_id(), right_object.get_value());
 
@@ -65,10 +76,11 @@ void Graph_dumper::dump(const Int& left_object, const Int_signal int_signal, con
 }
 
 void Graph_dumper::print_node(const Node_identity* node, Console_colours colour = Console_colours::RESET) {
-	if(node->is_binary)
+	if(node->is_binary && node->type != Type_functions::COPY)
 		fprintf(dumper, "node%ld%s%ld", node->left_id, char_type_functions[(int)node->type], node->right_id);
-	else
+	else {
 		fprintf(dumper, "node%ld%s", node->left_id, char_type_functions[(int)node->type]);
+	}
 
 	if(colour != Console_colours::RESET)
 		fprintf(dumper, "[]");
@@ -106,22 +118,24 @@ void Graph_dumper::add_ctor_dtor_arrows(const Int& object, Node_identity* node, 
 }
 
 void Graph_dumper::add_operation_arrows(const Int& left_object, const Int_signal int_signal, const Int& right_object, Node_identity& now_node) {
-	fprintf(dumper, "\t");
-	print_node(&left_object.last_operation);
+	// left -> now
+	add_one_operation_arrow(left_object, int_signal, now_node);
 
-	fprintf(dumper, " -> ");
-	print_node(&now_node);
+	// right -> now
+	add_one_operation_arrow(right_object, int_signal, now_node);
+}
 
-	fprintf(dumper, "[color=\"red\"]\n");
+void Graph_dumper::add_one_operation_arrow(const Int& object, const Int_signal int_signal, Node_identity& now_node) {
+	if(int_signal != Int_signal::COPY || int_signal == Int_signal::COPY && object.get_is_copy_anyone() == false) {
+		fprintf(dumper, "\t");
+		print_node(&object.last_operation);
 
-	fprintf(dumper, "\t");
-	print_node(&right_object.last_operation);
+		fprintf(dumper, " -> ");
+		print_node(&now_node);
 
-	fprintf(dumper, " -> ");
-	print_node(&now_node);
-
-	fprintf(dumper, "[color=\"red\"]\n");
-} // need last object operation!!
+		fprintf(dumper, "[color=\"red\"]\n");
+	}
+}
 
 Graph_dumper::~Graph_dumper() {
 	fprintf(dumper, "}\n");

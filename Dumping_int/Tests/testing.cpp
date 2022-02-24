@@ -5,7 +5,7 @@
 #define VAR(type, name, value) type name(value, #name)
 
 Int nothing(Int& var) {
-	return var;
+	return var * var;
 }
 
 void testing() {
@@ -13,11 +13,11 @@ void testing() {
 
 	VAR(Int, a, 10);
 	VAR(Int, b, 20);
-	VAR(Int, d, 30);
+	// VAR(Int, d, 30);
 
 	printf("\n");
 
-	b = a;
+	// b = a;
 	b = nothing(a);
 
 	// VAR(Int, c, 0);

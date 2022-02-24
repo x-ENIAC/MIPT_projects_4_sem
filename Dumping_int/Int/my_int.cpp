@@ -65,10 +65,12 @@ Int::Int(const Int &other) {
 	parent = Dumper::get_dumper();
 
 	REFRESH_UNARY(this, *this, Int_signal::CONSTRUCT)
-	REFRESH_UNARY(this, *this, Int_signal::COPY)
+	// REFRESH_UNARY(this, *this, Int_signal::COPY)
+	REFRESH_BINARY(this, *this, Int_signal::COPY, other)
 
 	if(parent)
-		parent->signal(*this, Int_signal::COPY);
+		parent->signal(*this, Int_signal::COPY, other);
+		// parent->signal(*this, Int_signal::COPY);
 }
 
 Int::Int(const int arg_value, const std::string arg_name) {

@@ -54,6 +54,7 @@ public:
 	void add_ctor_dtor_arrows(const Int& object, Node_identity* node, Int_signal int_signal);
 
 	void add_operation_arrows(const Int& left_object, const Int_signal int_signal, const Int& right_object, Node_identity& now_node);
+	void add_one_operation_arrow(const Int& object, const Int_signal int_signal, Node_identity& now_node);
 
 	~Graph_dumper();
 };

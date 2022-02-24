@@ -95,7 +95,6 @@ class Dumper : public Signals_default_handler {
 		Console_colours colour = get_colour(int_signal);
 		
 		graph_dumper->dump(sender, int_signal, other, colour);
-		printf("COLOUR %s, id %d\n", colours_text[(int)colour], (int)colour);
 
 		char first[MAX_SIZE], second[MAX_SIZE];
 
