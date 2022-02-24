@@ -4,22 +4,17 @@
 
 #define VAR(type, name, value) type name(value, #name)
 
-Int nothing(Int& var) {
-	return var * var;
+Int get_var(Int var) {
+	return var;
+}
+
+Int mult(Int& var) {
+	return var * var * 5 + get_var(var) * 3 + 1;
 }
 
 void testing() {
-	std::cout << __PRETTY_FUNCTION__ << "\n";
-
-	VAR(Int, a, 10);
+	VAR(Int, a, 130);
 	VAR(Int, b, 20);
-	// VAR(Int, d, 30);
 
-	printf("\n");
-
-	// b = a;
-	b = nothing(a);
-
-	// VAR(Int, c, 0);
-	// c = (a + b) * d;
+	b = mult(a);
 }
