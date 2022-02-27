@@ -6,6 +6,8 @@
 #include "../Tools/console_colours.h"
 #include "../Dumper/int_signals_default_handler.h"
 
+#define MOVE_OPTIMIZATION
+
 class Int;
 class Signals_default_handler;
 struct Node_identity;
@@ -15,7 +17,8 @@ enum class Type_functions {
 	CONSTRUCT,
 	DESTRUCT,
 	OPERATION,
-	COPY
+	COPY,
+	MOVE
 };
 
 extern const char* char_type_functions[];
@@ -31,12 +34,13 @@ extern size_t indents;
 
 #define $$ printf("\n");
 
-const Console_colours CONSTRUCTOR_COLOUR = Console_colours::BOLDGREEN;
+const Console_colours CONSTRUCTOR_COLOUR = Console_colours::BOLDYELLOW;
 const Console_colours ARGUMENTS_COLOUR = Console_colours::BOLDYELLOW;
 const Console_colours DESTRUCTOR_COLOUR = Console_colours::BOLDMAGENTA;
 const Console_colours OPERATOR_COLOUR = Console_colours::BOLDCYAN;
 const Console_colours DEFAULT_COLOUR = Console_colours::BOLDWHITE;
 const Console_colours COPY_COLOUR = Console_colours::BOLDRED;
+const Console_colours MOVE_COLOUR = Console_colours::BOLDGREEN;
 // const Console_colours 
 
 class Int {
@@ -48,6 +52,7 @@ class Int {
 	static size_t max_tmp_number;
 	size_t id;
 	bool is_copy_anyone;
+	bool is_move_anyone;
 
 	Signals_default_handler* parent;
 
@@ -61,6 +66,10 @@ class Int {
 	Int(const int arg_value, const std::string arg_name = "tmp");
 
 	Int(const Int &other);
+
+    #ifdef MOVE_OPTIMIZATION
+    Int(const Int&& other);
+    #endif
 
 	Int& operator=(const int &other);
 
@@ -105,6 +114,8 @@ class Int {
 	std::string get_name() const;
 
 	bool get_is_copy_anyone() const;
+
+	bool get_is_move_anyone() const;
 
 	void set_value(const int new_value);
 };

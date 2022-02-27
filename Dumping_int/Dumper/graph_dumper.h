@@ -34,6 +34,14 @@ struct Node_identity {
 		is_binary = true;
 		is_used = false;
 	}
+
+	bool operator==(const Node_identity &other) {
+		return (left_id == other.left_id && right_id == other.right_id && type == other.type && is_binary == other.is_binary);
+	}
+
+	bool operator!=(const Node_identity &other) {
+		return !(left_id == other.left_id && right_id == other.right_id && type == other.type && is_binary == other.is_binary);
+	}
 };
 
 class Graph_dumper {

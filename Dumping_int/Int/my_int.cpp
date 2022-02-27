@@ -26,7 +26,8 @@ const char* char_type_functions[] = {
 	"CTOR",
 	"DTOR",
 	"OPERATION",
-	"COPY"
+	"COPY",
+	"MOVE"
 };
 
 size_t Int::max_id = 0;
@@ -39,6 +40,7 @@ Int::Int() {
 	id = max_id++;
 	name = "not_defined";
 	is_copy_anyone = false;
+	is_move_anyone = false;
 	parent = Dumper::get_dumper();
 
 	REFRESH_UNARY(this, *this, Int_signal::CONSTRUCT)
@@ -62,16 +64,35 @@ Int::Int(const Int &other) {
 	name = other.get_name();
 	name += "_copied";
 	is_copy_anyone = true;
+	is_move_anyone = false;
 	parent = Dumper::get_dumper();
 
 	REFRESH_UNARY(this, *this, Int_signal::CONSTRUCT)
-	// REFRESH_UNARY(this, *this, Int_signal::COPY)
 	REFRESH_BINARY(this, *this, Int_signal::COPY, other)
 
 	if(parent)
 		parent->signal(*this, Int_signal::COPY, other);
-		// parent->signal(*this, Int_signal::COPY);
 }
+
+#ifdef MOVE_OPTIMIZATION
+Int::Int(const Int &&other) {
+    BEGIN_FUNC(Type_functions::MOVE, MOVE_COLOUR)
+
+    value = other.get_value();
+    id = max_id++;
+    name = other.get_name();
+    name += "_moved";
+    is_copy_anyone = false;
+    is_move_anyone = true;
+    parent = other.parent;
+
+	REFRESH_UNARY(this, *this, Int_signal::CONSTRUCT)
+	REFRESH_BINARY(this, *this, Int_signal::MOVE, other)
+
+	if(parent)
+		parent->signal(*this, Int_signal::MOVE, other);
+}
+#endif
 
 Int::Int(const int arg_value, const std::string arg_name) {
 	BEGIN_FUNC(Type_functions::CONSTRUCT, CONSTRUCTOR_COLOUR)
@@ -80,6 +101,7 @@ Int::Int(const int arg_value, const std::string arg_name) {
 	id = max_id++;
 	name = arg_name;
 	is_copy_anyone = false;
+	is_move_anyone = false;
 	parent = Dumper::get_dumper();
 
 	if(arg_name == "tmp")
@@ -109,7 +131,7 @@ Int& Int::operator=(const Int &other) {
 	REFRESH_BINARY(this, *this, Int_signal::ASSIGNMENT, other)
 	REFRESH_BINARY((&other), *this, Int_signal::ASSIGNMENT, other)
 
-	return *this; 
+	return *this;
 }
 
 Int& Int::operator+=(const Int &other) {
@@ -300,6 +322,9 @@ void Int::refresh_last_node_operation(const Int& sender, const Int_signal int_si
 	if(int_signal == Int_signal::COPY)
 		last_operation.type = Type_functions::COPY;
 	else
+	if(int_signal == Int_signal::MOVE)
+		last_operation.type = Type_functions::MOVE;
+	else
 	if(int_signal == Int_signal::NOT_SIGNAL)
 		last_operation.type = Type_functions::NOT_FUNCTION;
 	else
@@ -320,6 +345,9 @@ void Int::refresh_last_node_operation(const Int& sender, const Int_signal int_si
 	else
 	if(int_signal == Int_signal::COPY)
 		last_operation.type = Type_functions::COPY;
+	else
+	if(int_signal == Int_signal::MOVE)
+		last_operation.type = Type_functions::MOVE;
 	else
 	if(int_signal == Int_signal::NOT_SIGNAL)
 		last_operation.type = Type_functions::NOT_FUNCTION;
@@ -346,6 +374,10 @@ size_t Int::get_id() const {
 
 bool Int::get_is_copy_anyone() const {
 	return is_copy_anyone;
+}
+
+bool Int::get_is_move_anyone() const {
+	return is_move_anyone;
 }
 
 std::string Int::get_name() const {

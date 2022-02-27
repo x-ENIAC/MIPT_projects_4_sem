@@ -23,10 +23,11 @@ enum class Int_signal {
 	CONSTRUCT			= 16,
 	DESTRUCT			= 17,
 	COPY				= 18,
-	OPERATION			= 19
+	MOVE				= 19,
+	OPERATION			= 20
 };
 
-const int COUNT_OF_SIGNALS = 20;
+const int COUNT_OF_SIGNALS = 32;
 
 extern const char* signals[];
 

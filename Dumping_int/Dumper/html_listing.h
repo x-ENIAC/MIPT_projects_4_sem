@@ -84,15 +84,15 @@ class Html_listing {
 			case DEFAULT_COLOUR:
 				return 0;
 			case CONSTRUCTOR_COLOUR:
-				return 1;
-			case ARGUMENTS_COLOUR:
-				return 2;
+				return 6;
 			case DESTRUCTOR_COLOUR:
 				return 3;
 			case COPY_COLOUR:
 				return 4;
 			case OPERATOR_COLOUR:
 				return 5;
+			case MOVE_COLOUR:
+				return 1;
 			default:
 				return 0;
 

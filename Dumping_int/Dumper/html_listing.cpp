@@ -6,5 +6,6 @@ const char* html_colours[] = {
 	"blue",
 	"purple",
 	"red",
-	"darkcyan"
+	"darkcyan",
+	"gold"
 };
