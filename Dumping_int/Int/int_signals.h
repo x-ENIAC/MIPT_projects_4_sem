@@ -23,8 +23,10 @@ enum class Int_signal {
 	CONSTRUCT			= 16,
 	DESTRUCT			= 17,
 	COPY				= 18,
-	MOVE				= 19,
-	OPERATION			= 20
+	COPY_ASSIGNMENT		= 19,
+	MOVE				= 20,
+	MOVE_ASSIGNMENT		= 21,
+	OPERATION			= 22
 };
 
 const int COUNT_OF_SIGNALS = 32;

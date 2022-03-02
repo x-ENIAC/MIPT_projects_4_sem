@@ -6,7 +6,7 @@ Why is this needed? Everyone around says that extra copying is bad, everyone arg
 
 Let's look at this simple example: 
 ```
-	VAR(Int, a, 130);
+	VAR(Int, a, 10);
 	VAR(Int, b, 20);
 ```
 ![Examples1](https://github.com/x-ENIAC/MIPT_projects_4_sem/blob/master/Dumping_int/Examples/picture1.png)
@@ -29,6 +29,8 @@ Okay, now let's look at situations using different ways of passing an object to 
 
 ```
 Int mult(Int var1, Int var2) {
+	BEGIN_ANY_FUNC
+	
 	return var1 * var2;
 }
 
@@ -40,6 +42,7 @@ void testing() {
 	c = mult(a, b);
 }
 ```
+Note: BEGIN_ANY_FUNC is a macro that creates a subgraph in the picture with the name of the function called by the user.
 
 The first way is to pass the function object by value, the second way is to pass by reference.
 
@@ -53,6 +56,8 @@ Now let's look at another way to optimize copies: add a move constructor. Look a
 
 ```
 Int get_var(Int var) {
+	BEGIN_ANY_FUNC
+	
 	return var;
 }
 

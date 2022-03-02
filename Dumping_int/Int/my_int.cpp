@@ -6,7 +6,7 @@
 size_t indents = 0;
 bool pair_arithm_flag  = false;
 
-#define BEGIN_FUNC(func_type, colour) Adder_at_trace adder(__PRETTY_FUNCTION__, func_type, colour);
+#define BEGIN_FUNC(func_type, colour) Adder_at_trace adder(__PRETTY_FUNCTION__, func_type, colour); // __PRETTY_FUNCTION__
 
 #define SINGLE_PRETTY_ARITHM							\
 	printf("%s", ARROWS[1]);
@@ -27,7 +27,9 @@ const char* char_type_functions[] = {
 	"DTOR",
 	"OPERATION",
 	"COPY",
-	"MOVE"
+	"COPY_ASS",
+	"MOVE",
+	"MOVE_ASS"
 };
 
 size_t Int::max_id = 0;
@@ -58,6 +60,7 @@ Int::~Int() {
 
 Int::Int(const Int &other) {
 	BEGIN_FUNC(Type_functions::COPY, COPY_COLOUR)
+	printf("\n\n!!!!!!!!!!!!!11\ncopy\n!!!!!!!!!!!!!!!!!!!!!\n\n");
 
 	value = other.get_value();
 	id = max_id++;
@@ -121,15 +124,14 @@ Int& Int::operator=(const int &other) {
 }
 
 Int& Int::operator=(const Int &other) {
-	BEGIN_FUNC(Type_functions::OPERATION, OPERATOR_COLOUR)
+	BEGIN_FUNC(Type_functions::COPY_ASSIGNMENT, COPY_COLOUR)
 
 	value = other.get_value();
 
-	if(parent)
-		parent->signal(*this, Int_signal::ASSIGNMENT, other);
+	REFRESH_BINARY(this, *this, Int_signal::COPY_ASSIGNMENT, other)
 
-	REFRESH_BINARY(this, *this, Int_signal::ASSIGNMENT, other)
-	REFRESH_BINARY((&other), *this, Int_signal::ASSIGNMENT, other)
+	if(parent)
+		parent->signal(*this, Int_signal::COPY_ASSIGNMENT, other);
 
 	return *this;
 }
@@ -322,8 +324,14 @@ void Int::refresh_last_node_operation(const Int& sender, const Int_signal int_si
 	if(int_signal == Int_signal::COPY)
 		last_operation.type = Type_functions::COPY;
 	else
+	if(int_signal == Int_signal::COPY_ASSIGNMENT)
+		last_operation.type = Type_functions::COPY_ASSIGNMENT;
+	else
 	if(int_signal == Int_signal::MOVE)
 		last_operation.type = Type_functions::MOVE;
+	else
+	if(int_signal == Int_signal::MOVE_ASSIGNMENT)
+		last_operation.type = Type_functions::MOVE_ASSIGNMENT;
 	else
 	if(int_signal == Int_signal::NOT_SIGNAL)
 		last_operation.type = Type_functions::NOT_FUNCTION;
@@ -346,8 +354,14 @@ void Int::refresh_last_node_operation(const Int& sender, const Int_signal int_si
 	if(int_signal == Int_signal::COPY)
 		last_operation.type = Type_functions::COPY;
 	else
+	if(int_signal == Int_signal::COPY_ASSIGNMENT)
+		last_operation.type = Type_functions::COPY_ASSIGNMENT;
+	else
 	if(int_signal == Int_signal::MOVE)
 		last_operation.type = Type_functions::MOVE;
+	else
+	if(int_signal == Int_signal::MOVE_ASSIGNMENT)
+		last_operation.type = Type_functions::MOVE_ASSIGNMENT;
 	else
 	if(int_signal == Int_signal::NOT_SIGNAL)
 		last_operation.type = Type_functions::NOT_FUNCTION;

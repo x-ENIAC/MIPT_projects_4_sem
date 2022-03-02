@@ -1,13 +1,14 @@
 CUR_PROG = numbers
 ARGS = 
 
-CPP = g++
+CPP = g++ -std=c++11
 LD = g++
 
 WARNINGS = 
-STANDARD = 
-OPTIMIZATION_ON = -O0 -Wno-reorder -fno-elide-constructors
-OPTIMIZATION_OFF = -O3
+STANDARD =
+SIMPLE_OPTIMIZATION = -O0
+OPTIMIZATION_ON = -fno-elide-constructors
+OPTIMIZATION_OFF = 
 
 CFLAGS = $(WARNINGS) $(STANDARD)
 LDFLAGS =
@@ -15,11 +16,11 @@ LDFLAGS =
 .PHONY : all run debug clean
 
 all_optimize_on: my_int.o int_dumping.o int_signals.o calling_trace.o console_colours.o html_listing.o graph_dumper.o console.o testing.o
-	$(CPP) $(CFLAGS) $(OPTIMIZATION_ON) -c main.cpp -o main.o
+	$(CPP) $(CFLAGS) $(SIMPLE_OPTIMIZATION) $(OPTIMIZATION_ON) -c main.cpp -o main.o
 	$(LD) my_int.o int_dumping.o int_signals.o calling_trace.o console_colours.o console.o html_listing.o graph_dumper.o testing.o main.o -o $(CUR_PROG) $(LDFLAGS)
 	
 all_optimize_off: my_int.o int_dumping.o int_signals.o calling_trace.o console_colours.o html_listing.o graph_dumper.o console.o testing.o
-	$(CPP) $(CFLAGS) $(OPTIMIZATION_OFF) -c main.cpp -o main.o
+	$(CPP) $(CFLAGS) $(SIMPLE_OPTIMIZATION) $(OPTIMIZATION_OFF) -c main.cpp -o main.o
 	$(LD) my_int.o int_dumping.o int_signals.o calling_trace.o console_colours.o console.o html_listing.o graph_dumper.o testing.o main.o -o $(CUR_PROG) $(LDFLAGS)
 
 testing.o: Tests/testing.cpp Tests/testing.h

@@ -1,10 +1,13 @@
 #include "../Int/my_int.h"
+#include "../Tools/stack.h"
+
 #ifndef GRAPH_DUMPER_H
 #define GRAPH_DUMPER_H
 
 struct Node_identity;
 
 #include <string.h>
+#include <vector>
 
 struct Node_identity {
 	size_t left_id;
@@ -44,11 +47,31 @@ struct Node_identity {
 	}
 };
 
+const int SUBGRAPH_COLOUR_OFFSET = 50;
+
+struct Arrow {
+    std::string from;
+    std::string to;
+
+    std::string type;
+    std::string color;
+
+    Arrow(std::string arg_from, std::string arg_to, std::string arg_type, std::string arg_color) {
+    	from = arg_from;
+    	to = arg_to;
+    	type = arg_type;
+    	color = arg_color;
+    }
+};
+
 class Graph_dumper {
 public:
 	FILE* dumper;
 	Node_identity last_node;
 	char graph_name[128];
+	size_t subgraph_number;
+	int subgraph_colour;
+	std::vector<Arrow> arrows;
 
 	Graph_dumper();
 
@@ -64,7 +87,21 @@ public:
 	void add_operation_arrows(const Int& left_object, const Int_signal int_signal, const Int& right_object, Node_identity& now_node);
 	void add_one_operation_arrow(const Int& object, const Int_signal int_signal, Node_identity& now_node);
 
+	void begin_subgraph(Elem_t& name_function);
+	void end_subgraph(Elem_t& name_function);
+	void dump_arrows();
+
 	~Graph_dumper();
+};
+
+class Function_name_sender {
+  public:
+	Elem_t name_func;
+
+	Function_name_sender(Elem_t arg_name_func);
+
+	~Function_name_sender();
+
 };
 
 #endif

@@ -46,9 +46,11 @@ Adder_at_trace::Adder_at_trace(Elem_t name_func, 	const Type_functions type_func
 													const Console_colours colour = Console_colours::GREEN) {
 	is_func_added = true;
 	Dumper::get_dumper()->get_tracer_functions()->add_function(name_func, type_function, colour);
+	// Dumper::get_dumper()->get_graph_dumper()->begin_subgraph(name_func);
 }
 
 Adder_at_trace::~Adder_at_trace() {
+	// Dumper::get_dumper()->get_graph_dumper()->begin_subgraph(Dumper::get_dumper()->get_tracer_functions()->get_last_function());
 	if(is_func_added)
 		Dumper::get_dumper()->get_tracer_functions()->delete_function();
 	$$

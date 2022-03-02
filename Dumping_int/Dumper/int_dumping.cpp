@@ -37,6 +37,10 @@ Console_colours Dumper::get_colour(const Int_signal& int_signal) {
 			return OPERATOR_COLOUR;
 		case (int)Int_signal::COPY:
 			return COPY_COLOUR;
+		case (int)Int_signal::COPY_ASSIGNMENT:
+			return COPY_COLOUR;
+		case (int)Int_signal::MOVE_ASSIGNMENT:
+			return MOVE_COLOUR;
 		case (int)Int_signal::MOVE:
 			return MOVE_COLOUR;
 		default:

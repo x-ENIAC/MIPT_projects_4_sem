@@ -4,7 +4,7 @@
 #include "../Int/my_int.h"
 #include "../Int/int_container.h"
 
-void bubble_sort(Int* numbers, const int len);
+Int create_var();
 
 void testing();
 

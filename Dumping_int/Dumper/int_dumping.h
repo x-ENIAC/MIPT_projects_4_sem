@@ -97,7 +97,8 @@ class Dumper : public Signals_default_handler {
 
 		char first[MAX_SIZE], second[MAX_SIZE];
 
-		if(int_signal == Int_signal::ASSIGNMENT) {
+		if(int_signal == Int_signal::ASSIGNMENT || int_signal == Int_signal::MOVE_ASSIGNMENT ||
+			int_signal == Int_signal::COPY_ASSIGNMENT) {
 			strcpy(first,  "from");
 			strcpy(second, "to  ");
 		} else {
