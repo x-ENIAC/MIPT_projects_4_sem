@@ -1,6 +1,8 @@
 
-## Small study on copying variables 
-This project provides code for the Int class that implements an integer, as well as a set of tools for tracking the behavior of various operations on objects. All actions with this object (summation, subtraction, multiplication, division, assignment, and many others) are recorded, then written to the terminal, to an html file, and also presented as a graph.
+# Small study on copying variables 
+
+## Intro
+This project provides code for the Int class that implements an integer, as well as a set of tools for tracking the behavior of various operations on objects. All actions with this object (summation, subtraction, multiplication, division, assignment, and many others) are recorded, then written to the terminal, to an html file, and also presented as a graph. Investigation is done with the compilation flag turned on **-fno-elide-constructors** (not including the third paragraph).
 
 Why is this needed? Everyone around says that extra copying is bad, everyone argues that passing arguments should be done only by reference. But why? What happens if you do it differently? This mini-project is a small illustration and an answer to these questions. 
 
@@ -25,6 +27,7 @@ This picture is simple. Two variables are built, two are destroyed. Let's take a
 
 Operators are marked in blue. Three constructors are called first; then the operation takes place and the result is assigned to the **temporary variable**, which in turn is assigned to c. The summation operator calls the constructor and creates a temporary object.
 
+## First comparison
 Okay, now let's look at situations using different ways of passing an object to a function as an argument:
 
 ```
@@ -52,6 +55,7 @@ The first way is to pass the function object by value, the second way is to pass
 
 Wow! By passing by reference, we prevented two extra **copies**. Adorably!
 
+## Second comparison
 Now let's look at another way to optimize copies: add a move constructor. Look at an example:
 
 ```
@@ -78,4 +82,25 @@ Green boxes mean that the variable's move constructor has been called.
 
 So, when adding a move constructor, part of the copying is replaced by **moves**. Great! 
 
+## Third comparison
+At the very beginning of the article, it was said about the existence of the compilation flag **-fno-elide-constructors**. Let's try to run with on/off move-optimization and with/without this flag. Let's look at an example of such a simple program, what happens:
 
+'''
+Int sum(Int& a, Int& b) {
+	BEGIN_ANY_FUNC
+
+	return a + b;
+}
+
+void testing() {
+	VAR(Int, a, 130);
+	VAR(Int, b, 20);
+	VAR(Int, c, 0);
+
+	c =  sum(a, b);
+}
+'''
+
+| Off moves, off flag | Off moves, on flag  | On moves, off flag | On moves, on flag |
+|----------------|:---------:|----------------|-------------|
+| ![Examples10](https://github.com/x-ENIAC/MIPT_projects_4_sem/blob/master/Dumping_int/Examples/no-elide-no-moves.png) | ![Examples11](https://github.com/x-ENIAC/MIPT_projects_4_sem/blob/master/Dumping_int/Examples/elide-no-moves.png)  | ![Examples12](https://github.com/x-ENIAC/MIPT_projects_4_sem/blob/master/Dumping_int/Examples/no-elide-with-moves.png) | ![Examples13](https://github.com/x-ENIAC/MIPT_projects_4_sem/blob/master/Dumping_int/Examples/elide-with-moves.png) |
