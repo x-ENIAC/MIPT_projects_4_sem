@@ -85,7 +85,7 @@ So, when adding a move constructor, part of the copying is replaced by **moves**
 ## Third comparison
 At the very beginning of the article, it was said about the existence of the compilation flag **-fno-elide-constructors**. Let's try to run with on/off move-optimization and with/without this flag. Let's look at an example of such a simple program, what happens:
 
-'''
+```
 Int sum(Int& a, Int& b) {
 	BEGIN_ANY_FUNC
 
@@ -99,8 +99,8 @@ void testing() {
 
 	c =  sum(a, b);
 }
-'''
+```
 
 | Off moves, off flag | Off moves, on flag  | On moves, off flag | On moves, on flag |
 |----------------|:---------:|----------------|-------------|
-| ![Examples10](https://github.com/x-ENIAC/MIPT_projects_4_sem/blob/master/Dumping_int/Examples/no-elide-no-moves.png) | ![Examples11](https://github.com/x-ENIAC/MIPT_projects_4_sem/blob/master/Dumping_int/Examples/elide-no-moves.png)  | ![Examples12](https://github.com/x-ENIAC/MIPT_projects_4_sem/blob/master/Dumping_int/Examples/no-elide-with-moves.png) | ![Examples13](https://github.com/x-ENIAC/MIPT_projects_4_sem/blob/master/Dumping_int/Examples/elide-with-moves.png) |
+| ![Examples10](https://github.com/x-ENIAC/MIPT_projects_4_sem/blob/master/Dumping_int/Examples/fno-elide-no-moves.png) | ![Examples11](https://github.com/x-ENIAC/MIPT_projects_4_sem/blob/master/Dumping_int/Examples/elide-no-moves.png)  | ![Examples12](https://github.com/x-ENIAC/MIPT_projects_4_sem/blob/master/Dumping_int/Examples/fno-elide-with-moves.png) | ![Examples13](https://github.com/x-ENIAC/MIPT_projects_4_sem/blob/master/Dumping_int/Examples/elide-with-moves.png) |
