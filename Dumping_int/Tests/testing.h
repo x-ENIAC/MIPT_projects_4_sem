@@ -6,6 +6,8 @@
 
 Int create_var();
 
+Int sum(Int& a, Int& b);
+
 void testing();
 
 #endif

@@ -4,21 +4,29 @@
 #include "../Dumper/calling_trace.h"
 
 #define VAR(type, name, value) type name(value, #name)
-// #define BEGIN_ANY_FUNC Function_name_sender sender(__FUNCTION__); 
+#define BEGIN_ANY_FUNC Function_name_sender sender(__FUNCTION__); 
 
 Int create_var() {
 	VAR(Int, new_var, 10);
-	printf("Definitely here\n");
 	return new_var;
 }
 
-// Int get_var(Int var) {
-// 	return var;
-// }
+Int get_var(Int var) {
+	VAR(Int, help, 666);
+	return help;
+}
+
+Int sum(Int& a, Int& b) {
+	BEGIN_ANY_FUNC
+
+	Int res = a + b;
+
+	return res;
+}
 
 void testing() {
 	VAR(Int, a, 130);
-	VAR(Int, c, 0);
+	VAR(Int, b, 160);
 
-	c = create_var() + a;
+	Int c = sum(a, b);
 }

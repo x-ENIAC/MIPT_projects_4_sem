@@ -136,6 +136,21 @@ Int& Int::operator=(const Int &other) {
 	return *this;
 }
 
+#ifdef MOVE_OPTIMIZATION
+Int& Int::operator=(const Int &&other) {
+	BEGIN_FUNC(Type_functions::MOVE_ASSIGNMENT, MOVE_COLOUR)
+
+	value = other.get_value();
+
+	REFRESH_BINARY(this, *this, Int_signal::MOVE_ASSIGNMENT, other)
+
+	if(parent)
+		parent->signal(*this, Int_signal::MOVE_ASSIGNMENT, other);
+
+	return *this;
+}
+#endif
+
 Int& Int::operator+=(const Int &other) {
 	BEGIN_FUNC(Type_functions::OPERATION, OPERATOR_COLOUR)
 

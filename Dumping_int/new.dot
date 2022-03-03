@@ -1,28 +1,27 @@
 digraph graphname {
-	node0CTOR [shape="record", style="filled", fillcolor="gold", label="{{CTOR | a=130}|{0x7ffde450c510 | id=0}}"]
-	node1CTOR [shape="record", style="filled", fillcolor="gold", label="{{CTOR | c=0}|{0x7ffde450c570 | id=1}}"]
+	node0CTOR [shape="record", style="filled", fillcolor="gold", label="{{CTOR | a=130}|{0x7ffedc6fbd70 | id=0}}"]
+	node1CTOR [shape="record", style="filled", fillcolor="gold", label="{{CTOR | b=160}|{0x7ffedc6fbdd0 | id=1}}"]
+
+subgraph "cluster_0" {
+	style=filled;
+	color="#c8c8c8";
+		node0OPERATION1 [shape="record", style="filled", fillcolor="lightskyblue", label="{{OPERATION | a+b}|{0x7ffedc6fbd70 | id=0 | value=130}|{0x7ffedc6fbdd0 | id=1 | value=160}}"]
+	node2CTOR [shape="record", style="filled", fillcolor="gold", label="{{CTOR | tmp_1=290}|{0x7ffedc6fbe30 | id=2}}"]
+	label = "sum" 
+}
+
+	node2DTOR [shape="record", style="filled", fillcolor="violet", label="{{DTOR | tmp_1=290}|{0x7ffedc6fbe30 | id=2}}"]
+	node1DTOR [shape="record", style="filled", fillcolor="violet", label="{{DTOR | b=160}|{0x7ffedc6fbdd0 | id=1}}"]
+	node0DTOR [shape="record", style="filled", fillcolor="violet", label="{{DTOR | a=130}|{0x7ffedc6fbd70 | id=0}}"]
 	node0CTOR -> node1CTOR
-	node2CTOR [shape="record", style="filled", fillcolor="gold", label="{{CTOR | new_var=10}|{0x7ffde450c5d0 | id=2}}"]
-	node1CTOR -> node2CTOR
-	node2OPERATION0 [shape="record", style="filled", fillcolor="lightskyblue", label="{{OPERATION | new_var+a}|{0x7ffde450c5d0 | id=2 | value=10}|{0x7ffde450c510 | id=0 | value=130}}"]
-	node2CTOR -> node2OPERATION0
-	node2CTOR -> node2OPERATION0[color="red"]
-	node0CTOR -> node2OPERATION0[color="red"]
-	node3CTOR [shape="record", style="filled", fillcolor="gold", label="{{CTOR | tmp_1=140}|{0x7ffde450c630 | id=3}}"]
-	node2OPERATION0 -> node3CTOR
-	node1COPY_ASS3 [shape="record", style="filled", fillcolor="red", label="{{COPY_ASS | c = tmp_1}|{0x7ffde450c570 | id=1 | value=140}|{0x7ffde450c630 | id=3 | value=140}}"]
-	node3CTOR -> node1COPY_ASS3
-	node3CTOR -> node1COPY_ASS3[color="red"]
-	node3DTOR [shape="record", style="filled", fillcolor="violet", label="{{DTOR | tmp_1=140}|{0x7ffde450c630 | id=3}}"]
-	node1COPY_ASS3 -> node3DTOR
-	node3CTOR -> node3DTOR[style="dashed"]
-	node2DTOR [shape="record", style="filled", fillcolor="violet", label="{{DTOR | new_var=10}|{0x7ffde450c5d0 | id=2}}"]
-	node3DTOR -> node2DTOR
-	node2CTOR -> node2DTOR[style="dashed"]
-	node1DTOR [shape="record", style="filled", fillcolor="violet", label="{{DTOR | c=140}|{0x7ffde450c570 | id=1}}"]
+	node1CTOR -> node0OPERATION1
+	node0CTOR -> node0OPERATION1 [color="red"]
+	node1CTOR -> node0OPERATION1 [color="red"]
+	node0OPERATION1 -> node2CTOR
+	node2CTOR -> node2DTOR
+	node2CTOR -> node2DTOR [style="dashed"]
 	node2DTOR -> node1DTOR
-	node1CTOR -> node1DTOR[style="dashed"]
-	node0DTOR [shape="record", style="filled", fillcolor="violet", label="{{DTOR | a=130}|{0x7ffde450c510 | id=0}}"]
+	node1CTOR -> node1DTOR [style="dashed"]
 	node1DTOR -> node0DTOR
-	node0CTOR -> node0DTOR[style="dashed"]
+	node0CTOR -> node0DTOR [style="dashed"]
 }

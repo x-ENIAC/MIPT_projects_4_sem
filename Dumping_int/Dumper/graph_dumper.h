@@ -64,6 +64,8 @@ struct Arrow {
     }
 };
 
+Type_functions from_int_signal_to_type_function(const Int_signal signal);
+
 class Graph_dumper {
 public:
 	FILE* dumper;
@@ -79,6 +81,7 @@ public:
 	void dump(const Int& left_object, const Int_signal int_signal, const Int& right_object, const Console_colours colour);
 	
 	void print_node(const Node_identity* node, Console_colours colour);
+	std::string get_name_node(const Node_identity* node);
 
 	void add_order_arrows(Node_identity* last_node, Node_identity* now_node);
 

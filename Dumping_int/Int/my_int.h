@@ -71,6 +71,7 @@ class Int {
 
     #ifdef MOVE_OPTIMIZATION
     Int(const Int&& other);
+    Int& operator=(const Int &&other);
     #endif
 
 	Int& operator=(const int &other);

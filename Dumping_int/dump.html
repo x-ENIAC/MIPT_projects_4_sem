@@ -9,65 +9,45 @@ P {
 
 <p><font size="3" color="gold">[Calling_trace] CTOR Int::Int(int, std::string)
 </font>
-	<font size="3" color="gold">└──>[0x7ffde450c510]: id = 0, a=130
+	<font size="3" color="gold">└──>[0x7ffedc6fbd70]: id = 0, a=130
 </font>
 <font size="3" color="gold">
 </font>
 <font size="3" color="gold">[Calling_trace] CTOR Int::Int(int, std::string)
 </font>
-	<font size="3" color="gold">└──>[0x7ffde450c570]: id = 1, c=0
-</font>
-<font size="3" color="gold">
-</font>
-<font size="3" color="gold">[Calling_trace] CTOR Int::Int(int, std::string)
-</font>
-	<font size="3" color="gold">└──>[0x7ffde450c5d0]: id = 2, new_var=10
+	<font size="3" color="gold">└──>[0x7ffedc6fbdd0]: id = 1, b=160
 </font>
 <font size="3" color="gold">
 </font>
 <font size="3" color="darkcyan">[Calling_trace] OPERATION const Int Int::operator+(const Int&) const
 </font>
-	<font size="3" color="darkcyan">└──>[0x7ffde450c5d0]: left  id = 2, new_var=10
+	<font size="3" color="darkcyan">└──>[0x7ffedc6fbd70]: left  id = 0, a=130
 </font>
-	<font size="3" color="darkcyan">└──>[0x7ffde450c510]: right id = 0, a=130
+	<font size="3" color="darkcyan">└──>[0x7ffedc6fbdd0]: right id = 1, b=160
 </font>
 <font size="3" color="darkcyan">
 </font>
 	<font size="3" color="gold">[Calling_trace] CTOR Int::Int(int, std::string)
 </font>
-		<font size="3" color="gold">└──>[0x7ffde450c630]: id = 3, tmp_1=140
+		<font size="3" color="gold">└──>[0x7ffedc6fbe30]: id = 2, tmp_1=290
 </font>
 <font size="3" color="gold">
 </font>
-<font size="3" color="red">[Calling_trace] COPY_ASS Int& Int::operator=(const Int&)
-</font>
-	<font size="3" color="red">└──>[0x7ffde450c570]: from id = 1, c=140
-</font>
-	<font size="3" color="red">└──>[0x7ffde450c630]: to   id = 3, tmp_1=140
-</font>
-<font size="3" color="red">
-</font>
 <font size="3" color="purple">[Calling_trace] DTOR Int::~Int()
 </font>
-	<font size="3" color="purple">└──>[0x7ffde450c630]: id = 3, tmp_1=140
+	<font size="3" color="purple">└──>[0x7ffedc6fbe30]: id = 2, tmp_1=290
 </font>
 <font size="3" color="purple">
 </font>
 <font size="3" color="purple">[Calling_trace] DTOR Int::~Int()
 </font>
-	<font size="3" color="purple">└──>[0x7ffde450c5d0]: id = 2, new_var=10
+	<font size="3" color="purple">└──>[0x7ffedc6fbdd0]: id = 1, b=160
 </font>
 <font size="3" color="purple">
 </font>
 <font size="3" color="purple">[Calling_trace] DTOR Int::~Int()
 </font>
-	<font size="3" color="purple">└──>[0x7ffde450c570]: id = 1, c=140
-</font>
-<font size="3" color="purple">
-</font>
-<font size="3" color="purple">[Calling_trace] DTOR Int::~Int()
-</font>
-	<font size="3" color="purple">└──>[0x7ffde450c510]: id = 0, a=130
+	<font size="3" color="purple">└──>[0x7ffedc6fbd70]: id = 0, a=130
 </font>
 <font size="3" color="purple">
 </font>
