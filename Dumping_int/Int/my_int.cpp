@@ -60,7 +60,6 @@ Int::~Int() {
 
 Int::Int(const Int &other) {
 	BEGIN_FUNC(Type_functions::COPY, COPY_COLOUR)
-	printf("\n\n!!!!!!!!!!!!!11\ncopy\n!!!!!!!!!!!!!!!!!!!!!\n\n");
 
 	value = other.get_value();
 	id = max_id++;

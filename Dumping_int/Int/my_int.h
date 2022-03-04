@@ -6,7 +6,7 @@
 #include "../Tools/console_colours.h"
 #include "../Dumper/int_signals_default_handler.h"
 
-// #define MOVE_OPTIMIZATION
+#define MOVE_OPTIMIZATION
 
 class Int;
 class Signals_default_handler;

@@ -32,12 +32,6 @@
 // 	c = a + b;
 // }
 
-Int sum(Int& a, Int& b) {
-	BEGIN_ANY_FUNC
-
-	return a + b;
-}
-
 Int get_var(Int var) {
 	BEGIN_ANY_FUNC
 	
@@ -49,5 +43,5 @@ void testing() {
 	VAR(Int, b, 20);
 	VAR(Int, c, 0);
 
-	c=  sum(a, b);
+	c = get_var(a) + get_var(b);
 }

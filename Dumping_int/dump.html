@@ -9,65 +9,121 @@ P {
 
 <p><font size="3" color="gold">[Calling_trace] CTOR Int::Int(int, std::string)
 </font>
-	<font size="3" color="gold">└──>[0x7ffcfd5f2060]: id = 0, a=130
+	<font size="3" color="gold">└──>[0x7ffe83c7f850]: id = 0, a=130
 </font>
 <font size="3" color="gold">
 </font>
 <font size="3" color="gold">[Calling_trace] CTOR Int::Int(int, std::string)
 </font>
-	<font size="3" color="gold">└──>[0x7ffcfd5f20c0]: id = 1, b=20
+	<font size="3" color="gold">└──>[0x7ffe83c7f8b0]: id = 1, b=20
 </font>
 <font size="3" color="gold">
 </font>
 <font size="3" color="gold">[Calling_trace] CTOR Int::Int(int, std::string)
 </font>
-	<font size="3" color="gold">└──>[0x7ffcfd5f2120]: id = 2, c=0
+	<font size="3" color="gold">└──>[0x7ffe83c7f910]: id = 2, c=0
 </font>
 <font size="3" color="gold">
+</font>
+<font size="3" color="red">[Calling_trace] COPY Int::Int(const Int&)
+</font>
+	<font size="3" color="red">└──>[0x7ffe83c7fa30]: left  id = 3, b_copied=20
+</font>
+	<font size="3" color="red">└──>[0x7ffe83c7f8b0]: right id = 1, b=20
+</font>
+<font size="3" color="red">
+</font>
+<font size="3" color="green">[Calling_trace] MOVE Int::Int(const Int&&)
+</font>
+	<font size="3" color="green">└──>[0x7ffe83c7fa90]: left  id = 4, b_copied_moved=20
+</font>
+	<font size="3" color="green">└──>[0x7ffe83c7fa30]: right id = 3, b_copied=20
+</font>
+<font size="3" color="green">
+</font>
+<font size="3" color="red">[Calling_trace] COPY Int::Int(const Int&)
+</font>
+	<font size="3" color="red">└──>[0x7ffe83c7f970]: left  id = 5, a_copied=130
+</font>
+	<font size="3" color="red">└──>[0x7ffe83c7f850]: right id = 0, a=130
+</font>
+<font size="3" color="red">
+</font>
+<font size="3" color="green">[Calling_trace] MOVE Int::Int(const Int&&)
+</font>
+	<font size="3" color="green">└──>[0x7ffe83c7f9d0]: left  id = 6, a_copied_moved=130
+</font>
+	<font size="3" color="green">└──>[0x7ffe83c7f970]: right id = 5, a_copied=130
+</font>
+<font size="3" color="green">
 </font>
 <font size="3" color="darkcyan">[Calling_trace] OPERATION const Int Int::operator+(const Int&) const
 </font>
-	<font size="3" color="darkcyan">└──>[0x7ffcfd5f2060]: left  id = 0, a=130
+	<font size="3" color="darkcyan">└──>[0x7ffe83c7f9d0]: left  id = 6, a_copied_moved=130
 </font>
-	<font size="3" color="darkcyan">└──>[0x7ffcfd5f20c0]: right id = 1, b=20
+	<font size="3" color="darkcyan">└──>[0x7ffe83c7fa90]: right id = 4, b_copied_moved=20
 </font>
 <font size="3" color="darkcyan">
 </font>
 	<font size="3" color="gold">[Calling_trace] CTOR Int::Int(int, std::string)
 </font>
-		<font size="3" color="gold">└──>[0x7ffcfd5f2180]: id = 3, tmp_1=150
+		<font size="3" color="gold">└──>[0x7ffe83c7faf0]: id = 7, tmp_1=150
 </font>
 <font size="3" color="gold">
 </font>
-<font size="3" color="red">[Calling_trace] COPY_ASS Int& Int::operator=(const Int&)
+<font size="3" color="green">[Calling_trace] MOVE_ASS Int& Int::operator=(const Int&&)
 </font>
-	<font size="3" color="red">└──>[0x7ffcfd5f2120]: from id = 2, c=150
+	<font size="3" color="green">└──>[0x7ffe83c7f910]: from id = 2, c=150
 </font>
-	<font size="3" color="red">└──>[0x7ffcfd5f2180]: to   id = 3, tmp_1=150
+	<font size="3" color="green">└──>[0x7ffe83c7faf0]: to   id = 7, tmp_1=150
 </font>
-<font size="3" color="red">
+<font size="3" color="green">
 </font>
 <font size="3" color="purple">[Calling_trace] DTOR Int::~Int()
 </font>
-	<font size="3" color="purple">└──>[0x7ffcfd5f2180]: id = 3, tmp_1=150
+	<font size="3" color="purple">└──>[0x7ffe83c7faf0]: id = 7, tmp_1=150
 </font>
 <font size="3" color="purple">
 </font>
 <font size="3" color="purple">[Calling_trace] DTOR Int::~Int()
 </font>
-	<font size="3" color="purple">└──>[0x7ffcfd5f2120]: id = 2, c=150
+	<font size="3" color="purple">└──>[0x7ffe83c7f9d0]: id = 6, a_copied_moved=130
 </font>
 <font size="3" color="purple">
 </font>
 <font size="3" color="purple">[Calling_trace] DTOR Int::~Int()
 </font>
-	<font size="3" color="purple">└──>[0x7ffcfd5f20c0]: id = 1, b=20
+	<font size="3" color="purple">└──>[0x7ffe83c7f970]: id = 5, a_copied=130
 </font>
 <font size="3" color="purple">
 </font>
 <font size="3" color="purple">[Calling_trace] DTOR Int::~Int()
 </font>
-	<font size="3" color="purple">└──>[0x7ffcfd5f2060]: id = 0, a=130
+	<font size="3" color="purple">└──>[0x7ffe83c7fa90]: id = 4, b_copied_moved=20
+</font>
+<font size="3" color="purple">
+</font>
+<font size="3" color="purple">[Calling_trace] DTOR Int::~Int()
+</font>
+	<font size="3" color="purple">└──>[0x7ffe83c7fa30]: id = 3, b_copied=20
+</font>
+<font size="3" color="purple">
+</font>
+<font size="3" color="purple">[Calling_trace] DTOR Int::~Int()
+</font>
+	<font size="3" color="purple">└──>[0x7ffe83c7f910]: id = 2, c=150
+</font>
+<font size="3" color="purple">
+</font>
+<font size="3" color="purple">[Calling_trace] DTOR Int::~Int()
+</font>
+	<font size="3" color="purple">└──>[0x7ffe83c7f8b0]: id = 1, b=20
+</font>
+<font size="3" color="purple">
+</font>
+<font size="3" color="purple">[Calling_trace] DTOR Int::~Int()
+</font>
+	<font size="3" color="purple">└──>[0x7ffe83c7f850]: id = 0, a=130
 </font>
 <font size="3" color="purple">
 </font>
