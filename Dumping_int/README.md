@@ -101,6 +101,6 @@ void testing() {
 }
 ```
 
-| Off moves, off flag | Off moves, on flag  | On moves, off flag | On moves, on flag |
+| Off moves, on flag | Off moves, off flag  | On moves, on flag | On moves, off flag |
 |----------------|:---------:|----------------|-------------|
 | ![Examples10](https://github.com/x-ENIAC/MIPT_projects_4_sem/blob/master/Dumping_int/Examples/fno-elide-no-moves.png) | ![Examples11](https://github.com/x-ENIAC/MIPT_projects_4_sem/blob/master/Dumping_int/Examples/elide-no-moves.png)  | ![Examples12](https://github.com/x-ENIAC/MIPT_projects_4_sem/blob/master/Dumping_int/Examples/fno-elide-with-moves.png) | ![Examples13](https://github.com/x-ENIAC/MIPT_projects_4_sem/blob/master/Dumping_int/Examples/elide-with-moves.png) |
