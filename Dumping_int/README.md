@@ -103,7 +103,4 @@ void testing() {
 |----------------|:---------:|
 | ![Examples7](https://github.com/x-ENIAC/MIPT_projects_4_sem/blob/master/Dumping_int/Examples/picture7.png) | ![Examples6](https://github.com/x-ENIAC/MIPT_projects_4_sem/blob/master/Dumping_int/Examples/picture6.png) |
 
-So, when adding a move constructor, part of the copying is replaced by **moves**. Great! 
-
-
 
