@@ -58,7 +58,7 @@ void testing() {
 ```
 
 | pass lvalue<br/>my_move | pass lvalue<br/>my_forward | pass lvalue<br/>without moves<br/>and forwarding |
-|----------------|-------------|
+|----------------|-------------|-------------|
 | ![Examples2](https://github.com/x-ENIAC/MIPT_projects_4_sem/blob/master/Move&forward_research/Examples/picture2.png) | ![Examples3](https://github.com/x-ENIAC/MIPT_projects_4_sem/blob/master/Move&forward_research/Examples/picture3.png) | ![Examples4](https://github.com/x-ENIAC/MIPT_projects_4_sem/blob/master/Move&forward_research/Examples/picture4.png) |
 
 Fun fact: my_forward and argument passing without my_move and my_forward are the same in terms of the number of copies.
