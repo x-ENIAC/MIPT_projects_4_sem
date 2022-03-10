@@ -11,7 +11,7 @@
 template<class T>
 void example_1(T&& arg) {
 	BEGIN_ANY_FUNC
-	volatile auto new_tmp = arg;
+	volatile auto new_tmp = arg; // my_forward(arg)
 }
 
 template<class T>
@@ -21,6 +21,6 @@ void wrapper(T&& arg) {
 }
 
 void testing() {
-	VAR(Int, a, 10);
-	wrapper(a);
+	// VAR(Int, a, 10);
+	wrapper(Int(10));
 }
