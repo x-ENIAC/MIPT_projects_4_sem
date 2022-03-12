@@ -1,5 +1,5 @@
 digraph graphname {
-	node0CTOR [shape="record", style="filled", fillcolor="gold", label="{{CTOR | tmp_1=10}|{0x7ffeb7055750 | id=0}}"]
+	node0CTOR [shape="record", style="filled", fillcolor="gold", label="{{CTOR | tmp_1=5}|{0x7fffcdd3e7f0 | id=0}}"]
 
 subgraph "cluster_0" {
 	style=filled;
@@ -8,19 +8,19 @@ subgraph "cluster_0" {
 subgraph "cluster_1" {
 	style=filled;
 	color="#969696";
-		node1COPY  [shape="record", style="filled", fillcolor="red" label="{{COPY | tmp_1_copied}|{0x7ffeb7055600 | id=1 | value=10}|{0x7ffeb7055750 | id=0 | value=10}}"]
-	node1DTOR [shape="record", style="filled", fillcolor="violet", label="{{DTOR | tmp_1_copied=10}|{0x7ffeb7055600 | id=1}}"]
+		node1MOVE  [shape="record", style="filled", fillcolor="palegreen1" label="{{MOVE | tmp_1_moved}|{0x7fffcdd3e6a0 | id=1 | value=5}|{0x7fffcdd3e7f0 | id=0 | value=5}}"]
+	node1DTOR [shape="record", style="filled", fillcolor="violet", label="{{DTOR | tmp_1_moved=5}|{0x7fffcdd3e6a0 | id=1}}"]
 	label = "example_1" 
 }
 
 	label = "wrapper" 
 }
 
-	node0DTOR [shape="record", style="filled", fillcolor="violet", label="{{DTOR | tmp_1=10}|{0x7ffeb7055750 | id=0}}"]
-	node0CTOR -> node1COPY
-	node0CTOR -> node1COPY [color="red"]
-	node1COPY -> node1DTOR
-	node1COPY -> node1DTOR [style="dashed"]
+	node0DTOR [shape="record", style="filled", fillcolor="violet", label="{{DTOR | tmp_1=5}|{0x7fffcdd3e7f0 | id=0}}"]
+	node0CTOR -> node1MOVE
+	node0CTOR -> node1MOVE [color="red"]
+	node1MOVE -> node1DTOR
+	node1MOVE -> node1DTOR [style="dashed"]
 	node1DTOR -> node0DTOR
 	node0CTOR -> node0DTOR [style="dashed"]
 }

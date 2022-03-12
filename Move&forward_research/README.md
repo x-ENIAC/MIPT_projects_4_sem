@@ -11,7 +11,7 @@ Let's look at the following two simple examples. We pass the argument to the fun
 
 ```
 template<class T>
-void example_1(T&& arg) {
+void example(T&& arg) {
 	BEGIN_ANY_FUNC
 	volatile auto new_tmp = arg; // my_move(arg)
 }
@@ -19,7 +19,7 @@ void example_1(T&& arg) {
 template<class T>
 void wrapper(T&& arg) {
 	BEGIN_ANY_FUNC
-	example_1(arg);
+	example(arg);
 }
 
 void testing() {
@@ -40,15 +40,15 @@ By the way, what if we want to avoid copying, but also don't want the variables 
 
 ```
 template<class T>
-void example_1(T&& arg) {
+void example(T&& arg) {
 	BEGIN_ANY_FUNC
-	volatile auto new_tmp = my_move(arg); // my_forward(arg)
+	volatile auto new_tmp = my_move<T>(arg); // my_forward<T>(arg)
 }
 
 template<class T>
 void wrapper(T&& arg) {
 	BEGIN_ANY_FUNC
-	example_1(arg);
+	example(arg);
 }
 
 void testing() {
@@ -67,7 +67,21 @@ Fun fact: my_forward and argument passing without my_move and my_forward are the
 And now let's pass the good old rvalue:
 
 ```
+template<class T>
+void example(T&& arg) {
+	BEGIN_ANY_FUNC
+	volatile auto new_tmp = arg; // my_forward<T>(arg)
+}
 
+template<class T>
+void wrapper(T&& arg) {
+	BEGIN_ANY_FUNC
+	example(arg); // example(my_forward<T>(arg))
+}
+
+void testing() {
+	wrapper(Int(5));
+}
 ```
 
 | pass rvalue<br/>without my_forward | pass rvalue<br/>with my_forward  |
