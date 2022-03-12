@@ -86,7 +86,7 @@ void testing() {
 
 | pass rvalue<br/>without my_forward | pass rvalue<br/>with my_forward  |
 |----------------|:---------:|
-| ![Examples5](https://github.com/x-ENIAC/MIPT_projects_4_sem/blob/master/Move&forward_research/Examples/picture5.png) | ![Examples6](https://github.com/x-ENIAC/MIPT_projects_4_sem/blob/master/Move&forward_research/Examples/picture6.png) |
+| ![Examples5](https://github.com/x-ENIAC/MIPT_projects_4_sem/blob/master/Move&forward_research/Examples/picture5.png) | ![Examples7](https://github.com/x-ENIAC/MIPT_projects_4_sem/blob/master/Move&forward_research/Examples/picture7.png) |
 
 
 To be continued
