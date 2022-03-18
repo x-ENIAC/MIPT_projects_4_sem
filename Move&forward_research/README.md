@@ -61,7 +61,7 @@ void testing() {
 ```
 
 | my_move | my_forward |
-|----------------|-------------|-------------|
+|----------------|-------------|
 | ![Examples2](https://github.com/x-ENIAC/MIPT_projects_4_sem/blob/master/Move&forward_research/Examples/picture2.png) | ![Examples3](https://github.com/x-ENIAC/MIPT_projects_4_sem/blob/master/Move&forward_research/Examples/picture3.png) |
 
 Look at the pictures. When using a move, the variable is reset to zero, but it moves. And with a forward, it’s the other way around: copying occurs, but the value is saved.
