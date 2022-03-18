@@ -1,6 +1,6 @@
 #include <iostream>
-#include "../Int/my_int.h"
 #include "testing.h"
+#include "../Int/my_int.h"
 #include "../Dumper/calling_trace.h"
 #include "../My_references/my_std_move.h"
 #include "../My_references/my_std_forward.h"
@@ -9,17 +9,19 @@
 #define BEGIN_ANY_FUNC Function_name_sender sender(__FUNCTION__); 
 
 template<class T>
-void example_1(T&& arg) {
+void example_1(T arg) {
 	BEGIN_ANY_FUNC
-	volatile auto new_tmp = my_forward<T>(arg);
+	volatile auto new_tmp = arg;
 }
 
 template<class T>
 void wrapper(T&& arg) {
 	BEGIN_ANY_FUNC
-	example_1(my_forward<T>(arg));
+	printf("a = %d\n", arg.get_value());
+	example_1(arg);
+	printf("a = %d\n", arg.get_value());
 }
 
 void testing() {
-	wrapper(Int(5));
-}
+	wrapper(Int(10, "a"));
+} 

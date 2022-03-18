@@ -35,58 +35,63 @@ Note: BEGIN_ANY_FUNC is a macro that creates a subgraph in the picture with the 
 
 What can be the conclusion? If you look at the implementation of std::move, you can see that all references are truncated first, and then the truncated argument is cast to an rvalue using static_cast. This is really handy because it allows you to call move constructors 
 
-## Second comparison: std::move vs std::forward, lvalues
-By the way, what if we want to avoid copying, but also don't want the variables to be reset to zero after they are moved? Let's remember the existence of std::forward, it was not in vain that it was mentioned at the beginning of the article. Let's try to use it: 
-
+## Second comparison: std::move vs std::forward
+Let's take a look at this example:
 ```
 template<class T>
-void example(T&& arg) {
+void push_into_container(T arg) {
 	BEGIN_ANY_FUNC
-	volatile auto new_tmp = my_move<T>(arg); // my_forward<T>(arg)
+	volatile auto new_tmp = arg;
 }
 
 template<class T>
 void wrapper(T&& arg) {
-	BEGIN_ANY_FUNC
-	example(arg);
+	push_into_container(my_move(arg)); // my_forward<T>(arg);
 }
 
 void testing() {
 	VAR(Int, a, 10);
+
+	printf("a = %d\n", a.get_value()); // move: 10, forward: 10
 	wrapper(a);
+	printf("a = %d\n", a.get_value()); // move: 0, forward: 10
 }
+
+
 ```
 
-| pass lvalue<br/>my_move | pass lvalue<br/>my_forward | pass lvalue<br/>without moves<br/>and forwarding |
+| my_move | my_forward |
 |----------------|-------------|-------------|
-| ![Examples2](https://github.com/x-ENIAC/MIPT_projects_4_sem/blob/master/Move&forward_research/Examples/picture2.png) | ![Examples3](https://github.com/x-ENIAC/MIPT_projects_4_sem/blob/master/Move&forward_research/Examples/picture3.png) | ![Examples4](https://github.com/x-ENIAC/MIPT_projects_4_sem/blob/master/Move&forward_research/Examples/picture4.png) |
+| ![Examples2](https://github.com/x-ENIAC/MIPT_projects_4_sem/blob/master/Move&forward_research/Examples/picture2.png) | ![Examples3](https://github.com/x-ENIAC/MIPT_projects_4_sem/blob/master/Move&forward_research/Examples/picture3.png) |
 
-Fun fact: my_forward and argument passing without my_move and my_forward are the same in terms of the number of copies.
+Look at the pictures. When using a move, the variable is reset to zero, but it moves. And with a forward, it’s the other way around: copying occurs, but the value is saved.
 
-## Third comparison: std::move vs std::forward, rvalues
-And now let's pass the good old rvalue:
 
+Let's try to pass rvalue:
 ```
 template<class T>
-void example(T&& arg) {
+void example_1(T arg) {
 	BEGIN_ANY_FUNC
-	volatile auto new_tmp = arg; // my_forward<T>(arg)
+	volatile auto new_tmp = arg;
 }
 
 template<class T>
-void wrapper(T&& arg) {
-	BEGIN_ANY_FUNC
-	example(arg); // example(my_forward<T>(arg))
+void wrapper(T arg) {
+	printf("a = %d\n", arg.get_value());
+	example_1(arg); // my_forward<T>(arg);
+	printf("a = %d\n", arg.get_value());
 }
 
 void testing() {
-	wrapper(Int(5));
-}
+	wrapper(Int(10, "a"));
+} 
 ```
+
 
 | pass rvalue<br/>without my_forward | pass rvalue<br/>with my_forward  |
 |----------------|:---------:|
-| ![Examples5](https://github.com/x-ENIAC/MIPT_projects_4_sem/blob/master/Move&forward_research/Examples/picture5.png) | ![Examples7](https://github.com/x-ENIAC/MIPT_projects_4_sem/blob/master/Move&forward_research/Examples/picture7.png) |
+| ![Examples7](https://github.com/x-ENIAC/MIPT_projects_4_sem/blob/master/Move&forward_research/Examples/picture7.png) | ![Examples5](https://github.com/x-ENIAC/MIPT_projects_4_sem/blob/master/Move&forward_research/Examples/picture5.png) |
 
 
-To be continued
+## Conclusion
+The std::forward is supposed to be used for ideal parameter passing + it always requires the type to be specified. This allows rvalue arguments to be passed on as rvalues, and lvalues to be passed on as lvalues. This scheme is known as perfect forwarding. The std::move is used for displacing. It is quite important to differentiate these two purposes and to use correctly.

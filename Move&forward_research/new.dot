@@ -1,26 +1,32 @@
 digraph graphname {
-	node0CTOR [shape="record", style="filled", fillcolor="gold", label="{{CTOR | tmp_1=5}|{0x7fff12565270 | id=0}}"]
+	node0CTOR [shape="record", style="filled", fillcolor="gold", label="{{CTOR | a=10}|{0x7ffdaa30fca0 | id=0}}"]
 
 subgraph "cluster_0" {
 	style=filled;
 	color="#c8c8c8";
-	
+		node1COPY  [shape="record", style="filled", fillcolor="red" label="{{COPY | a_copied}|{0x7ffdaa30fbd0 | id=1 | value=10}|{0x7ffdaa30fca0 | id=0 | value=10}}"]
+
 subgraph "cluster_1" {
 	style=filled;
 	color="#969696";
-		node1MOVE  [shape="record", style="filled", fillcolor="palegreen1" label="{{MOVE | tmp_1_moved}|{0x7fff12565120 | id=1 | value=5}|{0x7fff12565270 | id=0 | value=5}}"]
-	node1DTOR [shape="record", style="filled", fillcolor="violet", label="{{DTOR | tmp_1_moved=5}|{0x7fff12565120 | id=1}}"]
+		node2COPY  [shape="record", style="filled", fillcolor="red" label="{{COPY | a_copied_copied}|{0x7ffdaa30fb00 | id=2 | value=10}|{0x7ffdaa30fbd0 | id=1 | value=10}}"]
+	node2DTOR [shape="record", style="filled", fillcolor="violet", label="{{DTOR | a_copied_copied=10}|{0x7ffdaa30fb00 | id=2}}"]
 	label = "example_1" 
 }
 
+	node1DTOR [shape="record", style="filled", fillcolor="violet", label="{{DTOR | a_copied=10}|{0x7ffdaa30fbd0 | id=1}}"]
 	label = "wrapper" 
 }
 
-	node0DTOR [shape="record", style="filled", fillcolor="violet", label="{{DTOR | tmp_1=5}|{0x7fff12565270 | id=0}}"]
-	node0CTOR -> node1MOVE
-	node0CTOR -> node1MOVE [color="red"]
-	node1MOVE -> node1DTOR
-	node1MOVE -> node1DTOR [style="dashed"]
+	node0DTOR [shape="record", style="filled", fillcolor="violet", label="{{DTOR | a=10}|{0x7ffdaa30fca0 | id=0}}"]
+	node0CTOR -> node1COPY
+	node0CTOR -> node1COPY [color="red"]
+	node1COPY -> node2COPY
+	node1COPY -> node2COPY [color="red"]
+	node2COPY -> node2DTOR
+	node2COPY -> node2DTOR [style="dashed"]
+	node2DTOR -> node1DTOR
+	node1COPY -> node1DTOR [style="dashed"]
 	node1DTOR -> node0DTOR
 	node0CTOR -> node0DTOR [style="dashed"]
 }

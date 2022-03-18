@@ -77,7 +77,7 @@ Int::Int(const Int &other) {
 }
 
 #ifdef MOVE_OPTIMIZATION
-Int::Int(const Int &&other) {
+Int::Int(Int &&other) {
     BEGIN_FUNC(Type_functions::MOVE, MOVE_COLOUR)
 
     value = other.get_value();
@@ -87,6 +87,8 @@ Int::Int(const Int &&other) {
     is_copy_anyone = false;
     is_move_anyone = true;
     parent = other.parent;
+
+    other.set_value(0);
 
 	REFRESH_UNARY(this, *this, Int_signal::CONSTRUCT)
 	REFRESH_BINARY(this, *this, Int_signal::MOVE, other)
@@ -154,10 +156,11 @@ Int& Int::operator=(const Int &other) {
 }
 
 #ifdef MOVE_OPTIMIZATION
-Int& Int::operator=(const Int &&other) {
+Int& Int::operator=(Int &&other) {
 	BEGIN_FUNC(Type_functions::MOVE_ASSIGNMENT, MOVE_COLOUR)
 
 	value = other.get_value();
+	other.set_value(0);
 
 	REFRESH_BINARY(this, *this, Int_signal::MOVE_ASSIGNMENT, other)
 
