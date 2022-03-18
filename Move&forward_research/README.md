@@ -2,7 +2,7 @@
 # Small study on std::move & std:forward
 
 ## Intro
-In the last article, it was found that moves are more efficient than copies. After that, the thought may arise that displacements should be used everywhere. Is it true?
+In the [last article](https://github.com/x-ENIAC/MIPT_projects_4_sem/tree/master/Dumping_int), it was found that moves are more efficient than copies. After that, the thought may arise that displacements should be used everywhere. Is it true?
 
 In the examples you will find the following functions: my_move and my_forward. This is the author's implementation of functions std::move and std::forward.
 
