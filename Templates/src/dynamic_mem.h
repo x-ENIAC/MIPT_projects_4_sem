@@ -7,12 +7,158 @@
 
 template <typename T, size_t data_size = 16>
 class Dynamic_storage {
-	protected:
+  public:
+	// ------------------------------------------------------------------------
+	// ------------------------------- iterator -------------------------------
+	class Iterator {
+	  private:
+		T* pointer_;
+
+	  public:
+		using difference_type	= ptrdiff_t;
+		using value_type		= T;
+		using pointer			= T*;
+		using reference			= T&;
+		using iterator_category	= std::forward_iterator_tag;
+
+		Iterator(): pointer_(nullptr) {}
+		Iterator(T* pointer): pointer_(pointer) {}
+		Iterator(const Iterator& other) {
+			pointer_ = other.pointer_;
+		}
+
+		T& operator*() const {
+			return *pointer_;
+		}
+
+		T* operator->() const {
+			return pointer_;
+		}
+
+		bool operator!=(const Iterator& another_iterator) const {
+			return this->pointer_ != another_iterator.pointer_;
+		}
+
+		bool operator==(const T& another_iterator) {
+			return this->pointer_ == another_iterator.pointer_;
+		}
+
+		Iterator& operator++() {
+			++pointer_;
+			return *this;
+		}
+
+		Iterator& operator++(int tmp) {
+			Iterator copy_this(*this);
+			--pointer_;
+			return copy_this;
+		}
+
+		Iterator& operator--() {
+			++pointer_;
+			return *this;
+		}
+
+		Iterator& operator--(int tmp) {
+			Iterator copy_this(*this);
+			--pointer_;
+			return copy_this;
+		}		
+	};
+
+	// ------------------------------------------------------------------------
+	// ----------------------------- reverse iterator -------------------------
+	class Reverse_iterator {
+	  private:
+		T* pointer_;
+
+	  public:
+		using difference_type	= ptrdiff_t;
+		using value_type		= T;
+		using pointer			= T*;
+		using reference			= T&;
+		using iterator_category	= std::forward_iterator_tag;
+
+		Reverse_iterator(): pointer_(nullptr) {}
+		Reverse_iterator(T* pointer): pointer_(pointer) {}
+		Reverse_iterator(const Reverse_iterator& other) {
+			pointer_ = other.pointer_;
+		}		
+
+		T& operator*() const {
+			return *pointer_;
+		}
+
+		T* operator->() const {
+			return pointer_;
+		}
+
+		bool operator!=(const Reverse_iterator& another_reverse_iterator) const {
+			return this->pointer_ != another_reverse_iterator.pointer_;
+		}
+
+		bool operator==(const T& another_reverse_iterator) {
+			return this->pointer_ == another_reverse_iterator.pointer_;
+		}
+
+		Reverse_iterator& operator++() {
+			--pointer_;
+			return *this;
+		}
+
+		Reverse_iterator& operator++(int tmp) {
+			Reverse_iterator copy_this(*this);
+			--pointer_;
+			return copy_this;
+		}		
+
+		Reverse_iterator& operator--() {
+			++pointer_;
+			return *this;
+		}
+
+		Reverse_iterator& operator--(int tmp) {
+			Reverse_iterator copy_this(*this);
+			++pointer_;
+			return copy_this;
+		}		
+	};
+
+	// ------------------------------------------------------------------------
+	// ------------------------ for iterator  ---------------------------------
+	Iterator begin() {
+		if(size_ == 0)
+			throw std::out_of_range(MESSAGE_DATA_IS_EMPTY);
+		return Iterator(data_);
+	}
+
+	Iterator end() {
+		if(size_ == 0)
+			throw std::out_of_range(MESSAGE_DATA_IS_EMPTY);
+		return Iterator(data_ + size_);
+	}
+
+	Reverse_iterator rbegin() {
+		if(size_ == 0)
+			throw std::out_of_range(MESSAGE_DATA_IS_EMPTY);
+		return Reverse_iterator(data_ + size_ - 1);
+	}
+
+	Reverse_iterator rend() {
+		if(size_ == 0)
+			throw std::out_of_range(MESSAGE_DATA_IS_EMPTY);
+		return Reverse_iterator(data_ - 1);
+	}
+
+	// ------------------------------------------------------------------------
+	// -------------------- for dynamic storage  ------------------------------
+  protected:
 	T* data_;
 	size_t size_;
 	size_t capacity_;
 
-	public:
+  public:
+
 	Dynamic_storage() : size_(0), capacity_(data_size), data_(nullptr) {
 		data_ = (T*)(new unsigned char[data_size * sizeof(T)]);
 		if(data_ == nullptr)
@@ -28,7 +174,8 @@ class Dynamic_storage {
 			new(data_ + i) T(init_element);
 	}
 
-	Dynamic_storage(std::initializer_list<T> list): size_(list.size()), capacity_(list.size() * 2) {
+	Dynamic_storage(std::initializer_list<T> list): size_(list.size()),
+					capacity_(list.size() * 2) {
 		data_ = (T*)(new unsigned char[data_size * sizeof(T)]);
 		if(data_ == nullptr)
 			throw std::bad_alloc();
@@ -47,6 +194,9 @@ class Dynamic_storage {
 		size_ = capacity_ = 0;
 		delete[] data_;
 	}
+
+	// ------------------------------------------------------------------------
+	// -------------------- api dynamic storage  ------------------------------	
 
 	T& data(size_t index) {
 		if(index > size_)
@@ -139,14 +289,6 @@ class Dynamic_storage {
 		assert(index < size_);
 
 		return data_[index];
-	}
-
-	size_t get_capacity_() const {
-		return capacity_;
-	}
-
-	size_t get_size() const {
-		return size_;
 	}
 };
 

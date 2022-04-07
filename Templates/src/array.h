@@ -14,87 +14,6 @@ class Array: public Storage<T, size> {
 	using Storage<T, size>::size_;
 
   public:
-
-	// ------------------------------------------------------------------------
-	// ------------------------------- iterator -------------------------------
-	class Iterator {
-	  private:
-		T* pointer_;
-
-	  public:
-		using difference_type	= ptrdiff_t;
-		using value_type		= T;
-		using pointer			= T*;
-		using reference			= T&;
-		using iterator_category	= std::forward_iterator_tag;
-
-		Iterator(): pointer_(nullptr) {}
-		Iterator(T* pointer): pointer_(pointer) {}
-
-		T& operator*() const {
-			return *pointer_;
-		}
-
-		T* operator->() const {
-			return pointer_;
-		}
-
-		bool operator!=(const Iterator& another_iterator) const {
-			return this->pointer_ != another_iterator.pointer_;
-		}
-
-		bool operator==(const T& another_iterator) {
-			return this->pointer_ == another_iterator.pointer_;
-		}
-
-		Iterator& operator++() { // prefix
-			++pointer_;
-			return *this;
-		}
-
-		Iterator& operator--() { // prefix
-			--pointer_;
-			return *this;
-		}		
-	};
-
-	// ------------------------------------------------------------------------
-	// ----------------------------- reverse iterator -------------------------
-	class Reverse_iterator {
-	  private:
-		T* pointer_;
-
-	  public:
-		Reverse_iterator(): pointer_(nullptr) {}
-		Reverse_iterator(T* pointer): pointer_(pointer) {}
-
-		T& operator*() const {
-			return *pointer_;
-		}
-
-		T* operator->() const {
-			return pointer_;
-		}
-
-		bool operator!=(const Reverse_iterator& another_reverse_iterator) const {
-			return this->pointer_ != another_reverse_iterator.pointer_;
-		}
-
-		bool operator==(const T& another_reverse_iterator) {
-			return this->pointer_ == another_reverse_iterator.pointer_;
-		}
-
-		Reverse_iterator& operator++() { // prefix
-			--pointer_;
-			return *this;
-		}
-
-		Reverse_iterator& operator--() { // prefix
-			++pointer_;
-			return *this;
-		}		
-	};	
-
 	// ------------------------------------------------------------------------
 	// ----------------------------- array ------------------------------------
 	Array(): Storage<T, size>() {}
@@ -118,30 +37,6 @@ class Array: public Storage<T, size> {
 			throw std::out_of_range(MESSAGE_DATA_IS_EMPTY);
 		return Storage<T, size>::data_[size_];
 	}
-
-	Iterator begin() {
-		if(size_ == 0)
-			throw std::out_of_range(MESSAGE_DATA_IS_EMPTY);
-		return Iterator(&Storage<T, size>::data_[0]);
-	}
-
-	Iterator end() {
-		if(size_ == 0)
-			throw std::out_of_range(MESSAGE_DATA_IS_EMPTY);
-		return Iterator(&Storage<T, size>::data_[size_]);
-	}
-
-	Reverse_iterator rbegin() {
-		if(size_ == 0)
-			throw std::out_of_range(MESSAGE_DATA_IS_EMPTY);
-		return Reverse_iterator(&Storage<T, size>::data_[size_ - 1]);
-	}
-
-	Reverse_iterator rend() {
-		if(size_ == 0)
-			throw std::out_of_range(MESSAGE_DATA_IS_EMPTY);
-		return Reverse_iterator(&Storage<T, size>::data_[0] - 1);
-	}	
 };
 
 // -------------------------------------------------------------------
