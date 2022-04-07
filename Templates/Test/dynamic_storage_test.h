@@ -1,3 +1,5 @@
+#include <algorithm>
+
 #ifndef DYNAMIC_STORAGE_TEST_H
 #define DYNAMIC_STORAGE_TEST_H
 
@@ -91,11 +93,11 @@ void test_iterator_find() {
 	PRINT_INT_DYNAMIC_ARRAY
 	PRINT_DYNAMIC_ARRAY_INFO
 
-	// auto it = std::find(array.begin(), array.end(), 3);
-	// if(it != array.end())
-	// 	printf("Element 3 contains in array\n");
-	// else
-	// 	printf("Element 3 doesn't contain in array\n");
+	auto it = std::find(array.begin(), array.end(), 3);
+	if(it != array.end())
+		printf("Element exists in array\n");
+	else
+		printf("Element doesn't exist in array\n");
 
 	END_TEST_FUNC(__PRETTY_FUNCTION__)
 }

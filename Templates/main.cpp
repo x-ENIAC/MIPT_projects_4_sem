@@ -9,7 +9,7 @@ void dynamic_tests() {
 	// Dynamic_storage_test::test_resize();
 	// Dynamic_storage_test::test_simply_int_array();
 	Dynamic_storage_test::test_iterator();
-	// Dynamic_storage_test::test_iterator_find();
+	Dynamic_storage_test::test_iterator_find();
 }
 
 void static_tests() {

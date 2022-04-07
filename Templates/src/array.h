@@ -22,6 +22,12 @@ class Array: public Storage<T, size> {
 		T* pointer_;
 
 	  public:
+		using difference_type	= ptrdiff_t;
+		using value_type		= T;
+		using pointer			= T*;
+		using reference			= T&;
+		using iterator_category	= std::forward_iterator_tag;
+
 		Iterator(): pointer_(nullptr) {}
 		Iterator(T* pointer): pointer_(pointer) {}
 
