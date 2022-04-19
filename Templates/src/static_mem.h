@@ -5,16 +5,16 @@
 
 
 template <typename T, size_t data_size>
-class Static_storage {
+class Static_storage_ {
   protected:
 	T data_[data_size];
-	size_t size_;
+	const size_t size_;
 
   public:
 
-	Static_storage(): size_(data_size) {}
+	Static_storage_(): size_(data_size) {}
 
-	Static_storage(std::initializer_list<T> list): size_(data_size) {
+	Static_storage_(std::initializer_list<T> list): size_(data_size) {
 		if (list.size() > size_) 
 			throw std::out_of_range(MESSAGE_WRONG_INIT_LIST_SIZE);
 			   
@@ -25,7 +25,7 @@ class Static_storage {
 		}
 	}
 
-	~Static_storage() {
+	~Static_storage_() {
 		for(int i = 0; i < size_; ++i)
 			data_[i].~T();
 	}
@@ -37,7 +37,7 @@ class Static_storage {
 		return data_[index];
 	}
 
-	size_t size() {
+	size_t size() const {
 		return size_;
 	}
 
@@ -52,6 +52,15 @@ class Static_storage {
 	void resize(size_t new_size, const T& initializer_value) {
 		throw std::runtime_error(MESSAGE_RESIZE_STATIC);
 	}
+
+	// using type = Static_storage_<T, data_size>;
+};
+
+template <size_t data_size>
+struct Static_storage {
+  public:
+	template <typename T>
+	using type = Static_storage_<T, data_size>;
 };
 
 #endif
