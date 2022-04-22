@@ -27,6 +27,22 @@ void test_simply_int_array() {
 	END_TEST_FUNC(__PRETTY_FUNCTION__)
 }
 
+void test_bool_array() {
+	START_TEST_FUNC(__PRETTY_FUNCTION__)
+
+	try {
+		Array<bool, Dynamic_storage> array(6, true);
+
+		PRINT_INT_ARRAY
+		PRINT_DYNAMIC_ARRAY_INFO
+
+	} catch (std::exception& exc) {
+		printf("\nEXCEPTION: %s\n", exc.what());
+	}
+
+	END_TEST_FUNC(__PRETTY_FUNCTION__)
+}
+
 void test_resize() {
 	START_TEST_FUNC(__PRETTY_FUNCTION__)
 

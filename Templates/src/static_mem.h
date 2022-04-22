@@ -1,6 +1,7 @@
 #ifndef STATIC_MEM_H
 #define STATIC_MEM_H
 
+#include <cassert>
 #include "error_codes.h"
 
 
@@ -31,7 +32,7 @@ class Static_storage_ {
 	}
 
 	T& data(size_t index) {
-		if(index > size_)
+		if(index >= size_)
 			throw std::out_of_range(MESSAGE_BAD_INDEX);
 
 		return data_[index];

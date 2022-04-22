@@ -133,19 +133,110 @@ class Array: public Storage<T> {
 
 // -------------------------------------------------------------------
 
-// template <
-// 	size_t size,
-// 	template <typename storage_type, size_t storage_size> typename Storage
-// 	>
-// class Array: public Storage<bool, size> {
-//   public:
+const size_t SIZEOF_UCHAR = sizeof(unsigned char);
+template <
+	template <typename storage_type> typename Storage
+	>
+class Array<bool, Storage>: public Storage<unsigned char> {
+  private:
+	struct Bool_proxy {
+		Array<bool, Storage>* array_;
+		size_t index_;
+		bool value_;
+		unsigned char bit_;
 
-// 	T& operator[](size_t index) {
-// 		return data(index);
-// 	}
+		Bool_proxy(Array<bool, Storage>* array) : array_(array) {
+			update(0);
+		}
 
-// private:
-// 	Storage<T, size> data;
-// };
+		void update(const size_t ind) {
+			index_ = ind / SIZEOF_UCHAR;
+			bit_ = ind % SIZEOF_UCHAR;
+			value_ = (array_->get_value(index_) << bit_) & 1;
+		}
+
+		operator bool() const {
+			return value_;
+		}
+
+		void set_value(const bool& new_value) {
+			value_ = new_value;
+			array_->set_value(index_, (unsigned char)(array_->get_value(index_) & ~(1 << bit_)));
+			array_->set_value(index_, (unsigned char)(array_->get_value(index_) | (value_ << bit_)));
+		}
+	};
+
+	Bool_proxy bool_proxy;
+	size_t bools_count;
+  public:
+	typedef Storage<unsigned char> BStorage_;
+
+	Array(): BStorage_(), bool_proxy(this), bools_count(0) {}
+	Array(size_t size, const bool& init_element):
+		BStorage_((size / SIZEOF_UCHAR + ((size % SIZEOF_UCHAR) != 0)), init_element), bool_proxy(this) {
+		bools_count = (size / SIZEOF_UCHAR + ((size % SIZEOF_UCHAR) != 0));
+	}
+
+	Array(std::initializer_list<bool> list) :
+		BStorage_(list.size() / SIZEOF_UCHAR + ((list.size() % SIZEOF_UCHAR) != 0), 0),
+		bool_proxy(this), bools_count(list.size()) {
+
+		size_t i = 0;
+		for(auto element = list.begin(); element != list.end(); ++element) {
+			BStorage_::data(i) = *element;
+			++i;
+		}
+	}
+
+	bool operator[](size_t index) {
+		bool_proxy.update(index);
+		return bool_proxy;
+	}
+
+	unsigned char get_value(const size_t index) {
+		return BStorage_::data(index);
+	}
+
+	void set_value(const size_t index, const unsigned char value) {
+		BStorage_::data(index) = value;
+	}	
+
+	bool& front() {
+		bool_proxy.update(0);
+		return bool_proxy;
+	}
+
+	bool& back() {
+		bool_proxy.update(bools_count - 1);
+		return bool_proxy;
+	}
+
+	void resize(size_t new_size) {
+		BStorage_::resize(new_size / SIZEOF_UCHAR + ((new_size % SIZEOF_UCHAR) != 0));
+	}
+
+	void resize(size_t new_size, const bool& init_value) {
+		unsigned char value = (init_value ? ((unsigned char)(-1)) : 0);
+		BStorage_::resize(new_size / SIZEOF_UCHAR + ((new_size % SIZEOF_UCHAR) != 0), value);
+	}
+
+	void push_back(const bool& value) {
+		if(bools_count % SIZEOF_UCHAR == SIZEOF_UCHAR - 1)
+			BStorage_::push_back(0);
+
+		bool_proxy.update(bools_count);
+		++bools_count;
+		bool_proxy.set_value(value);
+	}
+
+	void push_back(bool&& value) {
+		if(bools_count % SIZEOF_UCHAR == SIZEOF_UCHAR - 1)
+			BStorage_::push_back((unsigned char)0);
+
+		bool_proxy.update(bools_count);
+		++bools_count;
+		bool_proxy.set_value(value);
+	}	
+};
 
 #endif

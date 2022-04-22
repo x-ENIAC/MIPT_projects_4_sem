@@ -20,6 +20,7 @@ class Dynamic_storage {
 	Dynamic_storage() : size_(0), capacity_(0), data_(nullptr) {}
 
 	Dynamic_storage(size_t size, const T& init_element) : size_(size), capacity_(size * 2) {
+		// printf("INIT DYNAMIC_MEM\n");
 		data_ = (T*)(new unsigned char[capacity_ * sizeof(T)]);
 		if(data_ == nullptr)
 			throw std::bad_alloc();
@@ -56,6 +57,9 @@ class Dynamic_storage {
 		if(index > size_)
 			throw std::out_of_range(MESSAGE_BAD_INDEX);
 
+		if(!data_)
+			data_ = (T*)new unsigned char[capacity_ * sizeof(T)];
+
 		return data_[index];
 	}
 
@@ -76,34 +80,46 @@ class Dynamic_storage {
 	}
 
 	void resize(size_t new_size) {
-		T* new_data = (T*)(new unsigned char[new_size * sizeof(T)]);
+		size_t new_capacity = new_size * 2;
+		T* new_data = (T*)(new unsigned char[new_capacity * sizeof(T)]);
 
-		size_ = (new_size > size_ ? size_ : new_size);
-		for(size_t i = 0; i < size_; ++i) {
-			new_data[i] = data_[i];
+		size_t min_size = (new_size > size_ ? size_ : new_size);
+		for(size_t i = 0; i < min_size; ++i) {
+			new(new_data + i) T(std::move(data_[i]));
 		}
+
+		if(new_size < size_)
+			for(size_t i = size_; i < new_size; ++i)
+				data_[i].~T();
 
 		delete[] data_;
 
 		data_ = new_data;
-		capacity_ = new_size;
+		capacity_ = new_capacity;
+		size_ = new_size;
 	}
 
 	void resize(size_t new_size, const T& initializer_value) {
-		T* new_data = (T*)(new unsigned char[new_size * sizeof(T)]);
+		size_t new_capacity = new_size * 2;
+		T* new_data = (T*)(new unsigned char[new_capacity * sizeof(T)]);
 
-		size_ = (new_size > size_ ? size_ : new_size);
-		for(int i = 0; i < size_; ++i) {
-			new_data[i] = data_[i];
+		size_t min_size_ = (new_size > size_ ? size_ : new_size);
+		for(int i = 0; i < min_size_; ++i) {
+			new(new_data + i) T(std::move(data_[i]));
 		}
 
-		for(int i = size_; i < capacity_; ++i)
+		for(int i = min_size_; i < new_size; ++i)
 			new(new_data + i) T(initializer_value);
+
+		if(new_size < size_)
+			for(size_t i = size_; i < min_size_; ++i)
+				data_[i].~T();
 
 		delete[] data_;
 
 		data_ = new_data;
-		capacity_ = new_size;
+		capacity_ = new_capacity;
+		size_ = new_size;
 	}
 
 	void push_back(const T& value) {
@@ -137,12 +153,6 @@ class Dynamic_storage {
 		data_[size_--].~T();
 
 		return tail;
-	}
-
-	T get_element(size_t index) {
-		assert(index < size_);
-
-		return data_[index];
 	}
 };
 

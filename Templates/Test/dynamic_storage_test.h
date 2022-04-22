@@ -27,13 +27,35 @@ void test_simply_int_array() {
 	END_TEST_FUNC(__PRETTY_FUNCTION__)
 }
 
+void test_bool_array() {
+	START_TEST_FUNC(__PRETTY_FUNCTION__)
+
+	try {
+		Array<bool, Dynamic_storage> array{true, true, false, true, false, false};
+
+		PRINT_INT_ARRAY
+		PRINT_DYNAMIC_ARRAY_INFO
+
+		for(int i = 0; i < 5; ++i)
+			array.push_back(true);
+
+		PRINT_INT_ARRAY
+		PRINT_DYNAMIC_ARRAY_INFO
+
+	} catch (std::exception& exc) {
+		printf("\nEXCEPTION: %s\n", exc.what());
+	}
+
+	END_TEST_FUNC(__PRETTY_FUNCTION__)
+}
+
 void test_resize() {
 	START_TEST_FUNC(__PRETTY_FUNCTION__)
 
 	try {
-		Array<int, Dynamic_storage> array(16, 0);
+		Array<int, Dynamic_storage> array(6, 0);
 
-		for(int i = 0; i < 16; ++i) {
+		for(int i = 0; i < 6; ++i) {
 			array[i] = i + 1;
 		}
 
@@ -41,6 +63,14 @@ void test_resize() {
 		PRINT_INT_ARRAY
 
 		array.resize(5);
+
+		PRINT_DYNAMIC_ARRAY_INFO
+		PRINT_INT_ARRAY
+
+		array.push_back(12);
+		array.push_back(7);
+		array.push_back(1324);
+		array.push_back(4375);
 
 		PRINT_DYNAMIC_ARRAY_INFO
 		PRINT_INT_ARRAY
@@ -90,11 +120,12 @@ void test_iterator_find() {
 		PRINT_DYNAMIC_ARRAY_INFO
 		PRINT_INT_ARRAY
 
-		auto it = std::find(array.begin(), array.end(), 13);
+		int element = 13;
+		auto it = std::find(array.begin(), array.end(), element);
 		if(it != array.end())
-			printf("Element exists in array\n");
+			printf("Element %d exists in array\n", element);
 		else
-			printf("Element doesn't exist in array\n");
+			printf("Element %d doesn't exist in array\n", element);
 	} catch (std::exception& exc) {
 		printf("\nEXCEPTION: %s\n", exc.what());
 	}

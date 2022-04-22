@@ -104,7 +104,7 @@ class Chunked_storage_ {
 		size_t new_capacity = new_size / chunk_size_ + ((new_size % chunk_size_) != 0);
 		size_t min_capacity = (new_capacity > capacity_ ? capacity_ : new_capacity);
 
-		printf("new_size %ld, new_capacity %ld, chunk_size %ld\n", new_size, new_capacity, chunk_size_);
+		// printf("new_size %ld, new_capacity %ld, chunk_size %ld\n", new_size, new_capacity, chunk_size_);
 		T** new_data = new T*[new_capacity];
 		memset(new_data, 0, new_capacity);
 
@@ -136,7 +136,7 @@ class Chunked_storage_ {
 		size_t new_capacity = new_size / chunk_size_ + ((new_size % chunk_size_) != 0);
 		size_t min_capacity = (new_capacity > capacity_ ? capacity_ : new_capacity);
 
-		printf("new_size %ld, new_capacity %ld, chunk_size %ld\n", new_size, new_capacity, chunk_size_);
+		// printf("new_size %ld, new_capacity %ld, chunk_size %ld\n", new_size, new_capacity, chunk_size_);
 		T** new_data = new T*[new_capacity];
 		memset(new_data, 0, new_capacity);
 
