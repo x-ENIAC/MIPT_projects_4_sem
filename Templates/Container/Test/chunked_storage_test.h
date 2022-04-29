@@ -15,7 +15,7 @@ void test_simply_int_array() {
 	START_TEST_FUNC(__PRETTY_FUNCTION__)
 
 	try {
-		Array<int, Chunked_storage<4>::type> array = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
+		Array<int, Chunked_storage<4>::type> array{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
 
 		PRINT_CHUNKED_ARRAY_INFO
 		PRINT_INT_ARRAY

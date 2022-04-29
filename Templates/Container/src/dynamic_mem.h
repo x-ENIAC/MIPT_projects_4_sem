@@ -4,8 +4,9 @@
 #include <cstddef>
 #include <cstdlib>
 #include <cassert>
+#include "allocator.h"
 
-template <typename T>
+template <typename T, template <typename U> typename Allocator>
 class Dynamic_storage {
   public:
 	// ------------------------------------------------------------------------
@@ -15,39 +16,41 @@ class Dynamic_storage {
 	size_t size_;
 	size_t capacity_;
 
+	Allocator<T> allocator_;
+
   public:
 
 	Dynamic_storage() : size_(0), capacity_(0), data_(nullptr) {}
 
 	Dynamic_storage(size_t size, const T& init_element) : size_(size), capacity_(size * 2) {
 		// printf("INIT DYNAMIC_MEM\n");
-		data_ = (T*)(new unsigned char[capacity_ * sizeof(T)]);
+		data_ = allocator_.allocate(capacity_);
 		if(data_ == nullptr)
 			throw std::bad_alloc();
 
 		for (size_t i = 0; i < size_; ++i)
-			new(data_ + i) T(init_element);
+			allocator_.construct(data_ + i, init_element); // new(data_ + i) T(init_element);
 	}
 
 	Dynamic_storage(std::initializer_list<T> list): size_(list.size()),
 					capacity_(list.size() * 2) {
-		data_ = (T*)(new unsigned char[size_ * sizeof(T)]);
+		data_ = allocator_.allocate(size_);
 		if(data_ == nullptr)
 			throw std::bad_alloc();
 
 		size_t index = 0;
 		for (auto i = list.begin(); i != list.end(); ++i) {
-			new(data_ + index) T(*i);
+			allocator_.construct(data_ + index, *i); // new(data_ + index) T(*i);
 			++index;
 		}
 	}
 
 	~Dynamic_storage() {
 		for(size_t i = 0; i < size_; ++i)
-			data_[i].~T();
+			allocator_.destroy(data_ + i); // data_[i].~T();
 
 		size_ = capacity_ = 0;
-		delete[] data_;
+		allocator_.deallocate(data_);
 	}
 
 	// ------------------------------------------------------------------------
@@ -58,7 +61,7 @@ class Dynamic_storage {
 			throw std::out_of_range(MESSAGE_BAD_INDEX);
 
 		if(!data_)
-			data_ = (T*)new unsigned char[capacity_ * sizeof(T)];
+			data_ = allocator_.allocate(capacity_); // (T*)new char[capacity_ * sizeof(T)];
 
 		return data_[index];
 	}
@@ -73,7 +76,7 @@ class Dynamic_storage {
 
 	void clear() {
 		for(size_t i = 0; i < size_; ++i) {
-			data_[i].~T();
+			allocator_.destroy(data_ + i); // data_[i].~T();
 		}
 
 		size_ = 0;
@@ -81,18 +84,19 @@ class Dynamic_storage {
 
 	void resize(size_t new_size) {
 		size_t new_capacity = new_size * 2;
-		T* new_data = (T*)(new unsigned char[new_capacity * sizeof(T)]);
+		T* new_data = allocator_.allocate(new_capacity); // (T*)(new char[new_capacity * sizeof(T)]);
 
 		size_t min_size = (new_size > size_ ? size_ : new_size);
 		for(size_t i = 0; i < min_size; ++i) {
-			new(new_data + i) T(std::move(data_[i]));
+			allocator_.construct(new_data + i, std::move(data_[i])); // new(new_data + i) T(std::move(data_[i]));
 		}
 
 		if(new_size < size_)
 			for(size_t i = size_; i < new_size; ++i)
-				data_[i].~T();
+				allocator_.destroy(data_ + i); // data_[i].~T();
 
-		delete[] data_;
+		// delete[] data_;
+		allocator_.deallocate(data_);
 
 		data_ = new_data;
 		capacity_ = new_capacity;
@@ -101,21 +105,21 @@ class Dynamic_storage {
 
 	void resize(size_t new_size, const T& initializer_value) {
 		size_t new_capacity = new_size * 2;
-		T* new_data = (T*)(new unsigned char[new_capacity * sizeof(T)]);
+		T* new_data = allocator_.allocate(new_capacity); // (T*)(new char[new_capacity * sizeof(T)]);
 
 		size_t min_size_ = (new_size > size_ ? size_ : new_size);
 		for(int i = 0; i < min_size_; ++i) {
-			new(new_data + i) T(std::move(data_[i]));
+			allocator_.construct(new_data + i, std::move(data_[i])); // new(new_data + i) T(std::move(data_[i]));
 		}
 
 		for(int i = min_size_; i < new_size; ++i)
-			new(new_data + i) T(initializer_value);
+			allocator_.construct(new_data + i, initializer_value); // new(new_data + i) T(initializer_value);
 
 		if(new_size < size_)
 			for(size_t i = size_; i < min_size_; ++i)
-				data_[i].~T();
+				allocator_.destroy(data_ + i); // data_[i].~T();
 
-		delete[] data_;
+		allocator_.deallocate(data_); // delete[] data_;
 
 		data_ = new_data;
 		capacity_ = new_capacity;
@@ -126,7 +130,7 @@ class Dynamic_storage {
 		if(size_ + 1 >= capacity_)
 			resize(capacity_ * 2);
 
-		new(data_ + size_) T(value);
+		allocator_.construct(data_ + size_, value); // new(data_ + size_) T(value);
 		++size_;
 	}
 
@@ -134,7 +138,7 @@ class Dynamic_storage {
 		if(size_ + 1 >= capacity_)
 			resize(capacity_ * 2);
 
-		new(data_ + size_) T(std::move(value));
+		allocator_.construct(data_ + size_, std::move(value)); // new(data_ + size_) T(std::move(value));
 		++size_;
 	}
 
@@ -143,14 +147,15 @@ class Dynamic_storage {
 		if(size_ + 1 >= capacity_)
 			resize(capacity_ * 2);
 
-		new(data_ + size_) T(std::forward<Args>(args)...);
+		allocator_.construct(data_ + size_, std::forward<Args>(args)...); // new(data_ + size_) T(std::forward<Args>(args)...);
 		++size_;
 	}
 
 	T pop_back() {
 		T tail = data_[size_];
 
-		data_[size_--].~T();
+		allocator_.destroy(data_ + size_); // data_[size_--].~T();
+		--size_;
 
 		return tail;
 	}

@@ -23,6 +23,9 @@ class Chunked_storage_ {
 	size_t capacity_;
 	init_element_info<T> init_element_info_;
 
+	Allocator<T> allocator_;
+	Allocator<T*> ptr_allocator_;
+
   public:
 
 	Chunked_storage_() : data_(nullptr), chunk_size_(arg_chunk_size),
@@ -40,16 +43,34 @@ class Chunked_storage_ {
 					capacity_(2 * (size_ / chunk_size_ + ((size_ % chunk_size_) != 0))),
 					init_element_info_(false) {
 		size_t chunk_count = size_ / chunk_size_ + ((size_ % chunk_size_) != 0);
-		data_ = new T*[chunk_count];
+		data_ = ptr_allocator_.allocate(chunk_count); // new T*[chunk_count];
 
 		size_t index = 0;
 		for (auto i = list.begin(); i != list.end(); ++i) {
 			if(index % chunk_size_ == 0)
-				data_[index / chunk_size_] = (T*)(new unsigned char[chunk_size_ * sizeof(T)]);
+				data_[index / chunk_size_] = allocator_.allocate(chunk_size_); // (T*)(new char[chunk_size_ * sizeof(T)]);
 
-			new(data_[index / chunk_size_] + index % chunk_size_) T(*i);
+			allocator_.construct(data_[index / chunk_size_] + index % chunk_size_, *i); // new(data_[index / chunk_size_] + index % chunk_size_) T(*i);
 			++index;
 		}
+	}
+
+	~Chunked_storage_() {
+		size_t chunk_count = size_ / chunk_size_ + ((size_ % chunk_size_) != 0);
+
+		for(int i = 0; i < chunk_count; ++i) {
+			if(data_[i]) {
+				for(int j = 0; j < chunk_size_; ++j)
+					allocator_.destroy(data_[i] + j); // data_[i][j].~T();
+				allocator_.deallocate(data_[i]);
+			}
+		}
+
+		size_ 		= 0;
+		capacity_ 	= 0;
+		chunk_size_ = 0;
+
+		ptr_allocator_.deallocate(data_);
 	}
 	
 	// ------------------------------------------------------------------------
@@ -61,17 +82,17 @@ class Chunked_storage_ {
 
 		size_t chunk_count = index / chunk_size_;
 		if(!data_) {
-			data_ = new T*[capacity_];
+			data_ = ptr_allocator_.allocate(capacity_); // new T*[capacity_];
 			for(size_t i = 0; i < capacity_; ++i)
 				data_[i] = nullptr;
 		}
 
 		if(!data_[chunk_count]) {
-			data_[chunk_count] = (T*)(new unsigned char[chunk_size_ * sizeof(T)]);
+			data_[chunk_count] = allocator_.allocate(chunk_size_); // (T*)(new char[chunk_size_ * sizeof(T)]);
 
 			if(init_element_info_.is_used) {
 				for(size_t i = 0; i < chunk_size_; ++i)
-					new(data_[chunk_count] + i) T(init_element_info_.element);
+					allocator_.construct(data_[chunk_count] + i, init_element_info_.element); // new(data_[chunk_count] + i) T(init_element_info_.element);
 			}
 		}
 
@@ -91,10 +112,12 @@ class Chunked_storage_ {
 	}
 
 	void clear() {
-		for(int i = 0; i < size_; ++i) {
+		size_t chunk_count = size_ / chunk_size_ + ((size_ % chunk_size_) != 0);
+
+		for(int i = 0; i < chunk_count; ++i) {
 			if(data_[i])
 				for(int j = 0; j < chunk_size_; ++j)
-					data_[i][j].~T();
+					allocator_.destroy(data_[i] + j); // data_[i][j].~T();
 		}
 
 		size_ = 0;
@@ -105,7 +128,7 @@ class Chunked_storage_ {
 		size_t min_capacity = (new_capacity > capacity_ ? capacity_ : new_capacity);
 
 		// printf("new_size %ld, new_capacity %ld, chunk_size %ld\n", new_size, new_capacity, chunk_size_);
-		T** new_data = new T*[new_capacity];
+		T** new_data = ptr_allocator_.allocate(new_capacity); // new T*[new_capacity];
 		memset(new_data, 0, new_capacity);
 
 		size_t min_size_ = (new_size > size_ ? size_ : new_size);
@@ -115,7 +138,8 @@ class Chunked_storage_ {
 				new_data[i] = data_[i];
 			} else if(init_element_info_.is_used) {
 				for(size_t j = 0; j < chunk_size_; ++j)
-					new(new_data[i] + j) T(init_element_info_.element);
+					allocator_.construct(new_data[i] + j, init_element_info_.element);
+					// new(new_data[i] + j) T(init_element_info_.element);
 			}
 		}
 
@@ -123,7 +147,8 @@ class Chunked_storage_ {
 			for(size_t i = min_size_; i < size_; ++i)
 				data_[i / chunk_size_][i % chunk_size_].~T();
 
-		delete[] data_;
+		// delete[] data_;
+		ptr_allocator_.deallocate(data_);
 
 		data_ = new_data;
 		capacity_ = new_capacity;
@@ -137,7 +162,7 @@ class Chunked_storage_ {
 		size_t min_capacity = (new_capacity > capacity_ ? capacity_ : new_capacity);
 
 		// printf("new_size %ld, new_capacity %ld, chunk_size %ld\n", new_size, new_capacity, chunk_size_);
-		T** new_data = new T*[new_capacity];
+		T** new_data = ptr_allocator_.allocate(new_capacity); // new T*[new_capacity];
 		memset(new_data, 0, new_capacity);
 
 		size_t min_size_ = (new_size > size_ ? size_ : new_size);
@@ -147,19 +172,23 @@ class Chunked_storage_ {
 				new_data[i] = data_[i];
 			} else if(init_element_info_.is_used) {
 				for(size_t j = 0; j < chunk_size_; ++j)
-					new(new_data[i] + j) T(init_element_info_.element);
+					allocator_.construct(new_data[i] + j, init_element_info_.element);
+					// new(new_data[i] + j) T(init_element_info_.element);
 			}
 		}
 
 		if(new_size < size_)
 			for(size_t i = min_size_; i < size_; ++i)
-				data_[i / chunk_size_][i % chunk_size_].~T();
+				allocator_.destroy(data_[i / chunk_size_] + i % chunk_size_);
+				// data_[i / chunk_size_][i % chunk_size_].~T();
 
-		delete[] data_;
+		// delete[] data_;
+		ptr_allocator_.deallocate(data_);
 
 		if(new_size > size_)
 			for(size_t i = min_size_; i < size_; ++i)
-				new(new_data[i / chunk_size_] + i % chunk_size_) T(init_value);
+				allocator_.construct(new_data[i / chunk_size_] + i % chunk_size_, init_value);
+				// new(new_data[i / chunk_size_] + i % chunk_size_) T(init_value);
 
 		data_ = new_data;
 		capacity_ = new_capacity;
@@ -176,19 +205,21 @@ class Chunked_storage_ {
 
 		size_t chunk_count = size_ / chunk_size_;
 		if(!data_) {
-			data_ = new T*[capacity_];
+			data_ = ptr_allocator_.allocate(capacity_); // new T*[capacity_];
 		}
 
 		if(!data_[chunk_count]) {
-			data_[chunk_count] = (T*)(new unsigned char[chunk_size_ * sizeof(T)]);
+			data_[chunk_count] = allocator_.allocate(chunk_size_); // (T*)(new char[chunk_size_ * sizeof(T)]);
 
 			size_t remainder = size_ % chunk_size_;
 			if(remainder != 0 && init_element_info_.is_used)
 				for(size_t i = 0; i < remainder; ++i)
-					new(data_[chunk_count] + i) T(init_element_info_.element);
+					allocator_.construct(data_[chunk_count] + i, init_element_info_.element);
+					// new(data_[chunk_count] + i) T(init_element_info_.element);
 		}
 
-		new(data_[chunk_count] + size_ % chunk_size_) T(value);
+		// new(data_[chunk_count] + size_ % chunk_size_) T(value);
+		allocator_.construct(data_[chunk_count] + size_ % chunk_size_, value);
 		++size_;
 	}
 
@@ -199,20 +230,22 @@ class Chunked_storage_ {
 		size_t chunk_count = size_ / chunk_size_;
 
 		if(!data_) {
-			data_ = new T*[capacity_];
+			data_ = ptr_allocator_.allocate(capacity_); // new T*[capacity_];
 			memset(data_, 0, capacity_);
 		}
 
 		if(!data_[chunk_count]) {
-			data_[chunk_count] = (T*)(new unsigned char[chunk_size_ * sizeof(T)]);
+			data_[chunk_count] = allocator_.allocate(chunk_size_); // (T*)(new char[chunk_size_ * sizeof(T)]);
 			if(init_element_info_.is_used) {
 				size_t pos = size_ % chunk_size_;
 				for(size_t i = 0; i < pos; ++i)
-					new(data_[size_ / chunk_size_] + pos) T(init_element_info_.element);
+					allocator_.construct(data_[size_ / chunk_size_] + pos, init_element_info_.element);
+					// new(data_[size_ / chunk_size_] + pos) T(init_element_info_.element);
 			}
 		}
 
-		new(data_[chunk_count] + size_ % chunk_size_) T(std::move(value));
+		// new(data_[chunk_count] + size_ % chunk_size_) T(std::move(value));
+		allocator_.construct(data_[chunk_count] + size_ % chunk_size_, std::move(value));
 		++size_;
 	}
 
@@ -224,15 +257,16 @@ class Chunked_storage_ {
 		size_t chunk_count = size_ / chunk_size_;
 
 		if(!data_) {
-			data_ = new T*[capacity_];
+			data_ = ptr_allocator_.allocate(capacity_); // new T*[capacity_];
 			memset(data_, 0, capacity_);
 		}
 
 		if(!data_[chunk_count]) {
-			data_[chunk_count] = (T*)(new unsigned char[chunk_size_ * sizeof(T)]);
+			data_[chunk_count] =  allocator_.allocate(chunk_size_); // (T*)(new char[chunk_size_ * sizeof(T)]);
 		}
 
-		new(data_[chunk_count] + size_ % chunk_size_) T(std::forward<Args>(args)...);
+		// new(data_[chunk_count] + size_ % chunk_size_) T(std::forward<Args>(args)...);
+		allocator_.construct(data_[chunk_count] + size_ % chunk_size_, std::forward<Args>(args)...);
 		++size_;
 	}
 
@@ -244,11 +278,13 @@ class Chunked_storage_ {
 
 		if(size_ % chunk_size_ == 0) {
 			value = data_[size_ / chunk_size_ - 1][chunk_size_ - 1];
-			data_[size_ / chunk_size_ - 1][chunk_size_ - 1].~T();
+			allocator_.destroy(data_[size_ / chunk_size_ - 1] + chunk_size_ - 1);
+			// data_[size_ / chunk_size_ - 1][chunk_size_ - 1].~T();
 		}
 		else {
 			value = data_[size_ / chunk_size_][size_ % chunk_size_ - 1];
-			data_[size_ / chunk_size_][size_ % chunk_size_ - 1].~T();
+			allocator_.destroy(data_[size_ / chunk_size_] + size_ % chunk_size_ - 1);
+			// data_[size_ / chunk_size_][size_ % chunk_size_ - 1].~T();
 		}
 
 		--size_;

@@ -6,11 +6,12 @@
 
 template <
 	typename T,
-	template <typename storage_type> typename Storage
+	template <typename allocator_type> typename Allocator,
+	template <typename storage_type, template <typename allocator_type> typename storage_allocator> typename Storage
 	>
-class Array: public Storage<T> {
+class Array: public Storage<T, Allocator> {
   private:
-	typedef Storage<T> Storage_;
+	typedef Storage<T, Allocator> Storage_;
 
   public:
 	// ------------------------------------------------------------------------
@@ -41,17 +42,17 @@ class Array: public Storage<T> {
 	class Iterator {
 	  private:
 		Container* container_;
-		int index_;
+		size_t index_;
 
 	  public:
 		using difference_type	= ptrdiff_t;
 		using value_type		= Iterator_type;
 		using pointer			= Iterator_type*;
 		using reference			= Iterator_type&;
-		using iterator_category	= std::forward_iterator_tag;
+		using iterator_category	= std::bidirectional_iterator_tag;
 
 		Iterator(): container_(nullptr), index_(0) {}
-		Iterator(Container* container, const int index): container_(container), index_(index) {}
+		Iterator(Container* container, const size_t index): container_(container), index_(index) {}
 		Iterator(const Iterator& other) {
 			container_ = other.container_;
 			index_ = other.index_;
@@ -63,14 +64,6 @@ class Array: public Storage<T> {
 
 		Iterator_type* operator->() const {
 			return &container_[0] + index_;
-		}
-
-		bool operator==(const Iterator<Iterator_type, Container> &other) const {
-			return index_ == other.index_;
-		}
-
-		bool operator!=(const Iterator<Iterator_type, Container> &other) const {
-			return index_ != other.index_;
 		}
 
 		Iterator& operator++() {
@@ -93,7 +86,73 @@ class Array: public Storage<T> {
 			Iterator copy_this(*this);
 			--index_;
 			return copy_this;
-		}		
+		}
+
+		difference_type operator+(const Iterator& other) const {
+			return index_ + other.index_;
+		}
+
+		difference_type operator-(const Iterator& other) const {
+			return index_ - other.index_;
+		}
+
+		Iterator operator+(difference_type diff) {
+			Iterator ret_iter{container_, index_ + diff};
+
+			assert(ret_iter.index_ <= container_->size());
+			return ret_iter;
+		}
+
+		Iterator& operator+=(difference_type diff) {
+			index_ += diff;
+
+			assert(index_ <= container_->size());
+			return *this;
+		}
+
+		Iterator operator-(difference_type diff) {
+			Iterator ret_iter{container_, index_ - diff};
+
+			assert(ret_iter.index_ <= container_->size());
+			return ret_iter;
+		}
+
+		Iterator& operator-=(difference_type diff) {
+			index_ -= diff;
+
+			assert(index_ <= container_->size());
+			return *this;
+		}
+
+		bool operator!=(const Iterator& other) const {
+			assert(container_ == other.container_);
+			return index_ != other.index_;
+		}
+		
+		bool operator==(const Iterator& other) const {
+			assert(container_ == other.container_);
+			return index_ == other.index_;
+		}
+
+		bool operator<(const Iterator& other) const {
+			assert(container_ == other.container_);
+			return index_ < other.index_;
+		}
+
+		bool operator>(const Iterator& other) const {
+			assert(container_ == other.container_);
+			return index_ > other.index_;
+		}
+
+		bool operator<=(const Iterator& other) const {
+			assert(container_ == other.container_);
+			return index_ < other.index_;
+		}
+
+		bool operator>=(const Iterator& other) const {
+			assert(container_ == other.container_);
+			return index_ > other.index_;
+		}
 	};
 
 	using iterator = Iterator<T, Array>;
@@ -133,19 +192,21 @@ class Array: public Storage<T> {
 
 // -------------------------------------------------------------------
 
+
 const size_t SIZEOF_UCHAR = sizeof(unsigned char);
 template <
-	template <typename storage_type> typename Storage
-	>
-class Array<bool, Storage>: public Storage<unsigned char> {
+	template <typename allocator_type> typename Allocator,
+	template <typename storage_type, template <typename allocator_type> typename storage_allocator> typename Storage
+	>	
+class Array<bool, Allocator, Storage>: public Storage<unsigned char, Allocator> {
   private:
 	struct Bool_proxy {
-		Array<bool, Storage>* array_;
+		Array<bool, Allocator, Storage>* array_;
 		size_t index_;
 		bool value_;
 		unsigned char bit_;
 
-		Bool_proxy(Array<bool, Storage>* array) : array_(array) {
+		Bool_proxy(Array<bool, Allocator, Storage>* array) : array_(array) {
 			update(0);
 		}
 
@@ -169,7 +230,7 @@ class Array<bool, Storage>: public Storage<unsigned char> {
 	Bool_proxy bool_proxy;
 	size_t bools_count;
   public:
-	typedef Storage<unsigned char> BStorage_;
+	typedef Storage<unsigned char, Allocator> BStorage_;
 
 	Array(): BStorage_(), bool_proxy(this), bools_count(0) {}
 	Array(size_t size, const bool& init_element):
