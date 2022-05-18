@@ -10,7 +10,6 @@
 const size_t SMALL_SIZE = 8;
 
 enum class String_state {
-	NON_POSSESING	= 0,
 	SSO				= 1,
 	DYNAMIC			= 2,
 	VIEW			= 3
@@ -58,14 +57,38 @@ class String_storage {
 	}
 
 	String_storage(String_storage&& other, size_t pos = 0) : size_(other.size()) {
+		if(other.is_view()) {
+			data_.data_ = other.data_.data_;
+			data_.capacity_ = other.data_.capacity_;
+
+			size_ = other.size_;
+			state_ = String_state::VIEW;
+
+			other.data_.data_ = nullptr;
+			
+			return;
+		}
+
 		if(other.is_size_small())
 			construct_static(other.small_data_ + pos);
 		else
 			construct_dynamic(other.data_.data_ + pos);
 	}
 
+	static String_storage view(CharT** buffer, size_t count) {
+		String_storage result = {};
+
+		result.data_.data_ = *buffer;
+		result.data_.capacity_ = count;
+		result.size_ = count;
+
+		result.state_ = String_state::VIEW;
+
+		return result;
+	}
+
 	~String_storage() {
-		if(!is_size_small()) {
+		if(is_dynamic()) {
 			allocator_.deallocate(data_.data_);
 			data_.capacity_ = 0;
 		}
@@ -89,16 +112,19 @@ class String_storage {
 		return state_ == String_state::DYNAMIC;
 	}
 
+	inline bool is_view() const {
+		return state_ == String_state::VIEW;
+	}
+
 	size_t size() const {
 		return size_;
 	}
 
 	size_t capacity() const {
-		if(is_dynamic())
+		if(is_dynamic() || is_view()) {
 			return data_.capacity_;
-		else
-		if(is_static())
-			return SMALL_SIZE;
+		}
+		return SMALL_SIZE;
 	}
 
 	bool empty() const {
@@ -117,30 +143,31 @@ class String_storage {
 		return small_data_;
 	}
  
-  // public:
-
 	CharT* c_str() const {
-		if(is_dynamic())
+		if(is_dynamic() || is_view())
 			return data_.data_;
-		else
-		if(is_static())
-			return (CharT*)small_data_;
+		return (CharT*)small_data_;
 	}
 
 	String_storage& operator=(const String_storage& other) {
 		if(is_dynamic() && other.is_dynamic()) {
+			// printf("dynamic & dynamic!\n");
 			if(size_ < other.size())
 				redistribute_memory(other.capacity());
 		} else
 		if(is_dynamic() && other.is_static()) {
+			// printf("dynamic & static! (size %ld, other.size %ld)\n", size_, other.size());
 			if(size_ < other.size())
 				redistribute_memory(other.capacity());
 		} else
 		if(is_static() && other.is_dynamic()) {
+			// printf("static & dynamic!\n");
 			if(!is_size_small(other.size())) {
 				switch_to_dynamic();
 				redistribute_memory(other.capacity());
 			}
+		} else {
+			// printf("static & static!\n");
 		}
 
 		copy_data(other, other.size());
@@ -172,7 +199,7 @@ class String_storage {
 		if(index >= size_)
 			throw std::out_of_range(MESSAGE_BAD_INDEX);
 
-		if(is_dynamic())
+		if(is_dynamic() || is_view())
 			return data_.data_[index];
 		return small_data_[index];
 	}
@@ -181,7 +208,7 @@ class String_storage {
 		if(index >= size_)
 			throw std::out_of_range(MESSAGE_BAD_INDEX);
 
-		if(is_dynamic())
+		if(is_dynamic() || is_view())
 			return data_.data_[index];
 		return small_data_[index];
 	}
@@ -216,11 +243,13 @@ class String_storage {
 		else
 			small_data_[size_] = CharT(0);
 
-		if(size_ * 4 < capacity())
+		if(size_ * 4 < capacity() && !is_view())
 			resize(capacity() / 2);
 	}
 
 	void resize(size_t new_capacity, CharT value = CharT()) {
+		assert(!is_view());
+
 		if(is_static()) {
 			if(new_capacity > SMALL_SIZE)
 				switch_to_dynamic();
@@ -254,6 +283,8 @@ class String_storage {
   protected:
 
 	void redistribute_memory(size_t new_capacity) {
+		assert(!is_view());
+
 		if(new_capacity < capacity())
 			return;
 
@@ -347,6 +378,34 @@ class String_storage {
 			small_data_[i] = copy_static[i];
 		
 		state_ = String_state::SSO;
+	}
+
+	void copy_data(const String_storage& other, size_t length) {
+		assert(!(other.is_static() && length > SMALL_SIZE));
+
+		if(is_dynamic() && other.is_dynamic()) {
+			for(size_t i = 0; i < length; ++i)
+				data_.data_[i] = other.data_.data_[i];
+			data_.capacity_ = length * 2;
+		} else
+		if(is_static() && other.is_static())
+			for(size_t i = 0; i < length; ++i)
+				small_data_[i] = other.small_data_[i];
+		else
+		if(is_dynamic() && other.is_static()) {
+			for(size_t i = 0; i < length; ++i)
+				data_.data_[i] = other.small_data_[i];
+			data_.capacity_ = length * 2;
+		} else
+		if(is_static() && other.is_dynamic()) {
+			for(size_t i = 0; i < length; ++i)
+				small_data_[i] = other.data_.data_[i];
+		}
+
+		size_ = length;
+
+		if(is_size_small())
+			switch_to_static();
 	}
 };
 

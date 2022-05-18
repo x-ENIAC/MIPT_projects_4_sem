@@ -7,31 +7,6 @@
 
 const size_t STANDART_TESTING_LINE_LEN = 24;
 
-#define PRINT_STRING_INFO(str) {													\
-	size_t length = str.size();														\
-	for(size_t i = 0; i < length; ++i)												\
-		printf("%c", str[i]);														\
-																					\
-	if(str.is_static())																\
-		printf(": sso, size %ld\n", length);										\
-	else																			\
-	if(str.is_dynamic())															\
-		printf(": dynamic, size %ld, capacity %ld\n", length, str.capacity());		\
-}
-
-#define PRINT_STRING(str) {				\
-	size_t length = str.size();			\
-	for(size_t i = 0; i < length; ++i)	\
-		printf("%c", str[i]);			\
-	printf("\n");						\
-}
-
-#define PRINT_STRING_WITHOUT_NEW_LINE(str) {	\
-	size_t length = str.size();					\
-	for(size_t i = 0; i < length; ++i)			\
-		printf("%c", str[i]);					\
-}
-
 #define START_TEST_FUNC(FUNC)									\
 	printf("\n\n\n\n");											\
 	size_t line_len = STANDART_TESTING_LINE_LEN + strlen(FUNC);	\
@@ -47,11 +22,46 @@ const size_t STANDART_TESTING_LINE_LEN = 24;
 
 namespace String_test {
 
+enum End_of_print_str {
+	NOTHING,
+	SPACE,
+	END_LINE
+};
+
+template < typename CharT >
+void print_string(String<CharT>& string, End_of_print_str is_need_new_line = END_LINE) {
+	size_t len = string.size();
+	for(size_t i = 0; i < len; ++i)
+		printf("%c", string[i]);
+
+	if(is_need_new_line == END_LINE)
+		printf("\n");
+	else
+	if(is_need_new_line == SPACE)
+		printf(" ");
+}
+
+template < typename CharT >
+void print_string_info(String<CharT>& string) {
+	size_t len = string.size();
+	for(size_t i = 0; i < len; ++i)
+		printf("%c", string[i]);
+
+	if(string.is_static())
+		printf(": sso, size %ld\n", len);
+	else
+	if(string.is_dynamic())
+		printf(": dynamic, size %ld, capacity %ld\n", len, string.capacity());
+	else
+	 if(string.is_view())
+	 	printf(": view, size %ld, capacity %ld\n", len, string.capacity());
+}
+
 void test_constructor_string() {
 	START_TEST_FUNC(__PRETTY_FUNCTION__)
 
 	String<char> str(12, 's');
-	PRINT_STRING_INFO(str)
+	print_string_info(str);
 
 	END_TEST_FUNC(__PRETTY_FUNCTION__)
 }
@@ -60,7 +70,22 @@ void test_sso() {
 	START_TEST_FUNC(__PRETTY_FUNCTION__)
 
 	String<char> str("sso", 4);
-	PRINT_STRING_INFO(str)
+	print_string_info(str);
+
+	END_TEST_FUNC(__PRETTY_FUNCTION__)
+}
+
+void test_view() {
+	START_TEST_FUNC(__PRETTY_FUNCTION__)
+
+	size_t buffer_size = 64;
+	char* buffer = new char[buffer_size];
+	memset(buffer, 0, buffer_size);
+	strcpy(buffer, "Are you view?");
+
+    String<char> string = String<char>::view(&buffer, buffer_size);
+
+    print_string_info(string);
 
 	END_TEST_FUNC(__PRETTY_FUNCTION__)
 }
@@ -69,16 +94,16 @@ void test_push_pop_back() {
 	START_TEST_FUNC(__PRETTY_FUNCTION__)
 
 	String<char> str("sso", 4);
-	PRINT_STRING_INFO(str)
+	print_string_info(str);
 
 	for(char symbol = 'a'; symbol <= 'h'; ++symbol) {
 		str.push_back(symbol);
-		PRINT_STRING_INFO(str)
+		print_string_info(str);
 	}
 
 	for(size_t i = 0; i < 9; ++i) {
 		str.pop_back();
-		PRINT_STRING_INFO(str);
+		print_string_info(str);
 	}
 
 	END_TEST_FUNC(__PRETTY_FUNCTION__)
@@ -90,7 +115,7 @@ void test_append() {
 	String<char> str("sso", 4);
 
 	// --------------------------------
-	PRINT_STRING_WITHOUT_NEW_LINE(str)
+	print_string(str, NOTHING);
 
 	printf(" + ");
 
@@ -100,19 +125,53 @@ void test_append() {
 	}
 
 	printf(" = ");
-	PRINT_STRING(str)
+	print_string(str);
 	// --------------------------------
 
 	char text[] = "allocator";
 
-	PRINT_STRING_WITHOUT_NEW_LINE(str)
+	print_string(str, NOTHING);
 	printf(" + %s = ", text);
 
 	str += text;
-	PRINT_STRING(str)
+	print_string(str);
 
 	END_TEST_FUNC(__PRETTY_FUNCTION__)
 }
+
+void test_assignment() {
+	START_TEST_FUNC(__PRETTY_FUNCTION__)
+
+	String<char> str1 = "I'm the first string";
+	String<char> str2 = "Second!";
+	String<char> str3 = "...third?";
+
+	printf("After assignment:\nstr1: ");
+	print_string_info(str1);
+	
+	printf("str2: ");
+	print_string_info(str2);
+
+	printf("str3: ");
+	print_string_info(str3);
+
+	printf("\n");
+
+	str1 = str3;
+	str3 = str2;
+
+	printf("\nBefore assignment:\nstr1: ");
+	print_string_info(str1);
+	
+	printf("str2: ");
+	print_string_info(str2);
+
+	printf("str3: ");
+	print_string_info(str3);
+
+	END_TEST_FUNC(__PRETTY_FUNCTION__)
+}
+
 
 void test_comparisons() {
 	START_TEST_FUNC(__PRETTY_FUNCTION__)
@@ -123,24 +182,24 @@ void test_comparisons() {
 
 	// --------------------------------
 	printf("%d - result of ", (str1 < str2));
-	PRINT_STRING_WITHOUT_NEW_LINE(str1)
+	print_string(str1, NOTHING);
 	printf(" < ");
-	PRINT_STRING(str2);
+	print_string(str2);
 	// --------------------------------
 	printf("%d - result of ", (str3 < str2));
-	PRINT_STRING_WITHOUT_NEW_LINE(str3)
+	print_string(str3, NOTHING);
 	printf(" < ");
-	PRINT_STRING(str2);
+	print_string(str2);
 	// --------------------------------
 	printf("%d - result of ", (str3 >= str2));
-	PRINT_STRING_WITHOUT_NEW_LINE(str3)
+	print_string(str3, NOTHING);
 	printf(" >= ");
-	PRINT_STRING(str2);
+	print_string(str2);
 	// --------------------------------
 	printf("%d - result of ", (str1 <= str3));
-	PRINT_STRING_WITHOUT_NEW_LINE(str1)
+	print_string(str1, NOTHING);
 	printf(" <= ");
-	PRINT_STRING(str3);
+	print_string(str3);
 	// --------------------------------
 
 	END_TEST_FUNC(__PRETTY_FUNCTION__)
@@ -151,11 +210,11 @@ void helpful_for_test_std_find(String<CharT>& string, CharT symbol) {
 	auto find_iter = std::find(string.begin(), string.end(), symbol);
 
 	if(find_iter == string.end()) {
-		PRINT_STRING_WITHOUT_NEW_LINE(string);
-		printf(" contains %c\n", symbol);		
+		print_string(string, SPACE);
+		printf("contains %c\n", symbol);		
 	} else {
-		PRINT_STRING_WITHOUT_NEW_LINE(string)
-		printf(" doesn't contain %c\n", symbol);
+		print_string(string, SPACE);
+		printf("doesn't contain %c\n", symbol);
 	}
 }
 
@@ -175,12 +234,12 @@ void test_std_sort() {
 
 	String<char> string("square", 7);
 
-	PRINT_STRING_WITHOUT_NEW_LINE(string)
+	print_string(string, NOTHING);
 
 	printf(" -> ");
 	std::sort(string.begin(), string.end());
 
-	PRINT_STRING(string);
+	print_string(string);
 
 	END_TEST_FUNC(__PRETTY_FUNCTION__)
 }

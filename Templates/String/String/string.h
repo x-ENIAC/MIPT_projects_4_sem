@@ -40,8 +40,12 @@ class String : public String_storage<CharT> {
 	String(size_t size, const char& init_element)
 	: String_storage_(size, init_element) {}
 
-	String(std::initializer_list<CharT> list)
-	: String_storage_(list) {}
+	String(String_storage_&& other)
+	: String_storage_(std::move(other)) {}
+
+	static String view(CharT** buffer, size_t count) {
+		return String(String_storage_::view(buffer, count));
+	}
 
 	const String& operator=(const String& other) {
 		String_storage_::operator=(other);
@@ -98,6 +102,8 @@ class String : public String_storage<CharT> {
 
 		for(size_t i = 0; i < count; ++i)
 			String_storage_::push_back(string[i]);
+
+		return *this;
 	}
 
 	String& append(const String& string) {
@@ -128,6 +134,8 @@ class String : public String_storage<CharT> {
 	const CharT* data() const {
 		return String_storage_::data();
 	}
+
+	// --------- comparison operators -----------------
 
 	bool operator==(const String& other) const {
 		size_t other_size = other.size();
