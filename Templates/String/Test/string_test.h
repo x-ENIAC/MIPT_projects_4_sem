@@ -93,11 +93,16 @@ void test_view() {
 void test_copy_on_write() {
 	START_TEST_FUNC(__PRETTY_FUNCTION__)
 
-	String<char> string("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.");
+	String<char> str1 = "Never gonna give you up, Never gonna let you down, "
+						"Never gonna run around and desert you, Never gonna make you cry, "
+						"Never gonna say goodbye, Never gonna tell a lie and hurt you";
 
-	for(auto i : string)
-		printf("%c", i);
-	printf("\n");
+	String<char> str2(str1);
+
+	str1[1] = '.';
+
+	print_string(str1);
+	print_string(str2);
 
 	END_TEST_FUNC(__PRETTY_FUNCTION__)
 }

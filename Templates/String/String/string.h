@@ -25,6 +25,9 @@ class String : public String_core<CharT> {
 	String(const CharT* string)
 	: String_core_(string, strlen(string)) {}
 
+	String(String& other)
+	: String_core_(other) {}
+
 	String(const String& other)
 	: String_core_(other) {}
 
