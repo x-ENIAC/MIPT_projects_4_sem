@@ -8,57 +8,57 @@
 #include <stdexcept>
 
 #include "error_codes.h"
-#include "string_storage.h"
+#include "string_core.h"
 
 template <typename CharT>
-class String : public String_storage<CharT> {
+class String : public String_core<CharT> {
   private:
-	typedef String_storage<CharT> String_storage_;
+	typedef String_core<CharT> String_core_;
 
   public:
 	String() 
-	: String_storage_() {}
+	: String_core_() {}
 
 	String(const CharT* string, size_t count)
-	: String_storage_(string, count) {}
+	: String_core_(string, count) {}
 
 	String(const CharT* string)
-	: String_storage_(string, strlen(string)) {}
+	: String_core_(string, strlen(string)) {}
 
 	String(const String& other)
-	: String_storage_(other) {}
+	: String_core_(other) {}
 
 	String(const String& other, size_t pos)
-	: String_storage_(other, pos) {}
+	: String_core_(other, pos) {}
 
 	String(const String& other, size_t pos, size_t count)
-	: String_storage_(other, pos, count) {}
+	: String_core_(other, pos, count) {}
 
 	String(String&& other)
-	: String_storage_(other) {}
+	: String_core_(other) {}
 
 	String(size_t size, const char& init_element)
-	: String_storage_(size, init_element) {}
+	: String_core_(size, init_element) {}
 
-	String(String_storage_&& other)
-	: String_storage_(std::move(other)) {}
+	String(String_core_&& other)
+	: String_core_(std::move(other)) {}
 
 	static String view(CharT** buffer, size_t count) {
-		return String(String_storage_::view(buffer, count));
+		return String(String_core_::view(buffer, count));
 	}
 
 	const String& operator=(const String& other) {
-		String_storage_::operator=(other);
+		String_core_::operator=(other);
 		return *this;
 	}
 
 	const String& operator=(const String&& other) {
-		String_storage_::operator=(other);
+		String_core_::operator=(other);
 		return *this;
 	}
 
 	CharT& operator[](size_t index) {
-		return String_storage_::at(index);
+		return String_core_::at(index);
 	}
 
 	const CharT& front() {
@@ -74,13 +74,13 @@ class String : public String_storage<CharT> {
 	}
 
 	void push_back(CharT value) {
-		String_storage_::push_back(value);
+		String_core_::push_back(value);
 	}
 
 	void pop_back() {
 		if(size() == 0)
 			throw std::out_of_range(MESSAGE_DATA_IS_EMPTY);
-		String_storage_::pop_back();		
+		String_core_::pop_back();		
 	}
 
 	String& operator+=(const String& string) {
@@ -98,10 +98,10 @@ class String : public String_storage<CharT> {
 	}
 
 	String& append(const CharT* string, size_t count) {
-		String_storage_::redistribute_memory(size() + count);
+		String_core_::redistribute_memory(size() + count);
 
 		for(size_t i = 0; i < count; ++i)
-			String_storage_::push_back(string[i]);
+			String_core_::push_back(string[i]);
 
 		return *this;
 	}
@@ -111,28 +111,28 @@ class String : public String_storage<CharT> {
 	}
 
 	String& append(CharT& value, size_t count) {
-		String_storage_::redistribute_memory(size() + count);
+		String_core_::redistribute_memory(size() + count);
 
 		for(size_t i = 0; i < count; ++i)
-			String_storage_::push_back(value);
+			String_core_::push_back(value);
 
 		return *this;
 	}
 
 	size_t size() const {
-		return String_storage_::size();
+		return String_core_::size();
 	}
 
 	size_t capacity() const {
-		return String_storage_::capacity();
+		return String_core_::capacity();
 	}
 
 	CharT* data() {
-		return String_storage_::data();
+		return String_core_::data();
 	}
 
 	const CharT* data() const {
-		return String_storage_::data();
+		return String_core_::data();
 	}
 
 	// --------- comparison operators -----------------
@@ -144,7 +144,7 @@ class String : public String_storage<CharT> {
 			return false;
 
 		for(size_t i = 0; i < other_size; ++i)
-			if(String_storage_::at(i) != other.at(i))
+			if(String_core_::at(i) != other.at(i))
 				return false;
 		return true;
 	}
@@ -158,7 +158,7 @@ class String : public String_storage<CharT> {
 		bool flag = true;
 
 		for(size_t i = 0; i < other_size; ++i)
-			if(String_storage_::at(i) != other.at(i))
+			if(String_core_::at(i) != other.at(i))
 				flag = false;
 		return flag;
 	}
@@ -170,10 +170,10 @@ class String : public String_storage<CharT> {
 			return (size() < other_size);
 
 		for(size_t i = 0; i + 2 < other_size; ++i)		// because '\0'
-			if(String_storage_::at(i) > other.at(i))
+			if(String_core_::at(i) > other.at(i))
 				return false;
 
-		if(String_storage_::at(other_size - 2) >= other.at(other_size - 2))
+		if(String_core_::at(other_size - 2) >= other.at(other_size - 2))
 			return false;
 		return true;
 	}
@@ -185,10 +185,10 @@ class String : public String_storage<CharT> {
 			return (size() < other_size);
 
 		for(size_t i = 0; i + 2 < other_size; ++i)		// because '\0'
-			if(String_storage_::at(i) > other.at(i))
+			if(String_core_::at(i) > other.at(i))
 				return false;
 
-		if(String_storage_::at(other_size - 2) > other.at(other_size - 2))
+		if(String_core_::at(other_size - 2) > other.at(other_size - 2))
 			return false;
 		return true;
 	}
@@ -200,10 +200,10 @@ class String : public String_storage<CharT> {
 			return (size() > other_size);
 
 		for(size_t i = 0; i + 2 < other_size; ++i)		// because '\0'
-			if(String_storage_::at(i) < other.at(i))
+			if(String_core_::at(i) < other.at(i))
 				return false;
 
-		if(String_storage_::at(other_size - 2) <= other.at(other_size - 2))
+		if(String_core_::at(other_size - 2) <= other.at(other_size - 2))
 			return false;
 		return true;
 	}
@@ -215,10 +215,10 @@ class String : public String_storage<CharT> {
 			return (size() > other_size);
 
 		for(size_t i = 0; i + 2 < other_size; ++i)		// because '\0'
-			if(String_storage_::at(i) < other.at(i))
+			if(String_core_::at(i) < other.at(i))
 				return false;
 
-		if(String_storage_::at(other_size - 2) < other.at(other_size - 2))
+		if(String_core_::at(other_size - 2) < other.at(other_size - 2))
 			return false;
 		return true;
 	}
@@ -231,6 +231,14 @@ class String : public String_storage<CharT> {
 
 	CharT* end() {
 		return data() + size();
+	}
+
+	CharT* rbegin() {
+		return reverse_iterator(data());
+	}
+
+	CharT* rend() {
+		return reverse_iterator(data() + size());
 	}
 };
 

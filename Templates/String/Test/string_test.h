@@ -90,6 +90,18 @@ void test_view() {
 	END_TEST_FUNC(__PRETTY_FUNCTION__)
 }
 
+void test_copy_on_write() {
+	START_TEST_FUNC(__PRETTY_FUNCTION__)
+
+	String<char> string("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.");
+
+	for(auto i : string)
+		printf("%c", i);
+	printf("\n");
+
+	END_TEST_FUNC(__PRETTY_FUNCTION__)
+}
+
 void test_push_pop_back() {
 	START_TEST_FUNC(__PRETTY_FUNCTION__)
 
@@ -142,32 +154,39 @@ void test_append() {
 void test_assignment() {
 	START_TEST_FUNC(__PRETTY_FUNCTION__)
 
-	String<char> str1 = "I'm the first string";
-	String<char> str2 = "Second!";
-	String<char> str3 = "...third?";
+	String<char> dynamic1 = "dynamic...1";
+	String<char> dynamic2 = "dynamic...2";
+	String<char> sso1 = "sso1";
+	String<char> sso2 = "sso2";
 
-	printf("After assignment:\nstr1: ");
-	print_string_info(str1);
+	printf("After assignment:\ndynamic1: ");
+	print_string_info(dynamic1);
 	
-	printf("str2: ");
-	print_string_info(str2);
+	printf("dynamic2: ");
+	print_string_info(dynamic2);
 
-	printf("str3: ");
-	print_string_info(str3);
+	printf("sso1: ");
+	print_string_info(sso1);
+
+	printf("sso2: ");
+	print_string_info(sso2);
 
 	printf("\n");
 
-	str1 = str3;
-	str3 = str2;
+	dynamic1 = sso2;
+	sso1 = dynamic2;
 
-	printf("\nBefore assignment:\nstr1: ");
-	print_string_info(str1);
+	printf("\nBefore assignment:\ndynamic1: ");
+	print_string_info(dynamic1);
 	
-	printf("str2: ");
-	print_string_info(str2);
+	printf("dynamic2: ");
+	print_string_info(dynamic2);
 
-	printf("str3: ");
-	print_string_info(str3);
+	printf("sso1: ");
+	print_string_info(sso1);
+
+	printf("sso2: ");
+	print_string_info(sso2);
 
 	END_TEST_FUNC(__PRETTY_FUNCTION__)
 }

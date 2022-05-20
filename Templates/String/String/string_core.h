@@ -1,5 +1,5 @@
-#ifndef STRING_STORAGE_H
-#define STRING_STORAGE_H
+#ifndef STRING_core_H
+#define STRING_core_H
 
 #include <cstddef>
 #include <cstdlib>
@@ -9,6 +9,80 @@
 
 const size_t SMALL_SIZE = 8;
 
+template < typename DataT >
+struct Shared_data {
+	DataT data_;
+	size_t viewers;
+
+	Shared_data(DataT&& other)
+	: data_(std::move(other)), viewers(0) {}
+
+	void view() {
+		++viewers;
+	}
+
+	void unview() {
+		--viewers;
+	}
+
+	size_t get_viewers() const {
+		return viewers;
+	}
+};
+
+template < typename DataT >
+class Shared_ptr {
+	Shared_data<DataT>* ptr_;
+
+  public:
+
+	Shared_ptr(Shared_data<DataT>& other)
+	: ptr_(other.ptr_) {
+		ptr_->view();
+	}
+
+	Shared_ptr(Shared_ptr* other)
+	: ptr_(other) {
+		ptr_->view();
+	}
+
+	~Shared_ptr() {
+		if(ptr_) {
+			ptr_->unview();
+		}
+	}
+
+	Shared_ptr& operator=(Shared_ptr& other) {
+		ptr_ = other.ptr_;
+		ptr_->view();
+		return *this;
+	}
+
+	void view() {
+		ptr_->view();
+	}
+
+	void unview() {
+		ptr_->unview();
+	}
+
+	size_t get_viewers() const {
+		return ptr_->get_viewers();
+	}
+
+	DataT operator*() {
+		return ptr_->data_;
+	}
+
+  	DataT* operator->() {
+  		return &(ptr_->data_);
+  	}
+
+  	Shared_data<DataT>* get_ptr() {
+  		return ptr_;
+  	}
+};
+
 enum class String_state {
 	SSO				= 1,
 	DYNAMIC			= 2,
@@ -16,7 +90,7 @@ enum class String_state {
 };
 
 template < typename CharT >
-class String_storage {
+class String_core {
   private:
 	size_t size_;
 
@@ -34,29 +108,29 @@ class String_storage {
 	String_state state_;
 
   public:
-	String_storage() : data_{}, size_(0), state_(String_state::SSO) {}
-	String_storage(const CharT* string, size_t count) : size_(count) {
+	String_core() : data_{}, size_(0), state_(String_state::SSO) {}
+	String_core(const CharT* string, size_t count) : size_(count) {
 		if(!is_size_small())
 			construct_dynamic(string);
 		else
 			construct_static(string);
 	}
 
-	String_storage(size_t size, const CharT& init_element) : size_(size) {
+	String_core(size_t size, const CharT& init_element) : size_(size) {
 		if(!is_size_small())
 			construct_dynamic(init_element);
 		else
 			construct_static(init_element);
 	}
 
-	String_storage(const String_storage& other, size_t pos = 0) : size_(other.size()) {
+	String_core(const String_core& other, size_t pos = 0) : size_(other.size()) {
 		if(other.is_size_small())
 			construct_static(other.small_data_ + pos);
 		else
 			construct_dynamic(other.data_.data_ + pos);
 	}
 
-	String_storage(String_storage&& other, size_t pos = 0) : size_(other.size()) {
+	String_core(String_core&& other, size_t pos = 0) : size_(other.size()) {
 		if(other.is_view()) {
 			data_.data_ = other.data_.data_;
 			data_.capacity_ = other.data_.capacity_;
@@ -75,8 +149,8 @@ class String_storage {
 			construct_dynamic(other.data_.data_ + pos);
 	}
 
-	static String_storage view(CharT** buffer, size_t count) {
-		String_storage result = {};
+	static String_core view(CharT** buffer, size_t count) {
+		String_core result = {};
 
 		result.data_.data_ = *buffer;
 		result.data_.capacity_ = count;
@@ -87,7 +161,7 @@ class String_storage {
 		return result;
 	}
 
-	~String_storage() {
+	~String_core() {
 		if(is_dynamic()) {
 			allocator_.deallocate(data_.data_);
 			data_.capacity_ = 0;
@@ -149,7 +223,7 @@ class String_storage {
 		return (CharT*)small_data_;
 	}
 
-	String_storage& operator=(const String_storage& other) {
+	String_core& operator=(const String_core& other) {
 		if(is_dynamic() && other.is_dynamic()) {
 			// printf("dynamic & dynamic!\n");
 			if(size_ < other.size())
@@ -175,7 +249,7 @@ class String_storage {
 		return *this;
 	}
 
-	String_storage& operator=(String_storage&& other) {
+	String_core& operator=(String_core&& other) {
 		if(other.is_dynamic()) {
 			if(is_dynamic())
 				allocator_.deallocate(data_.data_);
@@ -380,7 +454,7 @@ class String_storage {
 		state_ = String_state::SSO;
 	}
 
-	void copy_data(const String_storage& other, size_t length) {
+	void copy_data(const String_core& other, size_t length) {
 		assert(!(other.is_static() && length > SMALL_SIZE));
 
 		if(is_dynamic() && other.is_dynamic()) {
