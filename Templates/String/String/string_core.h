@@ -32,6 +32,10 @@ class Shared_data {
 		printf("[Shared_data::unview] viewers: %ld\n", viewers);
 	}
 
+	bool is_unused() {
+		return (viewers == 0);
+	}
+
 	size_t get_viewers() const {
 		return viewers;
 	}
@@ -68,6 +72,10 @@ class Shared_ptr {
 	~Shared_ptr() {
 		if (ptr_) {
 			ptr_->unview();
+			if (ptr_->is_unused()) {
+				ptr_->~Shared_data<DataT>();
+				allocator_.deallocate(ptr_);
+			}
 		}
 	}
 
